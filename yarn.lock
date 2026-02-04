@@ -2869,7 +2869,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/base-controller@npm:^8.0.0":
+"@metamask/base-controller@npm:^8.4.2":
   version: 8.4.2
   resolution: "@metamask/base-controller@npm:8.4.2"
   dependencies:
@@ -2891,7 +2891,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/controller-utils@npm:^11.16.0, @metamask/controller-utils@npm:^11.17.0, @metamask/controller-utils@npm:^11.5.0":
+"@metamask/controller-utils@npm:^11.14.1, @metamask/controller-utils@npm:^11.16.0, @metamask/controller-utils@npm:^11.17.0":
   version: 11.18.0
   resolution: "@metamask/controller-utils@npm:11.18.0"
   dependencies:
@@ -3010,7 +3010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/json-rpc-engine@npm:^10.0.2, @metamask/json-rpc-engine@npm:^10.0.3, @metamask/json-rpc-engine@npm:^10.1.0, @metamask/json-rpc-engine@npm:^10.1.1, @metamask/json-rpc-engine@npm:^10.2.0":
+"@metamask/json-rpc-engine@npm:^10.0.2, @metamask/json-rpc-engine@npm:^10.1.0, @metamask/json-rpc-engine@npm:^10.1.1, @metamask/json-rpc-engine@npm:^10.2.0":
   version: 10.2.1
   resolution: "@metamask/json-rpc-engine@npm:10.2.1"
   dependencies:
@@ -3077,21 +3077,21 @@ __metadata:
   linkType: hard
 
 "@metamask/permission-controller@npm:^11.0.6":
-  version: 11.0.6
-  resolution: "@metamask/permission-controller@npm:11.0.6"
+  version: 11.1.1
+  resolution: "@metamask/permission-controller@npm:11.1.1"
   dependencies:
-    "@metamask/base-controller": ^8.0.0
-    "@metamask/controller-utils": ^11.5.0
-    "@metamask/json-rpc-engine": ^10.0.3
+    "@metamask/base-controller": ^8.4.2
+    "@metamask/controller-utils": ^11.14.1
+    "@metamask/json-rpc-engine": ^10.1.1
     "@metamask/rpc-errors": ^7.0.2
-    "@metamask/utils": ^11.1.0
+    "@metamask/utils": ^11.8.1
     "@types/deep-freeze-strict": ^1.1.0
     deep-freeze-strict: ^1.1.1
     immer: ^9.0.6
     nanoid: ^3.3.8
   peerDependencies:
     "@metamask/approval-controller": ^7.0.0
-  checksum: 13203004b751b2bfa629ae1471ce285a22c325e3030ce87f85a42bf9adac764ac606b22a28ca92b120dc6ad1c30a3280983b4d1e9b782f0c6c7f4b50033647d2
+  checksum: 178f8d37fe84767847843b2f7ce0981fe1c4fdd4ed06b1dcb2ac4d64287f10e8194c170d94c286f78af2fad5c7f17cf44b0cc6e86fa86863f6cdcee6e74f06cb
   languageName: node
   linkType: hard
 
@@ -3491,7 +3491,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/utils@npm:^11.0.1, @metamask/utils@npm:^11.1.0, @metamask/utils@npm:^11.4.0, @metamask/utils@npm:^11.4.2, @metamask/utils@npm:^11.8.1, @metamask/utils@npm:^11.9.0":
+"@metamask/utils@npm:^11.0.1, @metamask/utils@npm:^11.4.0, @metamask/utils@npm:^11.4.2, @metamask/utils@npm:^11.8.1, @metamask/utils@npm:^11.9.0":
   version: 11.9.0
   resolution: "@metamask/utils@npm:11.9.0"
   dependencies:
