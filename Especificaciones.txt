@@ -1,0 +1,22 @@
+***Usar las versiones según carpeta***
+
+Ahora, cuando cambies de carpeta, usa nvm use:
+powershell# En smart-contracts (usar Node 22)
+cd smart-contracts
+nvm use 22
+
+# Verificar
+node --version
+# Debería mostrar: v22.x.x
+
+
+
+
+
+# En la raíz (usar Node 20)
+cd ..
+nvm use 20
+
+# Verificar
+node --version
+# Debería mostrar: v20.11.1

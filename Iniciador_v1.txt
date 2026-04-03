@@ -1,0 +1,25 @@
+@echo off
+echo =========================================
+echo Iniciando entorno completo TFG
+echo =========================================
+
+REM --- 1. Iniciar Ollama (puerto 11434) ---
+echo Iniciando Ollama...
+start "Ollama" cmd /k "ollama serve"
+
+REM Espera para evitar condiciones de carrera
+timeout /t 3 /nobreak > nul
+
+REM --- 2. Iniciar Backend (puerto 3000) ---
+echo Iniciando Backend...
+start "Backend" cmd /k "cd /d C:\Users\marcc\Desktop\Univ2.0\5-Cinque\SICUE\TFG\tfg_marc\backend && node server.js"
+
+timeout /t 3 /nobreak > nul
+
+REM --- 3. Iniciar DApp + Snap (8000 y 8080) ---
+echo Iniciando DApp + Snap...
+start "DApp + Snap" cmd /k "cd /d C:\Users\marcc\Desktop\Univ2.0\5-Cinque\SICUE\TFG\tfg_marc && yarn start"
+
+echo =========================================
+echo Todo lanzado correctamente
+echo =========================================

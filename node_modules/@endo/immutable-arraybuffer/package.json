@@ -1,0 +1,80 @@
+{
+  "name": "@endo/immutable-arraybuffer",
+  "version": "1.1.2",
+  "description": "Immutable ArrayBuffer (the shim!)",
+  "keywords": [
+    "immutable",
+    "arraybuffer",
+    "typedarray",
+    "shim"
+  ],
+  "author": "Endo contributors",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/endojs/endo/tree/master/packages/immutable-arraybuffer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endojs/endo.git",
+    "directory": "packages/immutable-arraybuffer"
+  },
+  "bugs": {
+    "url": "https://github.com/endojs/endo/issues"
+  },
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./shim.js": "./shim.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "exit 0",
+    "lint": "yarn lint:types && yarn lint:eslint",
+    "lint-fix": "yarn lint:eslint --fix && yarn lint:types",
+    "lint:eslint": "eslint '**/*.js'",
+    "lint:types": "tsc",
+    "postpack": "git clean -fX \"*.d.ts*\" \"*.d.cts*\" \"*.d.mts*\" \"*.tsbuildinfo\"",
+    "prepack": "tsc --build tsconfig.build.json",
+    "test": "ava",
+    "test:c8": "c8 $C8_OPTIONS ava --config=ava-nesm.config.js",
+    "test:xs": "exit 0"
+  },
+  "devDependencies": {
+    "ava": "^6.1.3",
+    "babel-eslint": "^10.1.0",
+    "c8": "^7.14.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.31.0",
+    "tsd": "^0.31.2",
+    "typescript": "~5.8.3"
+  },
+  "files": [
+    "./*.d.ts",
+    "./*.js",
+    "./*.map",
+    "LICENSE*",
+    "SECURITY*",
+    "dist",
+    "lib",
+    "src",
+    "tools"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:@endo/ses"
+    ]
+  },
+  "ava": {
+    "files": [
+      "test/**/*.test.*"
+    ],
+    "timeout": "2m"
+  },
+  "gitHead": "9815aea9541f241389d2135c6097a7442bdffa17"
+}
