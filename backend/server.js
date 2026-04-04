@@ -21,11 +21,21 @@ app.post('/analyze', async (req, res) => {
 
     res.json({
       success: true,
+
       risk: analysis.risk_level,
       risk_score: analysis.risk_score,
       issues: analysis.issues,
+
+      verdict: {
+        risk: analysis.risk_level,
+        risk_score: analysis.risk_score,
+      },
+      findings: analysis.issues,
+
       explanation: analysis.explanation,
       context_summary: analysis.context_summary,
+      normalized_tx: analysis.normalized_tx,
+      decoded: analysis.decoded,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

@@ -1,37 +1,69 @@
-function detectType(selector) {
-  if (!selector) return 'eth_transfer';
-  if (selector === '0x095ea7b3') return 'approve';
-  if (selector === '0xa22cb465') return 'setApprovalForAll';
-  return 'contract_interaction';
+function ensureHex(value, fallback = '0x') {
+  if (typeof value !== 'string' || value.trim() === '') {
+    return fallback;
+  }
+
+  const trimmed = value.trim().toLowerCase();
+
+  if (trimmed.startsWith('0x')) {
+    return trimmed;
+  }
+
+  return `0x${trimmed}`;
 }
 
-function isInfiniteApprove(tx) {
-  if (tx.function_selector !== '0x095ea7b3') return false;
-  if (!tx.data || tx.data.length < 138) return false;
+function normalizeAddress(address) {
+  if (typeof address !== 'string' || address.trim() === '') {
+    return null;
+  }
 
-  const amountHex = tx.data.slice(-64).toLowerCase();
-  return /^f{64}$/.test(amountHex);
+  return address.trim().toLowerCase();
 }
 
-function normalizeTx(txData) {
-  const data = txData.data || '0x';
-  const functionSelector = data && data.length >= 10 ? data.substring(0, 10) : null;
+function getMethodSelector(data) {
+  const normalizedData = ensureHex(data, '0x');
 
-  const normalized = {
-    tx_hash: txData.tx_hash || null,
-    from: txData.from || null,
-    to: txData.to || null,
-    value: txData.value || '0',
+  if (normalizedData === '0x' || normalizedData.length < 10) {
+    return null;
+  }
+
+  return normalizedData.slice(0, 10);
+}
+
+function hasNonZeroValue(value) {
+  if (!value || value === '0x' || value === '0x0' || value === '0') {
+    return false;
+  }
+
+  return true;
+}
+
+function isContractInteraction(data) {
+  const normalizedData = ensureHex(data, '0x');
+  return normalizedData !== '0x' && normalizedData.length >= 10;
+}
+
+function normalizeTx(rawTx = {}) {
+  const data = ensureHex(rawTx.data, '0x');
+  const value = typeof rawTx.value === 'string' ? rawTx.value.toLowerCase() : '0x0';
+  const methodSelector = getMethodSelector(data);
+
+  return {
+    type: rawTx.type || 'transaction',
+    chainId: rawTx.chainId || null,
+    from: normalizeAddress(rawTx.from),
+    to: normalizeAddress(rawTx.to),
+    value,
     data,
-    chainId: txData.chainId || '11155111',
-    origin: txData.origin || 'unknown',
-    function_selector: functionSelector,
-    type: txData.type || detectType(functionSelector),
+    origin: rawTx.origin || 'unknown',
+    method_selector: methodSelector,
+    has_value: hasNonZeroValue(value),
+    is_contract_interaction: isContractInteraction(data),
+    decoded: null,
   };
-
-  normalized.is_infinite_approve = isInfiniteApprove(normalized);
-
-  return normalized;
 }
 
-module.exports = { normalizeTx };
+module.exports = {
+  normalizeTx,
+  getMethodSelector,
+};

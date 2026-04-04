@@ -12,7 +12,7 @@ async function askOllama(prompt, model = 'llama3.2') {
         stream: false,
       },
       {
-        timeout: 15000,
+        timeout: 0,
       },
     );
 
