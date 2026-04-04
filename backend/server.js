@@ -29,13 +29,16 @@ app.post('/analyze', async (req, res) => {
       verdict: {
         risk: analysis.risk_level,
         risk_score: analysis.risk_score,
+        recommended_action: analysis.recommended_action,
       },
-      findings: analysis.issues,
 
+      findings: analysis.findings,
       explanation: analysis.explanation,
       context_summary: analysis.context_summary,
       normalized_tx: analysis.normalized_tx,
       decoded: analysis.decoded,
+      deterministic_verdict: analysis.deterministic_verdict,
+      local_memory_signals: analysis.local_memory_signals,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

@@ -1,0 +1,38 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="120" fill="#6366f1" opacity="0.1"/>
+  
+  <!-- Shield outline -->
+  <path d="M 128 40 L 180 60 L 180 120 C 180 160 160 190 128 210 C 96 190 76 160 76 120 L 76 60 Z" 
+        fill="#6366f1" 
+        stroke="#4f46e5" 
+        stroke-width="4"/>
+  
+  <!-- Inner shield -->
+  <path d="M 128 55 L 170 70 L 170 120 C 170 155 153 180 128 195 C 103 180 86 155 86 120 L 86 70 Z" 
+        fill="#818cf8" 
+        opacity="0.3"/>
+  
+  <!-- Checkmark symbol -->
+  <path d="M 110 128 L 122 142 L 150 105" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="8" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Blockchain hexagon accent -->
+  <path d="M 200 45 L 215 53 L 215 69 L 200 77 L 185 69 L 185 53 Z" 
+        fill="#10b981" 
+        opacity="0.8"/>
+  <circle cx="200" cy="61" r="3" fill="#ffffff"/>
+  
+  <!-- Lock symbol (bottom right) -->
+  <g transform="translate(195, 185)">
+    <rect x="-8" y="-4" width="16" height="12" rx="2" fill="#f59e0b"/>
+    <path d="M -4 -4 L -4 -8 C -4 -11 -1 -14 2 -14 C 5 -14 8 -11 8 -8 L 8 -4" 
+          fill="none" 
+          stroke="#f59e0b" 
+          stroke-width="2.5"/>
+  </g>
+</svg>

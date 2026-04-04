@@ -24,8 +24,7 @@ contract SecurityTestContract is ERC20, Ownable {
     event ETHWithdrawn(address indexed to, uint256 amount);
     event DangerousApprovalMade(address indexed owner, address indexed spender, uint256 amount);
     
-    constructor() ERC20("SecurityTest Token", "STT") Ownable(msg.sender) {
-        // Mintear tokens iniciales al deployer (1 millón)
+    constructor() ERC20("SecurityTest Token", "STT") {        // Mintear tokens iniciales al deployer (1 millón)
         _mint(msg.sender, 1_000_000 * 10**decimals());
     }
     

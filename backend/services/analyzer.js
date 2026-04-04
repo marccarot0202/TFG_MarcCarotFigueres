@@ -1,69 +1,13 @@
 const { askOllama } = require('./ollama');
 const { normalizeTx } = require('./normalizeTx');
 const { decodeKnownTransaction } = require('./decoder');
-
-function normalizeRisk(risk) {
-  const text = String(risk || '').toUpperCase();
-
-  if (text.includes('ALTO')) return 'ALTO';
-  if (text.includes('MEDIO')) return 'MEDIO';
-  if (text.includes('BAJO')) return 'BAJO';
-
-  return 'DESCONOCIDO';
-}
-
-function riskToScore(riskLevel) {
-  switch (riskLevel) {
-    case 'ALTO':
-      return 80;
-    case 'MEDIO':
-      return 50;
-    case 'BAJO':
-      return 20;
-    default:
-      return 0;
-  }
-}
-
-function buildIssues(tx) {
-  const issues = [];
-
-  if (tx.decoded?.method === 'approve') {
-    issues.push('Se ha detectado una aprobación de tokens');
-
-    if (tx.decoded.is_infinite_approval) {
-      issues.push('El permiso solicitado es ilimitado');
-    } else {
-      issues.push(`Se concede permiso al spender ${tx.decoded.spender}`);
-    }
-  } else if (tx.decoded?.method === 'setApprovalForAll') {
-    issues.push('Se ha detectado un setApprovalForAll');
-
-    if (tx.decoded.approved) {
-      issues.push(`Se autoriza al operador ${tx.decoded.operator} para gestionar todos los activos cubiertos`);
-    } else {
-      issues.push(`Se revoca la autorización global del operador ${tx.decoded.operator}`);
-    }
-  } else {
-    if (tx.is_contract_interaction) {
-      issues.push('La transacción interactúa con un smart contract');
-    }
-
-    if (tx.method_selector) {
-      issues.push(`Selector detectado: ${tx.method_selector}`);
-    }
-  }
-
-  if (tx.has_value) {
-    issues.push('La transacción envía ETH');
-  }
-
-  if (tx.origin) {
-    issues.push(`Solicitud iniciada desde ${tx.origin}`);
-  }
-
-  return issues;
-}
+const { buildDeterministicVerdict } = require('./rules');
+const {
+  saveAnalysisHistory,
+  upsertAddressCache,
+  getAddressCache,
+  findRecentAnalysisByTarget,
+} = require('./database');
 
 function buildContextSummary(tx) {
   const parts = [];
@@ -74,106 +18,173 @@ function buildContextSummary(tx) {
   if (tx.method_selector) parts.push(`Selector: ${tx.method_selector}`);
 
   if (tx.decoded?.method === 'approve') {
-    parts.push(`Método decodificado: approve`);
+    parts.push('Método: approve');
     parts.push(`Spender: ${tx.decoded.spender}`);
+    parts.push(`Cantidad: ${tx.decoded.amount}`);
     parts.push(`Permiso ilimitado: ${tx.decoded.is_infinite_approval ? 'sí' : 'no'}`);
   }
 
   if (tx.decoded?.method === 'setApprovalForAll') {
-    parts.push(`Método decodificado: setApprovalForAll`);
+    parts.push('Método: setApprovalForAll');
     parts.push(`Operator: ${tx.decoded.operator}`);
     parts.push(`Approved: ${tx.decoded.approved ? 'true' : 'false'}`);
   }
 
-  if (tx.has_value) parts.push(`Valor: ${tx.value}`);
+  if (tx.has_value) {
+    parts.push(`Valor: ${tx.value}`);
+  }
 
   return parts.join(' | ');
 }
 
-function buildExplanationContext(tx) {
-  if (tx.decoded?.method === 'approve') {
-    return `
-- Se ha detectado una aprobación de tokens
-- Dirección autorizada: ${tx.decoded.spender}
-- Permiso ilimitado: ${tx.decoded.is_infinite_approval ? 'sí' : 'no'}
-- También envía ETH: ${tx.has_value ? 'sí' : 'no'}
-`;
-  }
+async function explainTransaction(tx, verdict) {
+  const findingsText = verdict.findings.map((f, i) => `${i + 1}. ${f}`).join('\n');
 
-  if (tx.decoded?.method === 'setApprovalForAll') {
-    return `
-- Se ha detectado un permiso global sobre activos tipo NFT o similares
-- Operador afectado: ${tx.decoded.operator}
-- Se activa el permiso global: ${tx.decoded.approved ? 'sí' : 'no'}
-- También envía ETH: ${tx.has_value ? 'sí' : 'no'}
-`;
-  }
-
-  if (tx.is_contract_interaction) {
-    return `
-- Se ha detectado una llamada a contrato inteligente
-- Selector detectado: ${tx.method_selector || 'ninguno'}
-- La función exacta todavía no se ha decodificado
-- También envía ETH: ${tx.has_value ? 'sí' : 'no'}
-`;
-  }
-
-  return `
-- Parece una transferencia simple
-- Envía ETH: ${tx.has_value ? 'sí' : 'no'}
-`;
-}
-
-async function explainTransaction(tx) {
   const prompt = `
-Eres un asistente de seguridad para criptomonedas.
-Explica EN ESPAÑOL y de forma MUY SIMPLE qué hace esta transacción.
+  Eres un asistente de seguridad Web3.
+  Explica EN ESPAÑOL y de forma MUY SIMPLE una transacción basándote SOLO en los hallazgos confirmados.
 
-DATOS CONFIRMADOS:
-${buildExplanationContext(tx)}
-- Desde: ${tx.from || 'usuario'}
-- Hacia: ${tx.to || 'destino desconocido'}
-- Origen: ${tx.origin || 'desconocido'}
+  DATOS CONFIRMADOS:
+  - Riesgo calculado por reglas: ${verdict.risk_level}
+  - Acción recomendada: ${verdict.recommended_action}
+  - Hallazgos:
+  ${findingsText}
 
-INSTRUCCIONES:
-1. Explica en 2 o 3 frases cortas
-2. Habla para una persona no técnica
-3. No inventes funciones ni propósitos que no estén confirmados
-4. Si la función exacta no se conoce, dilo claramente
-5. Si detectas un permiso, explica qué implica para el usuario
+  INSTRUCCIONES:
+  1. Explica en 2 o 3 frases cortas
+  2. No inventes funciones ni propósitos no confirmados
+  3. Si es approve, di que es un permiso para mover tokens, NO una transferencia
+  4. No uses frases raras como "por nuestra seguridad" o "se puede acceder a él"
+  5. Si el permiso es limitado, dilo claramente
+  6. Si el permiso es ilimitado, adviértelo claramente
+  7. Habla para una persona no técnica
 
-Explicación:
+  Explicación:
   `.trim();
 
   return await askOllama(prompt);
 }
 
-async function assessRisk(tx) {
-  const prompt = `
-Eres un experto en seguridad Web3.
-Analiza esta transacción y responde SOLO con UNA PALABRA: BAJO, MEDIO o ALTO.
+async function persistLocalAddressMemory(tx) {
+  const chainId = tx.chainId || null;
+  const methodSelector = tx.method_selector || null;
 
-DATOS CONFIRMADOS:
-- Método decodificado: ${tx.decoded?.method || 'ninguno'}
-- Selector: ${tx.method_selector || 'ninguno'}
-- Interacción con contrato: ${tx.is_contract_interaction ? 'sí' : 'no'}
-- Envía ETH: ${tx.has_value ? 'sí' : 'no'}
-- Permiso ilimitado: ${tx.decoded?.is_infinite_approval ? 'sí' : 'no'}
-- Permiso global activo: ${tx.decoded?.method === 'setApprovalForAll' ? (tx.decoded.approved ? 'sí' : 'no') : 'no aplica'}
-- Origen: ${tx.origin || 'desconocido'}
+  const tasks = [];
 
-CRITERIOS:
-- ALTO: approval ilimitado o setApprovalForAll activado
-- MEDIO: llamada a contrato no decodificada o incierta
-- BAJO: transferencia simple o revocación sin señales claras
+  if (tx.from) {
+    tasks.push(
+      upsertAddressCache({
+        address: tx.from,
+        chainId,
+        label: 'sender',
+        notes: 'Dirección origen observada en análisis local',
+        lastMethodSelector: methodSelector,
+      }),
+    );
+  }
 
-Responde SOLO con: BAJO, MEDIO o ALTO
+  if (tx.to) {
+    tasks.push(
+      upsertAddressCache({
+        address: tx.to,
+        chainId,
+        label: 'target',
+        notes: 'Dirección destino observada en análisis local',
+        lastMethodSelector: methodSelector,
+      }),
+    );
+  }
 
-Riesgo:
-  `.trim();
+  if (tx.decoded?.method === 'approve' && tx.decoded.spender) {
+    tasks.push(
+      upsertAddressCache({
+        address: tx.decoded.spender,
+        chainId,
+        label: 'spender',
+        notes: tx.decoded.is_infinite_approval
+          ? 'Dirección observada como spender con aprobación ilimitada'
+          : 'Dirección observada como spender con aprobación limitada',
+        lastMethodSelector: methodSelector,
+      }),
+    );
+  }
 
-  const risk = await askOllama(prompt);
-  return normalizeRisk(risk);
+  if (tx.decoded?.method === 'setApprovalForAll' && tx.decoded.operator) {
+    tasks.push(
+      upsertAddressCache({
+        address: tx.decoded.operator,
+        chainId,
+        label: 'operator',
+        notes: tx.decoded.approved
+          ? 'Dirección observada como operador con permiso global activo'
+          : 'Dirección observada como operador con revocación de permiso global',
+        lastMethodSelector: methodSelector,
+      }),
+    );
+  }
+
+  await Promise.all(tasks);
+}
+
+async function collectLocalMemorySignals(tx) {
+  const chainId = tx.chainId || null;
+  const signals = {
+    cached_addresses: {},
+    recent_similar_analysis: [],
+    findings: [],
+  };
+
+  const addressesToCheck = [];
+
+  if (tx.to) {
+    addressesToCheck.push({ key: 'target', address: tx.to });
+  }
+
+  if (tx.decoded?.method === 'approve' && tx.decoded.spender) {
+    addressesToCheck.push({ key: 'spender', address: tx.decoded.spender });
+  }
+
+  if (tx.decoded?.method === 'setApprovalForAll' && tx.decoded.operator) {
+    addressesToCheck.push({ key: 'operator', address: tx.decoded.operator });
+  }
+
+  for (const item of addressesToCheck) {
+    const cached = await getAddressCache(item.address, chainId);
+    if (cached) {
+      signals.cached_addresses[item.key] = cached;
+
+      if ((cached.times_seen || 0) > 1) {
+        if (item.key === 'target') {
+          signals.findings.push(
+            `La dirección destino ya ha aparecido antes (${cached.times_seen} veces) en análisis locales`,
+          );
+        } else if (item.key === 'spender') {
+          signals.findings.push(
+            `La dirección autorizada ya ha aparecido antes (${cached.times_seen} veces) en análisis locales`,
+          );
+        } else if (item.key === 'operator') {
+          signals.findings.push(
+            `El operador ya ha aparecido antes (${cached.times_seen} veces) en análisis locales`,
+          );
+        }
+      }
+    }
+  }
+
+  if (tx.to) {
+    const recent = await findRecentAnalysisByTarget(tx.to, tx.method_selector, 10);
+    signals.recent_similar_analysis = recent;
+
+    const totalSimilar = recent.reduce((acc, row) => acc + (row.count || 0), 0);
+
+    if (totalSimilar > 0) {
+      signals.findings.push(
+        `Existen ${totalSimilar} análisis recientes similares para este destino${tx.method_selector ? ' y selector' : ''}`,
+      );
+    }
+  }
+
+  return signals;
 }
 
 async function analyzeTransaction(rawTxData) {
@@ -183,20 +194,45 @@ async function analyzeTransaction(rawTxData) {
   console.log('🧩 Transacción normalizada:', tx);
   console.log('🔎 Transacción decodificada:', tx.decoded);
 
-  const [riskLevel, explanation] = await Promise.all([
-    assessRisk(tx),
-    explainTransaction(tx),
-  ]);
+  const localMemorySignals = await collectLocalMemorySignals(tx);
+  console.log('🧠 Memoria local:', localMemorySignals);
 
-  return {
-    risk_level: riskLevel,
-    risk_score: riskToScore(riskLevel),
-    issues: buildIssues(tx),
+  const deterministicVerdict = buildDeterministicVerdict(tx);
+
+  if (localMemorySignals.findings.length > 0) {
+    deterministicVerdict.findings = [
+      ...deterministicVerdict.findings,
+      ...localMemorySignals.findings,
+    ];
+  }
+
+  console.log('🛡️ Veredicto determinista:', deterministicVerdict);
+
+  const explanation = await explainTransaction(tx, deterministicVerdict);
+
+  const analysisResult = {
+    risk_level: deterministicVerdict.risk_level,
+    risk_score: deterministicVerdict.risk_score,
+    recommended_action: deterministicVerdict.recommended_action,
+    issues: deterministicVerdict.findings,
+    findings: deterministicVerdict.findings,
     explanation,
     context_summary: buildContextSummary(tx),
     normalized_tx: tx,
     decoded: tx.decoded,
+    deterministic_verdict: deterministicVerdict,
+    local_memory_signals: localMemorySignals,
   };
+
+  try {
+    await saveAnalysisHistory(rawTxData, analysisResult);
+    await persistLocalAddressMemory(tx);
+    console.log('💾 Análisis guardado en BD');
+  } catch (dbError) {
+    console.error('⚠️ Error guardando en BD:', dbError.message);
+  }
+
+  return analysisResult;
 }
 
 module.exports = {

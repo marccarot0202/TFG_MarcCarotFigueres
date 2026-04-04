@@ -50,6 +50,47 @@ CREATE TABLE IF NOT EXISTS fraud_patterns (
   last_seen INTEGER DEFAULT (unixepoch())
 );
 
+CREATE TABLE IF NOT EXISTS analysis_history (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at INTEGER DEFAULT (unixepoch()),
+  chain_id TEXT,
+  from_address TEXT,
+  to_address TEXT,
+  method_selector TEXT,
+  decoded_method TEXT,
+  risk_level TEXT,
+  risk_score INTEGER,
+  recommended_action TEXT,
+  origin TEXT,
+  raw_tx_json TEXT,
+  normalized_tx_json TEXT,
+  decoded_json TEXT,
+  findings_json TEXT,
+  explanation TEXT
+);
+
+CREATE TABLE IF NOT EXISTS address_cache (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  address TEXT NOT NULL,
+  chain_id TEXT,
+  label TEXT,
+  notes TEXT,
+  first_seen_at INTEGER DEFAULT (unixepoch()),
+  last_seen_at INTEGER DEFAULT (unixepoch()),
+  times_seen INTEGER DEFAULT 1,
+  last_method_selector TEXT,
+  UNIQUE(address, chain_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_analysis_history_to_address
+ON analysis_history(to_address);
+
+CREATE INDEX IF NOT EXISTS idx_analysis_history_method_selector
+ON analysis_history(method_selector);
+
+CREATE INDEX IF NOT EXISTS idx_address_cache_address_chain
+ON address_cache(address, chain_id);
+
 -- Índices para búsquedas rápidas
 CREATE INDEX IF NOT EXISTS idx_contracts_risk ON contracts(risk_level);
 CREATE INDEX IF NOT EXISTS idx_contracts_verified ON contracts(verified);
