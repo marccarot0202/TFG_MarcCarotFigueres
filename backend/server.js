@@ -22,14 +22,16 @@ app.post('/analyze', async (req, res) => {
     res.json({
       success: true,
 
-      risk: analysis.risk_level,
+      risk: analysis.final_verdict?.risk_level || analysis.risk_level,
       risk_score: analysis.risk_score,
       issues: analysis.issues,
 
       verdict: {
-        risk: analysis.risk_level,
+        risk: analysis.final_verdict?.risk_level || analysis.risk_level,
         risk_score: analysis.risk_score,
         recommended_action: analysis.recommended_action,
+        source: analysis.final_verdict?.source || 'deterministic_base',
+        reason: analysis.final_verdict?.reason || 'Sin motivo adicional',
       },
 
       findings: analysis.findings,
@@ -39,6 +41,8 @@ app.post('/analyze', async (req, res) => {
       decoded: analysis.decoded,
       deterministic_verdict: analysis.deterministic_verdict,
       local_memory_signals: analysis.local_memory_signals,
+      ai_review: analysis.ai_review,
+      final_verdict: analysis.final_verdict,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
