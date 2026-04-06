@@ -269,7 +269,7 @@ Hallazgos: ${findingsText}
 Memoria local: ${memoryText}
 
 Formato exacto:
-{"ai_risk_hint":"BAJO|MEDIO|ALTO","confidence":"baja|media|alta","ai_flags":["flag1","flag2"],"reviewer_summary":"frase breve"}
+{"ai_risk_hint":"BAJO|MEDIO|ALTO","confidence":"baja|media|alta","ai_flags":["observación breve 1","observación breve 2"],"reviewer_summary":"frase breve"}
   `.trim();
 
   try {

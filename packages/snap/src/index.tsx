@@ -4,6 +4,18 @@ import { Box, Text, Bold, Heading } from '@metamask/snaps-sdk/jsx';
 /**
  * Llama al backend para analizar una transacción
  */
+
+function formatBulletList(items: string[], maxItems = 5): string {
+  if (!Array.isArray(items) || items.length === 0) {
+    return 'Sin elementos';
+  }
+
+  return items
+    .slice(0, maxItems)
+    .map((item) => `• ${item}`)
+    .join('\n');
+}
+
 async function analyzeTransaction(txData: any) {
   try {
     const response = await fetch('http://localhost:3000/analyze', {
@@ -34,12 +46,26 @@ async function analyzeTransaction(txData: any) {
         risk_score: 0,
         recommended_action: 'REVIEW',
       },
+      final_verdict: {
+        risk_level: 'DESCONOCIDO',
+        source: 'fallback',
+        reason: 'No se pudo obtener veredicto final',
+      },
+      ai_review: {
+        ai_risk_hint: 'DESCONOCIDO',
+        confidence: 'baja',
+        ai_flags: [],
+        reviewer_summary: 'No se pudo obtener revisión IA',
+      },
+      local_memory_signals: {
+        findings: [],
+      },
     };
   }
 }
 
 /**
- * Obtiene el emoji según el nivel de riesgo
+ * Emoji según riesgo
  */
 function getRiskEmoji(risk: string): string {
   switch ((risk || '').toUpperCase()) {
@@ -55,44 +81,21 @@ function getRiskEmoji(risk: string): string {
 }
 
 /**
- * Normaliza el riesgo desde la respuesta del backend
+ * Riesgo principal mostrado en UI: usar el veredicto final si existe
  */
-function getRisk(analysis: any): string {
-  return analysis?.risk || analysis?.verdict?.risk || 'DESCONOCIDO';
+function getDisplayedRisk(analysis: any): string {
+  return (
+    analysis?.final_verdict?.risk_level ||
+    analysis?.verdict?.risk ||
+    analysis?.risk ||
+    'DESCONOCIDO'
+  );
 }
 
-/**
- * Obtiene la acción recomendada
- */
 function getRecommendedAction(analysis: any): string {
   return analysis?.verdict?.recommended_action || 'REVIEW';
 }
 
-/**
- * Obtiene la explicación
- */
-function getExplanation(analysis: any): string {
-  return analysis?.explanation || 'No hay explicación disponible';
-}
-
-/**
- * Obtiene la lista de hallazgos
- */
-function getFindings(analysis: any): string[] {
-  if (Array.isArray(analysis?.findings) && analysis.findings.length > 0) {
-    return analysis.findings;
-  }
-
-  if (Array.isArray(analysis?.issues) && analysis.issues.length > 0) {
-    return analysis.issues;
-  }
-
-  return ['No se detectaron hallazgos específicos'];
-}
-
-/**
- * Traduce la acción recomendada a texto humano
- */
 function getActionLabel(action: string): string {
   switch ((action || '').toUpperCase()) {
     case 'ALLOW':
@@ -106,23 +109,121 @@ function getActionLabel(action: string): string {
   }
 }
 
+function getExplanation(analysis: any): string {
+  return analysis?.explanation || 'No hay explicación disponible';
+}
+
+function getFindings(analysis: any): string[] {
+  if (Array.isArray(analysis?.findings) && analysis.findings.length > 0) {
+    return analysis.findings;
+  }
+
+  if (Array.isArray(analysis?.issues) && analysis.issues.length > 0) {
+    return analysis.issues;
+  }
+
+  return ['No se detectaron hallazgos específicos'];
+}
+
+function getLocalContextFindings(analysis: any): string[] {
+  if (
+    Array.isArray(analysis?.local_memory_signals?.findings) &&
+    analysis.local_memory_signals.findings.length > 0
+  ) {
+    return analysis.local_memory_signals.findings;
+  }
+
+  return [];
+}
+
+function getAiFlags(analysis: any): string[] {
+  if (Array.isArray(analysis?.ai_review?.ai_flags) && analysis.ai_review.ai_flags.length > 0) {
+    return analysis.ai_review.ai_flags;
+  }
+
+  return [];
+}
+
+function getAiSummary(analysis: any): string {
+  return analysis?.ai_review?.reviewer_summary || 'Sin observaciones adicionales de IA';
+}
+
+function getAiConfidence(analysis: any): string {
+  return analysis?.ai_review?.confidence || 'baja';
+}
+
+function getFinalReason(analysis: any): string {
+  return analysis?.final_verdict?.reason || 'Sin motivo adicional';
+}
+
+function getFinalSource(analysis: any): string {
+  return analysis?.final_verdict?.source || 'deterministic_base';
+}
+
+function splitPrimaryAndLocalFindings(analysis: any): {
+  primaryFindings: string[];
+  localContextFindings: string[];
+} {
+  const allFindings = getFindings(analysis);
+  const localContextFindings = getLocalContextFindings(analysis);
+
+  const localSet = new Set(localContextFindings);
+
+  const primaryFindings = allFindings.filter((finding: string) => !localSet.has(finding));
+
+  return {
+    primaryFindings,
+    localContextFindings,
+  };
+}
+
+function getSourceLabel(source: string): string {
+  switch (source) {
+    case 'deterministic_priority':
+      return 'Reglas deterministas prioritarias';
+    case 'hybrid_escalation':
+      return 'Escalado híbrido';
+    case 'ai_escalation':
+      return 'Escalado por revisión IA';
+    case 'deterministic_base':
+      return 'Base determinista';
+    default:
+      return source || 'Desconocido';
+  }
+}
+
 /**
- * Renderiza la tarjeta de análisis
+ * UI principal de análisis
  */
 function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
-  const risk = getRisk(analysis);
-  const findings = getFindings(analysis);
-  const explanation = getExplanation(analysis);
+  const displayedRisk = getDisplayedRisk(analysis);
   const recommendedAction = getRecommendedAction(analysis);
+  const explanation = getExplanation(analysis);
+  const { primaryFindings, localContextFindings } = splitPrimaryAndLocalFindings(analysis);
+  const aiFlags = getAiFlags(analysis);
+  const aiSummary = getAiSummary(analysis);
+  const aiConfidence = getAiConfidence(analysis);
+  const finalReason = getFinalReason(analysis);
+  const finalSource = getFinalSource(analysis);
+
+  const primaryFindingsText = formatBulletList(primaryFindings, 5);
+  const localContextText =
+    localContextFindings.length > 0
+      ? formatBulletList(localContextFindings, 3)
+      : null;
+  const aiFlagsText =
+    aiFlags.length > 0
+      ? formatBulletList(aiFlags, 3)
+      : null;
 
   return (
     <Box>
       <Heading>
-        {getRiskEmoji(risk)} Análisis de Seguridad
+        {getRiskEmoji(displayedRisk)} Análisis de Seguridad
       </Heading>
 
       <Text>
-        <Bold>Nivel de Riesgo:</Bold> {risk}
+        <Bold>Veredicto final:</Bold> {displayedRisk}
       </Text>
 
       <Text>
@@ -130,18 +231,44 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
       </Text>
 
       <Text>
-        <Bold>Hallazgos:</Bold>
+        <Bold>Fuente del veredicto:</Bold> {getSourceLabel(finalSource)}
       </Text>
-
-      <Box>
-        {findings.map((finding: string, index: number) => (
-          <Text key={`finding-${index}`}>• {finding}</Text>
-        ))}
-      </Box>
 
       <Text>
-        <Bold>Explicación:</Bold>
+        <Bold>Motivo principal:</Bold> {finalReason}
       </Text>
+
+      <Text>
+        <Bold>Hallazgos principales:</Bold>
+      </Text>
+
+      <Text>{primaryFindingsText}</Text>
+
+      {localContextText ? (
+        <Box>
+          <Text>
+            <Bold>Contexto local:</Bold>
+          </Text>
+          <Text>{localContextText}</Text>
+        </Box>
+      ) : null}
+
+      <Text>
+        <Bold>Revisión IA:</Bold>
+      </Text>
+
+      <Text>{aiSummary}</Text>
+
+      <Text>
+        <Bold>Confianza IA:</Bold> {aiConfidence}
+      </Text>
+
+      {aiFlagsText ? <Text>{aiFlagsText}</Text> : null}
+
+      <Text>
+        <Bold>Explicación final:</Bold>
+      </Text>
+
       <Text>{explanation}</Text>
 
       <Text>
@@ -156,8 +283,7 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
 }
 
 /**
- * 🔥 Handle outgoing transactions - se ejecuta automáticamente
- * Este hook se activa ANTES de que el usuario confirme cualquier transacción
+ * Hook automático de transacciones salientes
  */
 export const onTransaction = async ({
   transaction,
@@ -188,12 +314,9 @@ export const onTransaction = async ({
 };
 
 /**
- * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
+ * Métodos RPC manuales
  */
-export const onRpcRequest: OnRpcRequestHandler = async ({
-  origin,
-  request,
-}) => {
+export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => {
   switch (request.method) {
     case 'hello':
       return snap.request({
