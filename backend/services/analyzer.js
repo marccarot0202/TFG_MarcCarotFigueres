@@ -38,7 +38,7 @@ function buildContextSummary(tx) {
   return parts.join(' | ');
 }
 
-async function explainTransaction(tx, verdict, localMemorySignals = null) {
+async function explainTransaction(tx, verdict, localMemorySignals = null, semanticFacts = null) {
   const findingsText = verdict.findings.map((f, i) => `${i + 1}. ${f}`).join('\n');
 
   const memoryText =
@@ -74,7 +74,8 @@ INSTRUCCIONES:
 Explicación:
   `.trim();
 
-  return await askOllama(prompt);
+const rawExplanation = await askOllama(prompt);
+return sanitizeExplanation(rawExplanation, verdict, semanticFacts || {});
 }
 
 async function persistLocalAddressMemory(tx) {
@@ -231,7 +232,7 @@ async function collectKnownAddressSignals(tx) {
     signals.matches[item.key] = match;
 
     const label = match.label || 'sin etiqueta';
-    const type = (match.type || '').toLowerCase();
+    const type = String(match.type || '').toLowerCase();
     const source = match.source || 'fuente desconocida';
 
     if (item.key === 'target') {
@@ -254,13 +255,35 @@ async function collectKnownAddressSignals(tx) {
       signals.score_adjustment += 50;
       signals.forced_risk_level = 'ALTO';
       signals.findings.push('La etiqueta indica un riesgo crítico conocido');
-    } else if (type === 'suspicious') {
+      continue;
+    }
+
+    if (type === 'warning' || type === 'suspicious') {
       signals.score_adjustment += 25;
-      if (!signals.forced_risk_level) {
+
+      if (signals.forced_risk_level !== 'ALTO') {
         signals.forced_risk_level = 'MEDIO';
       }
-      signals.findings.push('La etiqueta indica comportamiento sospechoso');
-    } else if (type === 'trusted' || type === 'known_protocol' || type === 'test_contract') {
+
+      if (source.includes('darklist')) {
+        signals.findings.push(
+          'La dirección aparece en una darklist externa y debe considerarse de alto riesgo potencial',
+        );
+      } else {
+        signals.findings.push(
+          'La etiqueta indica una dirección que merece especial precaución',
+        );
+      }
+      
+      continue;
+    }
+
+    if (
+      type === 'trusted' ||
+      type === 'known_protocol' ||
+      type === 'test_contract' ||
+      type === 'own_contract'
+    ) {
       signals.score_adjustment -= 10;
       signals.findings.push('La etiqueta aporta contexto de confianza o de prueba');
     }
@@ -319,8 +342,211 @@ function normalizeConfidence(value) {
   return 'media';
 }
 
-async function reviewWithAI(tx, deterministicVerdict, localMemorySignals) {
-  let raw = null;
+function containsAny(text, terms) {
+  const normalized = String(text || '').toLowerCase();
+  return terms.some((term) => normalized.includes(term));
+}
+
+function buildSemanticFacts(tx, deterministicVerdict, knownAddressSignals, localMemorySignals) {
+  const knownMatches = Object.values(knownAddressSignals?.matches || {});
+  const knownTypes = knownMatches.map((match) =>
+    String(match?.type || '').toLowerCase(),
+  );
+
+  const recentSimilarCount = Array.isArray(localMemorySignals?.recent_similar_analysis)
+    ? localMemorySignals.recent_similar_analysis.reduce(
+        (acc, row) => acc + (row.count || 0),
+        0,
+      )
+    : 0;
+
+  return {
+    method: tx.decoded?.method || 'unknown',
+    isInfiniteApproval: !!tx.decoded?.is_infinite_approval,
+    isGlobalApproval:
+      tx.decoded?.method === 'setApprovalForAll' && !!tx.decoded?.approved,
+    isRevocation:
+      (tx.decoded?.method === 'approve' && tx.decoded?.amount === '0') ||
+      (tx.decoded?.method === 'setApprovalForAll' && tx.decoded?.approved === false),
+    sendsValue: !!tx.has_value,
+    deterministicRisk: deterministicVerdict.risk_level,
+    hasKnownAddressMatch: knownMatches.length > 0,
+    hasKnownAddressRiskLabel: knownTypes.some((type) =>
+      ['warning', 'suspicious', 'scam', 'blacklist', 'blacklisted'].includes(type),
+    ),
+    hasKnownAddressCriticalLabel: knownTypes.some((type) =>
+      ['scam', 'blacklist', 'blacklisted'].includes(type),
+    ),
+    hasKnownAddressTrustedLabel: knownTypes.some((type) =>
+      ['trusted', 'known_protocol', 'test_contract', 'own_contract'].includes(type),
+    ),
+    recentSimilarCount,
+    repeatedTarget:
+      Number(localMemorySignals?.cached_addresses?.target?.times_seen || 0) > 1,
+    repeatedSensitiveAddress:
+      Number(localMemorySignals?.cached_addresses?.spender?.times_seen || 0) > 1 ||
+      Number(localMemorySignals?.cached_addresses?.operator?.times_seen || 0) > 1,
+  };
+}
+
+function buildSafeReviewerSummary(facts) {
+  if (facts.isInfiniteApproval) {
+    return 'La operación requiere revisión porque concede un permiso ilimitado.';
+  }
+
+  if (facts.isGlobalApproval) {
+    return 'La operación requiere revisión porque activa un permiso global.';
+  }
+
+  if (facts.hasKnownAddressCriticalLabel) {
+    return 'La operación requiere revisión porque la dirección implicada está etiquetada como de alto riesgo.';
+  }
+
+  if (facts.hasKnownAddressRiskLabel) {
+    return 'La operación requiere revisión porque la dirección implicada tiene una etiqueta de precaución.';
+  }
+
+  if (facts.deterministicRisk === 'MEDIO') {
+    return 'La operación requiere revisión por el contexto detectado.';
+  }
+
+  return 'Sin observaciones adicionales de IA.';
+}
+
+function buildSafeExplanation(verdict, facts) {
+  let sentence1 = 'Se ha detectado una operación que conviene revisar.';
+  let sentence2 = '';
+  let sentence3 = '';
+
+  if (facts.method === 'approve') {
+    if (facts.isInfiniteApproval) {
+      sentence1 = 'Se ha detectado una aprobación de tokens con permiso ilimitado.';
+      sentence2 =
+        'Eso permitiría a la dirección autorizada mover tokens sin volver a pedir permiso.';
+    } else if (facts.isRevocation) {
+      sentence1 = 'Se ha detectado una revocación de permiso de tokens.';
+      sentence2 = 'En este caso no se está concediendo un permiso nuevo amplio.';
+    } else {
+      sentence1 = 'Se ha detectado una aprobación de tokens con permiso limitado.';
+      sentence2 = 'Eso permite mover solo la cantidad autorizada, no un permiso ilimitado.';
+    }
+  } else if (facts.isGlobalApproval) {
+    sentence1 = 'Se ha detectado un permiso global sobre activos.';
+    sentence2 =
+      'Eso permitiría al operador gestionar todos los activos cubiertos por ese permiso.';
+  } else if (facts.method === 'setApprovalForAll' && facts.isRevocation) {
+    sentence1 = 'Se ha detectado una revocación de permiso global.';
+    sentence2 = 'En este caso se está retirando la autorización previa.';
+  } else if (facts.deterministicRisk === 'MEDIO') {
+    sentence1 = 'Se ha detectado una interacción con contrato que requiere revisión.';
+    sentence2 = 'La función concreta no es lo bastante clara como para asumir que sea segura.';
+  }
+
+  if (facts.hasKnownAddressCriticalLabel) {
+    sentence3 =
+      'Además, la dirección implicada está etiquetada en la base local como de alto riesgo.';
+  } else if (facts.hasKnownAddressRiskLabel) {
+    sentence3 =
+      'Además, la dirección implicada tiene una etiqueta de precaución en la base local.';
+  } else if (facts.recentSimilarCount > 0) {
+    sentence3 =
+      'Además, existen análisis locales similares previos, lo que aporta contexto adicional.';
+  }
+
+  return [sentence1, sentence2, sentence3].filter(Boolean).join(' ');
+}
+
+function sanitizeAiReview(aiReview, facts) {
+  let aiRiskHint = normalizeAiRiskHint(
+    aiReview?.ai_risk_hint,
+    facts.deterministicRisk,
+  );
+  let confidence = normalizeConfidence(aiReview?.confidence);
+  let aiFlags = Array.isArray(aiReview?.ai_flags)
+    ? aiReview.ai_flags
+        .filter((x) => typeof x === 'string' && x.trim())
+        .slice(0, 3)
+    : [];
+  let reviewerSummary =
+    typeof aiReview?.reviewer_summary === 'string' && aiReview.reviewer_summary.trim()
+      ? aiReview.reviewer_summary.trim()
+      : buildSafeReviewerSummary(facts);
+
+  if (facts.isInfiniteApproval || facts.isGlobalApproval) {
+    aiRiskHint = 'ALTO';
+  }
+
+  if (!facts.isInfiniteApproval) {
+    aiFlags = aiFlags.filter((flag) => !containsAny(flag, ['ilimitad', 'sin límite', 'sin limite']));
+    if (containsAny(reviewerSummary, ['ilimitad', 'sin límite', 'sin limite'])) {
+      reviewerSummary = buildSafeReviewerSummary(facts);
+    }
+  }
+
+  if (!facts.isGlobalApproval) {
+    aiFlags = aiFlags.filter((flag) => !containsAny(flag, ['permiso global', 'global', 'todos los activos']));
+    if (containsAny(reviewerSummary, ['permiso global', 'todos los activos'])) {
+      reviewerSummary = buildSafeReviewerSummary(facts);
+    }
+  }
+
+  if (!facts.sendsValue) {
+    aiFlags = aiFlags.filter((flag) => !containsAny(flag, ['envía eth', 'envia eth']));
+    if (containsAny(reviewerSummary, ['envía eth', 'envia eth'])) {
+      reviewerSummary = buildSafeReviewerSummary(facts);
+    }
+  }
+
+  if (!facts.hasKnownAddressRiskLabel) {
+    aiFlags = aiFlags.filter(
+      (flag) => !containsAny(flag, ['phishing', 'estafa', 'malicios', 'darklist', 'scam']),
+    );
+    if (containsAny(reviewerSummary, ['phishing', 'estafa', 'malicios', 'darklist', 'scam'])) {
+      reviewerSummary = buildSafeReviewerSummary(facts);
+    }
+  }
+
+  if (!reviewerSummary || reviewerSummary.length > 220) {
+    reviewerSummary = buildSafeReviewerSummary(facts);
+  }
+
+  return {
+    ai_risk_hint: aiRiskHint,
+    confidence,
+    ai_flags: aiFlags,
+    reviewer_summary: reviewerSummary,
+    raw_response: aiReview?.raw_response || null,
+  };
+}
+
+function sanitizeExplanation(explanation, verdict, facts) {
+  let text = String(explanation || '')
+    .replace(/```/g, '')
+    .replace(/\*\*/g, '')
+    .replace(/`/g, '')
+    .replace(/\bM\d+\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const hasContradiction =
+    (!facts.isInfiniteApproval &&
+      containsAny(text, ['ilimitad', 'sin límite', 'sin limite'])) ||
+    (!facts.isGlobalApproval &&
+      containsAny(text, ['permiso global', 'todos los activos', 'todos tus nft', 'todos los nfts'])) ||
+    (!facts.sendsValue && containsAny(text, ['envía eth', 'envia eth'])) ||
+    (!facts.hasKnownAddressRiskLabel &&
+      containsAny(text, ['phishing', 'estafa', 'malicios', 'darklist', 'scam']));
+
+  if (!text || text.length > 420 || hasContradiction) {
+    return buildSafeExplanation(verdict, facts);
+  }
+
+  return text;
+}
+
+
+
+async function reviewWithAI(tx, deterministicVerdict, localMemorySignals, semanticFacts) {  let raw = null;
 
   const findingsText = deterministicVerdict.findings.slice(0, 6).join(' | ');
   const memoryText =
@@ -329,54 +555,68 @@ async function reviewWithAI(tx, deterministicVerdict, localMemorySignals) {
       : 'Sin señales adicionales';
 
   const prompt = `
-Devuelve SOLO JSON válido.
+  Devuelve SOLO JSON válido.
+  No añadas texto antes ni después.
+  No uses markdown.
 
-Analiza esta transacción Web3 como revisor complementario.
-No reemplaces el riesgo base.
+  Eres un revisor complementario de seguridad Web3.
+  No reemplazas el riesgo base.
 
-Riesgo base: ${deterministicVerdict.risk_level}
-Método: ${tx.decoded?.method || 'ninguno'}
-Selector: ${tx.method_selector || 'ninguno'}
-Hallazgos: ${findingsText}
-Memoria local: ${memoryText}
+  DATOS:
+  - Riesgo base: ${deterministicVerdict.risk_level}
+  - Método: ${semanticFacts.method}
+  - Permiso ilimitado: ${semanticFacts.isInfiniteApproval ? 'sí' : 'no'}
+  - Permiso global activo: ${semanticFacts.isGlobalApproval ? 'sí' : 'no'}
+  - Revocación: ${semanticFacts.isRevocation ? 'sí' : 'no'}
+  - Dirección con etiqueta de riesgo: ${semanticFacts.hasKnownAddressRiskLabel ? 'sí' : 'no'}
+  - Riesgo crítico etiquetado: ${semanticFacts.hasKnownAddressCriticalLabel ? 'sí' : 'no'}
+  - Análisis similares recientes: ${semanticFacts.recentSimilarCount}
+  - Hallazgos: ${findingsText}
+  - Memoria local: ${memoryText}
 
-Formato exacto:
-{"ai_risk_hint":"ALTO","confidence":"media","ai_flags":["permiso ilimitado detectado","uso repetido en memoria local"],"reviewer_summary":"La operación requiere revisión por su riesgo elevado."}
+  REGLAS OBLIGATORIAS:
+  - Si "Permiso ilimitado" es "sí", ai_risk_hint debe ser "ALTO"
+  - Si "Permiso global activo" es "sí", ai_risk_hint debe ser "ALTO"
+  - Si no hay permiso ilimitado, no hables de permiso ilimitado
+  - Si no hay permiso global, no hables de permiso global
+  - No inventes phishing, scam o malicia si no existe etiqueta de riesgo
+  - confidence solo puede ser: "baja", "media" o "alta"
+  - ai_flags debe ser un array de 0 a 3 frases cortas
+  - reviewer_summary debe ser una frase breve y objetiva
+
+  Formato exacto:
+  {"ai_risk_hint":"ALTO","confidence":"media","ai_flags":["permiso ilimitado detectado","uso repetido en memoria local"],"reviewer_summary":"La operación requiere revisión por su riesgo elevado."}
   `.trim();
 
   try {
-    raw = await askOllama(prompt);
+
     const parsed = safeJsonParseFromText(raw);
 
-    return {
-      
-      ai_risk_hint: normalizeAiRiskHint(
-        parsed.ai_risk_hint,
-        deterministicVerdict.risk_level,
-      ),
-      confidence: normalizeConfidence(parsed.confidence),
-      ai_flags: Array.isArray(parsed.ai_flags)
-        ? parsed.ai_flags.filter((x) => typeof x === 'string' && x.trim()).slice(0, 3)
-        : [],
-      reviewer_summary:
-        typeof parsed.reviewer_summary === 'string' && parsed.reviewer_summary.trim()
-          ? parsed.reviewer_summary.trim()
-          : 'Sin observaciones adicionales de IA',
-      raw_response: raw,
-    };
+    return sanitizeAiReview(
+      {
+        ai_risk_hint: parsed.ai_risk_hint,
+        confidence: parsed.confidence,
+        ai_flags: parsed.ai_flags,
+        reviewer_summary: parsed.reviewer_summary,
+        raw_response: raw,
+      },
+      semanticFacts,
+    );
   } catch (error) {
-    console.error('⚠️ Error en AI reviewer:', error.message);
-    console.error('⚠️ Raw AI reviewer response:', raw);
 
-    return {
-      ai_risk_hint: deterministicVerdict.risk_level,
-      confidence: 'baja',
-      ai_flags: [],
-      reviewer_summary: 'No se pudieron generar observaciones adicionales de IA',
-      raw_response: raw,
-    };
+   return sanitizeAiReview(
+      {
+        ai_risk_hint: deterministicVerdict.risk_level,
+        confidence: 'baja',
+        ai_flags: [],
+        reviewer_summary: 'No se pudieron generar observaciones adicionales de IA',
+        raw_response: raw,
+      },
+      semanticFacts,
+    );     
   }
 }
+
 
 function fuseVerdicts(deterministicVerdict, aiReview) {
   const baseRisk = deterministicVerdict.risk_level;
@@ -424,8 +664,14 @@ async function analyzeTransaction(rawTxData) {
   console.log('🧠 Memoria local:', localMemorySignals);
   const knownAddressSignals = await collectKnownAddressSignals(tx);
   console.log('🏷️ Direcciones conocidas:', knownAddressSignals);
-
   const deterministicVerdict = buildDeterministicVerdict(tx);
+  const semanticFacts = buildSemanticFacts(
+    tx,
+    deterministicVerdict,
+    knownAddressSignals,
+    localMemorySignals,
+  );
+  console.log('🧱 Hechos semánticos:', semanticFacts);
 
 
   if (localMemorySignals.findings.length > 0) {
@@ -464,6 +710,7 @@ async function analyzeTransaction(rawTxData) {
     tx,
     deterministicVerdict,
     localMemorySignals,
+    semanticFacts,
   );
 
   console.log('🤖 Revisión IA:', aiReview);
@@ -477,6 +724,7 @@ async function analyzeTransaction(rawTxData) {
     tx,
     deterministicVerdict,
     localMemorySignals,
+    semanticFacts
   );
 
   const analysisResult = {
@@ -494,6 +742,7 @@ async function analyzeTransaction(rawTxData) {
     known_address_signals: knownAddressSignals,
     ai_review: aiReview,
     final_verdict: finalVerdict,
+    semantic_facts: semanticFacts,
   };
 
   try {

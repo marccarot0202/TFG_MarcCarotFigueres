@@ -200,3 +200,30 @@ reglas/heurísticas para decidir
 IA para traducir a lenguaje natural
 
 Eso es exactamente lo defendible.
+
+
+
+
+
+Política que te propongo
+Etiquetas de riesgo alto
+
+Estas deben subir fuerte o forzar ALTO:
+
+scam
+blacklist
+blacklisted
+Etiquetas de riesgo medio
+
+Estas deben subir score y como mínimo llevar a MEDIO si estabas en BAJO:
+
+warning
+suspicious
+Etiquetas de confianza / prueba
+
+Estas deben bajar un poco el ruido, pero nunca tapar un caso crítico:
+
+trusted
+known_protocol
+test_contract
+own_contract

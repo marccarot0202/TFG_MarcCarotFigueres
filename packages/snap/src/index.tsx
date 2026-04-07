@@ -191,6 +191,25 @@ function splitPrimaryAndLocalFindings(analysis: any): {
   };
 }
 
+function prioritizeFindings(findings: string[]): string[] {
+  const highPriority = findings.filter((finding) => {
+    const text = finding.toLowerCase();
+
+    return (
+      text.includes('está etiquetada como') ||
+      text.includes('fuente de la etiqueta') ||
+      text.includes('riesgo crítico conocido') ||
+      text.includes('merece especial precaución') ||
+      text.includes('base de datos') ||
+      text.includes('darklist')
+    );
+  });
+
+  const rest = findings.filter((finding) => !highPriority.includes(finding));
+
+  return [...highPriority, ...rest];
+}
+
 function getSourceLabel(source: string): string {
   switch (source) {
     case 'deterministic_priority':
@@ -214,6 +233,7 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
   const recommendedAction = getRecommendedAction(analysis);
   const explanation = getExplanation(analysis);
   const { primaryFindings, localContextFindings } = splitPrimaryAndLocalFindings(analysis);
+  const orderedPrimaryFindings = prioritizeFindings(primaryFindings);
   const aiFlags = getAiFlags(analysis);
   const aiSummary = getAiSummary(analysis);
   const aiConfidence = getAiConfidence(analysis);
@@ -245,7 +265,7 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
       <Text>
         <Bold>Hallazgos principales:</Bold>
       </Text>
-      {renderBulletTexts(primaryFindings, 5, 'primary')}
+      {renderBulletTexts(primaryFindings, 8, 'primary')}
 
       {localContextFindings.length > 0 ? (
         <Box>
