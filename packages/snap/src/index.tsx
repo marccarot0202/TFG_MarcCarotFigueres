@@ -16,6 +16,20 @@ function formatBulletList(items: string[], maxItems = 5): string {
     .join('\n');
 }
 
+function renderBulletTexts(items: string[], maxItems = 5, prefix = 'item') {
+  if (!Array.isArray(items) || items.length === 0) {
+    return <Text>• Sin elementos</Text>;
+  }
+
+  return (
+    <Box>
+      {items.slice(0, maxItems).map((item, index) => (
+        <Text key={`${prefix}-${index}`}>• {item}</Text>
+      ))}
+    </Box>
+  );
+}
+
 async function analyzeTransaction(txData: any) {
   try {
     const response = await fetch('http://localhost:3000/analyze', {
@@ -206,16 +220,6 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
   const finalReason = getFinalReason(analysis);
   const finalSource = getFinalSource(analysis);
 
-  const primaryFindingsText = formatBulletList(primaryFindings, 5);
-  const localContextText =
-    localContextFindings.length > 0
-      ? formatBulletList(localContextFindings, 3)
-      : null;
-  const aiFlagsText =
-    aiFlags.length > 0
-      ? formatBulletList(aiFlags, 3)
-      : null;
-
   return (
     <Box>
       <Heading>
@@ -241,15 +245,14 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
       <Text>
         <Bold>Hallazgos principales:</Bold>
       </Text>
+      {renderBulletTexts(primaryFindings, 5, 'primary')}
 
-      <Text>{primaryFindingsText}</Text>
-
-      {localContextText ? (
+      {localContextFindings.length > 0 ? (
         <Box>
           <Text>
             <Bold>Contexto local:</Bold>
           </Text>
-          <Text>{localContextText}</Text>
+          {renderBulletTexts(localContextFindings, 3, 'local')}
         </Box>
       ) : null}
 
@@ -263,7 +266,7 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
         <Bold>Confianza IA:</Bold> {aiConfidence}
       </Text>
 
-      {aiFlagsText ? <Text>{aiFlagsText}</Text> : null}
+      {aiFlags.length > 0 ? renderBulletTexts(aiFlags, 3, 'ai-flag') : null}
 
       <Text>
         <Bold>Explicación final:</Bold>

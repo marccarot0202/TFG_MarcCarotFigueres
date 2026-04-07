@@ -7,6 +7,7 @@ const {
   upsertAddressCache,
   getAddressCache,
   findRecentAnalysisByTarget,
+  lookupAddress,
 } = require('./database');
 
 function buildContextSummary(tx) {
@@ -60,14 +61,15 @@ MEMORIA LOCAL:
 ${memoryText}
 
 INSTRUCCIONES:
-1. Explica en 3 o 4 frases cortas
-2. No inventes funciones ni propósitos no confirmados
-3. Si es approve, di que es un permiso para mover tokens, NO una transferencia
-4. Si es setApprovalForAll, di que es un permiso global
-5. Si hay memoria local relevante, menciónala brevemente como contexto adicional
-6. No uses lenguaje dramático ni alarmista
-7. No digas cosas como "nuestro proyecto" o "nuestra seguridad"
-8. Habla para una persona no técnica
+1. Responde en 2 o 3 frases cortas, no más
+2. No uses markdown
+3. No inventes funciones ni propósitos no confirmados
+4. Si es approve, di que es un permiso para mover tokens, NO una transferencia
+5. Si la aprobación es ilimitada, dilo claramente
+6. Si hay memoria local, menciónala solo como contexto adicional
+7. No uses palabras como "sospechoso", "patrón inusual", "actividad sospechosa" o similares salvo que esté explícitamente confirmado
+8. No uses lenguaje alarmista
+9. Habla para una persona no técnica
 
 Explicación:
   `.trim();
@@ -197,6 +199,76 @@ async function collectLocalMemorySignals(tx) {
   return signals;
 }
 
+async function collectKnownAddressSignals(tx) {
+  const signals = {
+    matches: {},
+    findings: [],
+    score_adjustment: 0,
+    forced_risk_level: null,
+  };
+
+  const addressesToCheck = [];
+
+  if (tx.to) {
+    addressesToCheck.push({ key: 'target', address: tx.to });
+  }
+
+  if (tx.decoded?.method === 'approve' && tx.decoded.spender) {
+    addressesToCheck.push({ key: 'spender', address: tx.decoded.spender });
+  }
+
+  if (tx.decoded?.method === 'setApprovalForAll' && tx.decoded.operator) {
+    addressesToCheck.push({ key: 'operator', address: tx.decoded.operator });
+  }
+
+  for (const item of addressesToCheck) {
+    const match = await lookupAddress(item.address);
+
+    if (!match) {
+      continue;
+    }
+
+    signals.matches[item.key] = match;
+
+    const label = match.label || 'sin etiqueta';
+    const type = (match.type || '').toLowerCase();
+    const source = match.source || 'fuente desconocida';
+
+    if (item.key === 'target') {
+      signals.findings.push(
+        `La dirección destino está etiquetada como "${label}" (${type || 'sin tipo'})`,
+      );
+    } else if (item.key === 'spender') {
+      signals.findings.push(
+        `La dirección autorizada está etiquetada como "${label}" (${type || 'sin tipo'})`,
+      );
+    } else if (item.key === 'operator') {
+      signals.findings.push(
+        `El operador está etiquetado como "${label}" (${type || 'sin tipo'})`,
+      );
+    }
+
+    signals.findings.push(`Fuente de la etiqueta: ${source}`);
+
+    if (type === 'scam' || type === 'blacklist' || type === 'blacklisted') {
+      signals.score_adjustment += 50;
+      signals.forced_risk_level = 'ALTO';
+      signals.findings.push('La etiqueta indica un riesgo crítico conocido');
+    } else if (type === 'suspicious') {
+      signals.score_adjustment += 25;
+      if (!signals.forced_risk_level) {
+        signals.forced_risk_level = 'MEDIO';
+      }
+      signals.findings.push('La etiqueta indica comportamiento sospechoso');
+    } else if (type === 'trusted' || type === 'known_protocol' || type === 'test_contract') {
+      signals.score_adjustment -= 10;
+      signals.findings.push('La etiqueta aporta contexto de confianza o de prueba');
+    }
+  }
+
+  return signals;
+}
+
 function safeJsonParseFromText(text) {
   if (!text || typeof text !== 'string') {
     throw new Error('Respuesta vacía o no textual');
@@ -269,7 +341,7 @@ Hallazgos: ${findingsText}
 Memoria local: ${memoryText}
 
 Formato exacto:
-{"ai_risk_hint":"BAJO|MEDIO|ALTO","confidence":"baja|media|alta","ai_flags":["observación breve 1","observación breve 2"],"reviewer_summary":"frase breve"}
+{"ai_risk_hint":"ALTO","confidence":"media","ai_flags":["permiso ilimitado detectado","uso repetido en memoria local"],"reviewer_summary":"La operación requiere revisión por su riesgo elevado."}
   `.trim();
 
   try {
@@ -350,14 +422,42 @@ async function analyzeTransaction(rawTxData) {
 
   const localMemorySignals = await collectLocalMemorySignals(tx);
   console.log('🧠 Memoria local:', localMemorySignals);
+  const knownAddressSignals = await collectKnownAddressSignals(tx);
+  console.log('🏷️ Direcciones conocidas:', knownAddressSignals);
 
   const deterministicVerdict = buildDeterministicVerdict(tx);
+
 
   if (localMemorySignals.findings.length > 0) {
     deterministicVerdict.findings = [
       ...deterministicVerdict.findings,
       ...localMemorySignals.findings,
     ];
+  }
+
+  if (knownAddressSignals.findings.length > 0) {
+    deterministicVerdict.findings = [
+      ...deterministicVerdict.findings,
+      ...knownAddressSignals.findings,
+    ];
+  }
+
+  if (knownAddressSignals.score_adjustment !== 0) {
+    deterministicVerdict.risk_score = Math.max(
+      0,
+      Math.min(100, deterministicVerdict.risk_score + knownAddressSignals.score_adjustment),
+    );
+  }
+
+  if (knownAddressSignals.forced_risk_level === 'ALTO') {
+    deterministicVerdict.risk_level = 'ALTO';
+    deterministicVerdict.recommended_action = 'REVIEW';
+  } else if (
+    knownAddressSignals.forced_risk_level === 'MEDIO' &&
+    deterministicVerdict.risk_level === 'BAJO'
+  ) {
+    deterministicVerdict.risk_level = 'MEDIO';
+    deterministicVerdict.recommended_action = 'REVIEW';
   }
 
     const aiReview = await reviewWithAI(
@@ -391,6 +491,7 @@ async function analyzeTransaction(rawTxData) {
     decoded: tx.decoded,
     deterministic_verdict: deterministicVerdict,
     local_memory_signals: localMemorySignals,
+    known_address_signals: knownAddressSignals,
     ai_review: aiReview,
     final_verdict: finalVerdict,
   };

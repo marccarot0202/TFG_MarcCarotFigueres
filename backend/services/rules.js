@@ -7,15 +7,16 @@ function buildDeterministicVerdict(tx) {
   if (tx.decoded?.method === 'approve') {
     findings.push('Se ha detectado una aprobación de tokens');
     findings.push(`Dirección autorizada: ${tx.decoded.spender}`);
-    findings.push(`Cantidad aprobada: ${tx.decoded.amount}`);
 
     if (tx.decoded.is_infinite_approval) {
+      findings.push('Cantidad aprobada: ilimitada');
       findings.push('La aprobación es ilimitada');
       findings.push('La dirección autorizada podría mover todos los tokens permitidos sin pedir permiso de nuevo');
       risk_level = 'ALTO';
       risk_score = 90;
       recommended_action = 'REVIEW';
     } else {
+      findings.push(`Cantidad aprobada: ${tx.decoded.amount}`);
       findings.push('La aprobación no es ilimitada');
 
       if (tx.decoded.amount === '0') {
