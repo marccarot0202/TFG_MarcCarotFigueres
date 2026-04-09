@@ -662,17 +662,11 @@ async function analyzeTransaction(rawTxData) {
 
   const localMemorySignals = await collectLocalMemorySignals(tx);
   console.log('🧠 Memoria local:', localMemorySignals);
+
   const knownAddressSignals = await collectKnownAddressSignals(tx);
   console.log('🏷️ Direcciones conocidas:', knownAddressSignals);
-  const deterministicVerdict = buildDeterministicVerdict(tx);
-  const semanticFacts = buildSemanticFacts(
-    tx,
-    deterministicVerdict,
-    knownAddressSignals,
-    localMemorySignals,
-  );
-  console.log('🧱 Hechos semánticos:', semanticFacts);
 
+  const deterministicVerdict = buildDeterministicVerdict(tx);
 
   if (localMemorySignals.findings.length > 0) {
     deterministicVerdict.findings = [
@@ -691,7 +685,10 @@ async function analyzeTransaction(rawTxData) {
   if (knownAddressSignals.score_adjustment !== 0) {
     deterministicVerdict.risk_score = Math.max(
       0,
-      Math.min(100, deterministicVerdict.risk_score + knownAddressSignals.score_adjustment),
+      Math.min(
+        100,
+        deterministicVerdict.risk_score + knownAddressSignals.score_adjustment,
+      ),
     );
   }
 
@@ -706,13 +703,20 @@ async function analyzeTransaction(rawTxData) {
     deterministicVerdict.recommended_action = 'REVIEW';
   }
 
-    const aiReview = await reviewWithAI(
+  const semanticFacts = buildSemanticFacts(
+    tx,
+    deterministicVerdict,
+    knownAddressSignals,
+    localMemorySignals,
+  );
+  console.log('🧱 Hechos semánticos:', semanticFacts);
+
+  const aiReview = await reviewWithAI(
     tx,
     deterministicVerdict,
     localMemorySignals,
     semanticFacts,
   );
-
   console.log('🤖 Revisión IA:', aiReview);
 
   const finalVerdict = fuseVerdicts(deterministicVerdict, aiReview);
@@ -724,7 +728,7 @@ async function analyzeTransaction(rawTxData) {
     tx,
     deterministicVerdict,
     localMemorySignals,
-    semanticFacts
+    semanticFacts,
   );
 
   const analysisResult = {
@@ -755,7 +759,3 @@ async function analyzeTransaction(rawTxData) {
 
   return analysisResult;
 }
-
-module.exports = {
-  analyzeTransaction,
-};

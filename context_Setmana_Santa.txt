@@ -227,3 +227,19 @@ trusted
 known_protocol
 test_contract
 own_contract
+
+
+
+5) Qué debería pasar después
+
+Con esto ya no estarás haciendo un parche del tipo:
+
+“si no es approve infinito, borra ilimitado”
+
+Sino una capa general que dice:
+
+si no existe un hecho, la IA no puede afirmarlo
+si la IA lo afirma, se corrige
+si la explicación contradice hechos, se reemplaza por una versión segura
+
+Eso sí escala bastante mejor.
