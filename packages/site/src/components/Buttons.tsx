@@ -81,7 +81,7 @@ export const ConnectButton = (props: ComponentProps<typeof Button>) => {
   return (
     <Button {...props}>
       <FlaskFox />
-      <ButtonText>Connect</ButtonText>
+      <ButtonText>Connectar</ButtonText>
     </Button>
   );
 };
@@ -90,13 +90,13 @@ export const ReconnectButton = (props: ComponentProps<typeof Button>) => {
   return (
     <Button {...props}>
       <FlaskFox />
-      <ButtonText>Reconnect</ButtonText>
+      <ButtonText>Reconnectar</ButtonText>
     </Button>
   );
 };
 
 export const SendHelloButton = (props: ComponentProps<typeof Button>) => {
-  return <Button {...props}>Send message</Button>;
+  return <Button {...props}>Enviar missatge</Button>;
 };
 
 export const HeaderButtons = () => {
@@ -124,5 +124,5 @@ export const HeaderButtons = () => {
 };
 
 export const AnalyzeButton = (props: ComponentProps<typeof Button>) => {
-  return <Button {...props}>Analyze Transaction</Button>;
+  return <Button {...props}>Analitzar Transacció</Button>;
 };

@@ -7,7 +7,7 @@ echo =========================================
 
 set "NVM_HOME=C:\Users\marcc\AppData\Local\nvm"
 set "NODE_VERSION_ROOT=20.11.1"
-set "PROJECT_ROOT=C:\Users\marcc\Desktop\Univ2.0\5-Cinque\SICUE\TFG\tfg_marc_v1"
+set "PROJECT_ROOT=C:\Users\marcc\Desktop\TFG\tfg_marc_v1"
 
 set "PATH=%NVM_HOME%;%PATH%"
 

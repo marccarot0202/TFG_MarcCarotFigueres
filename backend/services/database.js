@@ -398,6 +398,182 @@ function closeDB() {
   });
 }
 
+function getDashboardStats() {
+  return new Promise((resolve, reject) => {
+    const stats = {
+      total_analysis: 0,
+      low_risk: 0,
+      medium_risk: 0,
+      high_risk: 0,
+      known_addresses: 0,
+      cached_addresses: 0,
+    };
+
+    const queries = [
+      {
+        key: 'total_analysis',
+        sql: 'SELECT COUNT(*) AS count FROM analysis_history',
+      },
+      {
+        key: 'low_risk',
+        sql: "SELECT COUNT(*) AS count FROM analysis_history WHERE risk_level = 'BAJO'",
+      },
+      {
+        key: 'medium_risk',
+        sql: "SELECT COUNT(*) AS count FROM analysis_history WHERE risk_level = 'MEDIO'",
+      },
+      {
+        key: 'high_risk',
+        sql: "SELECT COUNT(*) AS count FROM analysis_history WHERE risk_level = 'ALTO'",
+      },
+      {
+        key: 'known_addresses',
+        sql: 'SELECT COUNT(*) AS count FROM known_addresses',
+      },
+      {
+        key: 'cached_addresses',
+        sql: 'SELECT COUNT(*) AS count FROM address_cache',
+      },
+    ];
+
+    let pending = queries.length;
+
+    queries.forEach((query) => {
+      db.get(query.sql, [], (err, row) => {
+        if (err) {
+          console.warn(`⚠️ No se pudo calcular ${query.key}:`, err.message);
+          stats[query.key] = 0;
+        } else {
+          stats[query.key] = row?.count || 0;
+        }
+
+        pending -= 1;
+
+        if (pending === 0) {
+          resolve(stats);
+        }
+      });
+    });
+  });
+}
+
+function getRecentAnalysisHistory(limit = 10) {
+  return new Promise((resolve, reject) => {
+    const safeLimit = Math.min(Math.max(Number(limit) || 10, 1), 50);
+
+    const sql = `
+      SELECT rowid AS id, *
+      FROM analysis_history
+      ORDER BY rowid DESC
+      LIMIT ?
+    `;
+
+    db.all(sql, [safeLimit], (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(rows || []);
+    });
+  });
+}
+
+function getKnownAddresses({ limit = 50, type = null, search = null } = {}) {
+  return new Promise((resolve, reject) => {
+    const safeLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+
+    const conditions = [];
+    const params = [];
+
+    if (type && type !== 'all') {
+      conditions.push('LOWER(type) = LOWER(?)');
+      params.push(type);
+    }
+
+    if (search) {
+      conditions.push(
+        '(LOWER(address) LIKE LOWER(?) OR LOWER(label) LIKE LOWER(?) OR LOWER(source) LIKE LOWER(?))',
+      );
+      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+    }
+
+    const whereClause =
+      conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const sql = `
+      SELECT
+        rowid AS id,
+        address,
+        label,
+        type,
+        source,
+        added
+      FROM known_addresses
+      ${whereClause}
+      ORDER BY added DESC
+      LIMIT ?
+    `;
+
+    params.push(safeLimit);
+
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(rows || []);
+    });
+  });
+}
+
+function getDashboardMetrics() {
+  return new Promise((resolve, reject) => {
+    const metrics = {
+      risk_distribution: [],
+      method_distribution: [],
+    };
+
+    const riskSql = `
+      SELECT risk_level AS label, COUNT(*) AS count
+      FROM analysis_history
+      GROUP BY risk_level
+      ORDER BY count DESC
+    `;
+
+    const methodSql = `
+      SELECT
+        COALESCE(decoded_method, method_selector, 'desconegut') AS label,
+        COUNT(*) AS count
+      FROM analysis_history
+      GROUP BY COALESCE(decoded_method, method_selector, 'desconegut')
+      ORDER BY count DESC
+      LIMIT 8
+    `;
+
+    db.all(riskSql, [], (riskErr, riskRows) => {
+      if (riskErr) {
+        reject(riskErr);
+        return;
+      }
+
+      metrics.risk_distribution = riskRows || [];
+
+      db.all(methodSql, [], (methodErr, methodRows) => {
+        if (methodErr) {
+          reject(methodErr);
+          return;
+        }
+
+        metrics.method_distribution = methodRows || [];
+
+        resolve(metrics);
+      });
+    });
+  });
+}
+
 module.exports = {
   initDB,
   lookupAddress,
@@ -412,4 +588,8 @@ module.exports = {
   addKnownAddress,
   getStats,
   closeDB,
+  getDashboardStats,
+  getRecentAnalysisHistory,
+  getKnownAddresses,
+  getDashboardMetrics,
 };

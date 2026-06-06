@@ -546,7 +546,8 @@ function sanitizeExplanation(explanation, verdict, facts) {
 
 
 
-async function reviewWithAI(tx, deterministicVerdict, localMemorySignals, semanticFacts) {  let raw = null;
+async function reviewWithAI(tx, deterministicVerdict, localMemorySignals, semanticFacts) {
+  let raw = null;
 
   const findingsText = deterministicVerdict.findings.slice(0, 6).join(' | ');
   const memoryText =
@@ -555,41 +556,41 @@ async function reviewWithAI(tx, deterministicVerdict, localMemorySignals, semant
       : 'Sin señales adicionales';
 
   const prompt = `
-  Devuelve SOLO JSON válido.
-  No añadas texto antes ni después.
-  No uses markdown.
+Devuelve SOLO JSON válido.
+No añadas texto antes ni después.
+No uses markdown.
 
-  Eres un revisor complementario de seguridad Web3.
-  No reemplazas el riesgo base.
+Eres un revisor complementario de seguridad Web3.
+No reemplazas el riesgo base.
 
-  DATOS:
-  - Riesgo base: ${deterministicVerdict.risk_level}
-  - Método: ${semanticFacts.method}
-  - Permiso ilimitado: ${semanticFacts.isInfiniteApproval ? 'sí' : 'no'}
-  - Permiso global activo: ${semanticFacts.isGlobalApproval ? 'sí' : 'no'}
-  - Revocación: ${semanticFacts.isRevocation ? 'sí' : 'no'}
-  - Dirección con etiqueta de riesgo: ${semanticFacts.hasKnownAddressRiskLabel ? 'sí' : 'no'}
-  - Riesgo crítico etiquetado: ${semanticFacts.hasKnownAddressCriticalLabel ? 'sí' : 'no'}
-  - Análisis similares recientes: ${semanticFacts.recentSimilarCount}
-  - Hallazgos: ${findingsText}
-  - Memoria local: ${memoryText}
+DATOS:
+- Riesgo base: ${deterministicVerdict.risk_level}
+- Método: ${semanticFacts.method}
+- Permiso ilimitado: ${semanticFacts.isInfiniteApproval ? 'sí' : 'no'}
+- Permiso global activo: ${semanticFacts.isGlobalApproval ? 'sí' : 'no'}
+- Revocación: ${semanticFacts.isRevocation ? 'sí' : 'no'}
+- Dirección con etiqueta de riesgo: ${semanticFacts.hasKnownAddressRiskLabel ? 'sí' : 'no'}
+- Riesgo crítico etiquetado: ${semanticFacts.hasKnownAddressCriticalLabel ? 'sí' : 'no'}
+- Análisis similares recientes: ${semanticFacts.recentSimilarCount}
+- Hallazgos: ${findingsText}
+- Memoria local: ${memoryText}
 
-  REGLAS OBLIGATORIAS:
-  - Si "Permiso ilimitado" es "sí", ai_risk_hint debe ser "ALTO"
-  - Si "Permiso global activo" es "sí", ai_risk_hint debe ser "ALTO"
-  - Si no hay permiso ilimitado, no hables de permiso ilimitado
-  - Si no hay permiso global, no hables de permiso global
-  - No inventes phishing, scam o malicia si no existe etiqueta de riesgo
-  - confidence solo puede ser: "baja", "media" o "alta"
-  - ai_flags debe ser un array de 0 a 3 frases cortas
-  - reviewer_summary debe ser una frase breve y objetiva
+REGLAS OBLIGATORIAS:
+- Si "Permiso ilimitado" es "sí", ai_risk_hint debe ser "ALTO"
+- Si "Permiso global activo" es "sí", ai_risk_hint debe ser "ALTO"
+- Si no hay permiso ilimitado, no hables de permiso ilimitado
+- Si no hay permiso global, no hables de permiso global
+- No inventes phishing, scam o malicia si no existe etiqueta de riesgo
+- confidence solo puede ser: "baja", "media" o "alta"
+- ai_flags debe ser un array de 0 a 3 frases cortas
+- reviewer_summary debe ser una frase breve y objetiva
 
-  Formato exacto:
-  {"ai_risk_hint":"ALTO","confidence":"media","ai_flags":["permiso ilimitado detectado","uso repetido en memoria local"],"reviewer_summary":"La operación requiere revisión por su riesgo elevado."}
+Formato exacto:
+{"ai_risk_hint":"ALTO","confidence":"media","ai_flags":["permiso ilimitado detectado","uso repetido en memoria local"],"reviewer_summary":"La operación requiere revisión por su riesgo elevado."}
   `.trim();
 
   try {
-
+    raw = await askOllama(prompt);
     const parsed = safeJsonParseFromText(raw);
 
     return sanitizeAiReview(
@@ -603,8 +604,10 @@ async function reviewWithAI(tx, deterministicVerdict, localMemorySignals, semant
       semanticFacts,
     );
   } catch (error) {
+    console.error('⚠️ Error en AI reviewer:', error.message);
+    console.error('⚠️ Raw AI reviewer response:', raw);
 
-   return sanitizeAiReview(
+    return sanitizeAiReview(
       {
         ai_risk_hint: deterministicVerdict.risk_level,
         confidence: 'baja',
@@ -613,7 +616,7 @@ async function reviewWithAI(tx, deterministicVerdict, localMemorySignals, semant
         raw_response: raw,
       },
       semanticFacts,
-    );     
+    );
   }
 }
 
@@ -759,3 +762,7 @@ async function analyzeTransaction(rawTxData) {
 
   return analysisResult;
 }
+
+module.exports = {
+  analyzeTransaction,
+};

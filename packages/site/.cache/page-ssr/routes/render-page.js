@@ -12424,7 +12424,7 @@ const ConnectButton = props => {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(Button, {
     ...props,
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_assets_flask_fox_svg__WEBPACK_IMPORTED_MODULE_0__.ReactComponent, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(ButtonText, {
-      children: "Connect"
+      children: "Connectar"
     })]
   });
 };
@@ -12432,14 +12432,14 @@ const ReconnectButton = props => {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(Button, {
     ...props,
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_assets_flask_fox_svg__WEBPACK_IMPORTED_MODULE_0__.ReactComponent, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(ButtonText, {
-      children: "Reconnect"
+      children: "Reconnectar"
     })]
   });
 };
 const SendHelloButton = props => {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Button, {
     ...props,
-    children: "Send message"
+    children: "Enviar missatge"
   });
 };
 const HeaderButtons = () => {
@@ -12470,7 +12470,7 @@ const HeaderButtons = () => {
 const AnalyzeButton = props => {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Button, {
     ...props,
-    children: "Analyze Transaction"
+    children: "Analitzar Transacci\xF3"
   });
 };
 
@@ -12665,7 +12665,7 @@ const Header = ({
         color: (_theme$colors$icon = theme.colors.icon) === null || _theme$colors$icon === void 0 ? void 0 : _theme$colors$icon.default,
         size: 36
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Title, {
-        children: "template-snap"
+        children: "ASW3"
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(RightContainer, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Toggle__WEBPACK_IMPORTED_MODULE_2__.Toggle, {
@@ -13767,6 +13767,17 @@ const getThemePreference = () => {
 
 /***/ }),
 
+/***/ "buffer":
+/*!*************************!*\
+  !*** external "buffer" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("buffer");
+
+/***/ }),
+
 /***/ "crypto":
 /*!*************************!*\
   !*** external "crypto" ***!
@@ -13775,6 +13786,28 @@ const getThemePreference = () => {
 
 "use strict";
 module.exports = require("crypto");
+
+/***/ }),
+
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ "https":
+/*!************************!*\
+  !*** external "https" ***!
+  \************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
 
 /***/ }),
 
@@ -13789,25 +13822,36 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ "react":
-/*!***********************************************************************************************************************!*\
-  !*** external "C:\\Users\\marcc\\Desktop\\Univ2.2\\5-Cinque\\SICUE\\TFG\\tfg_marc_v1\\node_modules\\react\\index.js" ***!
-  \***********************************************************************************************************************/
+/***/ "punycode":
+/*!***************************!*\
+  !*** external "punycode" ***!
+  \***************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("C:\\Users\\marcc\\Desktop\\Univ2.2\\5-Cinque\\SICUE\\TFG\\tfg_marc_v1\\node_modules\\react\\index.js");
+module.exports = require("punycode");
+
+/***/ }),
+
+/***/ "react":
+/*!****************************************************************************************!*\
+  !*** external "C:\\Users\\marcc\\Desktop\\tfg_marc_v1\\node_modules\\react\\index.js" ***!
+  \****************************************************************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("C:\\Users\\marcc\\Desktop\\tfg_marc_v1\\node_modules\\react\\index.js");
 
 /***/ }),
 
 /***/ "react-dom/server":
-/*!****************************************************************************************************************************!*\
-  !*** external "C:\\Users\\marcc\\Desktop\\Univ2.2\\5-Cinque\\SICUE\\TFG\\tfg_marc_v1\\node_modules\\react-dom\\server.js" ***!
-  \****************************************************************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** external "C:\\Users\\marcc\\Desktop\\tfg_marc_v1\\node_modules\\react-dom\\server.js" ***!
+  \*********************************************************************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("C:\\Users\\marcc\\Desktop\\Univ2.2\\5-Cinque\\SICUE\\TFG\\tfg_marc_v1\\node_modules\\react-dom\\server.js");
+module.exports = require("C:\\Users\\marcc\\Desktop\\tfg_marc_v1\\node_modules\\react-dom\\server.js");
 
 /***/ }),
 
@@ -13819,6 +13863,39 @@ module.exports = require("C:\\Users\\marcc\\Desktop\\Univ2.2\\5-Cinque\\SICUE\\T
 
 "use strict";
 module.exports = require("stream");
+
+/***/ }),
+
+/***/ "string_decoder":
+/*!*********************************!*\
+  !*** external "string_decoder" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("string_decoder");
+
+/***/ }),
+
+/***/ "url":
+/*!**********************!*\
+  !*** external "url" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("url");
+
+/***/ }),
+
+/***/ "zlib":
+/*!***********************!*\
+  !*** external "zlib" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
 
 /***/ })
 

@@ -107,7 +107,21 @@ function getDisplayedRisk(analysis: any): string {
 }
 
 function getRecommendedAction(analysis: any): string {
-  return analysis?.verdict?.recommended_action || 'REVIEW';
+  const finalRisk =
+    analysis?.final_verdict?.risk_level ||
+    analysis?.verdict?.risk ||
+    analysis?.risk ||
+    'DESCONOCIDO';
+
+  if (finalRisk === 'ALTO' || finalRisk === 'MEDIO') {
+    return 'REVIEW';
+  }
+
+  if (finalRisk === 'BAJO') {
+    return analysis?.verdict?.recommended_action || 'ALLOW';
+  }
+
+  return 'REVIEW';
 }
 
 function getActionLabel(action: string): string {
