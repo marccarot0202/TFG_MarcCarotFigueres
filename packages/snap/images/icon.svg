@@ -1,38 +1,33 @@
-<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background circle -->
-  <circle cx="128" cy="128" r="120" fill="#6366f1" opacity="0.1"/>
-  
-  <!-- Shield outline -->
-  <path d="M 128 40 L 180 60 L 180 120 C 180 160 160 190 128 210 C 96 190 76 160 76 120 L 76 60 Z" 
-        fill="#6366f1" 
-        stroke="#4f46e5" 
-        stroke-width="4"/>
-  
-  <!-- Inner shield -->
-  <path d="M 128 55 L 170 70 L 170 120 C 170 155 153 180 128 195 C 103 180 86 155 86 120 L 86 70 Z" 
-        fill="#818cf8" 
-        opacity="0.3"/>
-  
-  <!-- Checkmark symbol -->
-  <path d="M 110 128 L 122 142 L 150 105" 
-        fill="none" 
-        stroke="#ffffff" 
-        stroke-width="8" 
-        stroke-linecap="round" 
-        stroke-linejoin="round"/>
-  
-  <!-- Blockchain hexagon accent -->
-  <path d="M 200 45 L 215 53 L 215 69 L 200 77 L 185 69 L 185 53 Z" 
-        fill="#10b981" 
-        opacity="0.8"/>
-  <circle cx="200" cy="61" r="3" fill="#ffffff"/>
-  
-  <!-- Lock symbol (bottom right) -->
-  <g transform="translate(195, 185)">
-    <rect x="-8" y="-4" width="16" height="12" rx="2" fill="#f59e0b"/>
-    <path d="M -4 -4 L -4 -8 C -4 -11 -1 -14 2 -14 C 5 -14 8 -11 8 -8 L 8 -4" 
-          fill="none" 
-          stroke="#f59e0b" 
-          stroke-width="2.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#09090b"></stop>
+      <stop offset="100%" stop-color="#18181b"></stop>
+    </linearGradient>
+
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00F5FF"></stop>
+      <stop offset="100%" stop-color="#6D5EFF"></stop>
+    </linearGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="110" fill="url(#bg)"></rect>
+
+  <g filter="url(#glow)">
+    <polygon points="256,90 380,160 380,352 256,422 132,352 132,160" fill="none" stroke="url(#neon)" stroke-width="18"></polygon>
+
+    <polygon points="256,150 325,190 325,270 256,310 187,270 187,190" fill="none" stroke="url(#neon)" stroke-width="14"></polygon>
+
+    <circle cx="256" cy="230" r="22" fill="#00F5FF"></circle>
+
+    <path d="M256 310V370" stroke="#00F5FF" stroke-width="14" stroke-linecap="round"></path>
   </g>
 </svg>

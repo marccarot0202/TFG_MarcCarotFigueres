@@ -1,0 +1,44 @@
+\subsection{Requisits funcionals}
+
+\textbf{RF1 -- Interceptació de transaccions}
+
+El sistema ha de ser capaç d’interceptar les sol·licituds de transaccions abans de la seva confirmació dins la cartera digital. Aquesta funcionalitat constitueix el punt d’entrada per a l’anàlisi de seguretat.
+
+\textbf{RF2 -- Anàlisi de risc basat en regles}
+
+El sistema ha d’avaluar cada transacció a partir d’un conjunt de regles i heurístiques que permetin estimar-ne el nivell de risc i detectar patrons especialment sensibles, com ara aprovacions il·limitades o permisos globals sobre col·leccions.
+
+\textbf{RF3 -- Generació d’explicacions comprensibles}
+
+El sistema ha de traduir el resultat tècnic de l’anàlisi a una explicació en llenguatge natural que permeti a l’usuari entendre les implicacions de l’operació. En aquest requisit, es considera comprensible una explicació que pugui ser interpretada per una persona sense coneixements previs de Web3: ha d’indicar l’acció principal i la seva conseqüència amb frases breus, emprar vocabulari planer i evitar, o aclarir quan siguin imprescindibles, tecnicismes com ara \textit{calldata}, ABI, \textit{wei} o selectors de funció. També ha de destacar de manera explícita qualsevol permís o risc rellevant per facilitar una decisió informada abans de confirmar la transacció.
+
+\textbf{RF4 -- Integració dins la interfície de la cartera}
+
+La informació generada ha de mostrar-se abans de la confirmació de la transacció, integrada dins la interfície de l’usuari.
+
+\subsection{Requisits no funcionals}
+
+
+\textbf{RNF1 -- Rendiment}
+
+El temps total d’anàlisi i generació de la resposta ha de ser prou reduït per mantenir una experiència d’ús fluida. Atès que el sistema integra diversos components, es considera acceptable una resposta en pocs segons, sempre que la interfície proporcioni \textit{feedback} clar quan el processament no sigui immediat \cite{nielsen_response_times}.
+
+\textbf{RNF2 -- Privadesa}
+
+Les dades analitzades han de romandre, sempre que sigui possible, dins l’entorn local de l’usuari, minimitzant l’enviament d’informació a serveis externs durant el procés d’avaluació.
+
+\vspace{0.1cm}
+\textbf{RNF3 -- Fiabilitat}
+
+En cas d’error d’algun component, el sistema no ha d’impedir l’execució de la transacció.
+
+\vspace{0.1cm}
+\textbf{RNF4 -- Extensibilitat}
+
+L’arquitectura ha de permetre incorporar noves regles d’anàlisi o millores futures sense redissenyar el sistema complet.
+
+\textbf{RNF5 -- Usabilitat}
+
+Les explicacions generades han de ser comprensibles per a usuaris sense coneixements tècnics avançats.
+
+Aquests requisits constitueixen la base sobre la qual es defineix l’arquitectura del sistema i les decisions de disseny adoptades en els apartats següents.

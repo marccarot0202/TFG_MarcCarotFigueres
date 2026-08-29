@@ -1,0 +1,45 @@
+\subsection{Implementació del Snap}
+
+El Snap constitueix el punt d’entrada del sistema dins de MetaMask i actua com a capa d’intercepció i presentació dels resultats. La seva funció principal no és realitzar tota l’anàlisi de manera interna, sinó capturar la transacció abans de la confirmació, preparar-ne la informació rellevant, consultar el \textit{backend} local i presentar el resultat a l’usuari dins la pròpia interfície de la cartera.
+
+\subsubsection{Estructura general del Snap}
+
+La implementació del Snap s’ha centralitzat principalment en el fitxer \texttt{packages/snap/src/index.tsx}, que conté tant la definició dels punts d’entrada del Snap com la lògica necessària per comunicar-se amb el \textit{backend}. Aquesta organització simplifica el prototip i permet concentrar en un únic punt la intercepció de transaccions, la preparació de les dades i la construcció de la interfície mostrada a MetaMask.
+
+En una primera fase, el Snap només disposava d’un mètode bàsic de prova, accessible des de la DApp local mitjançant \texttt{wallet\_invokeSnap}. Aquest comportament inicial servia per validar la instal·lació del Snap, la comunicació amb la cartera i la generació de diàlegs simples dins MetaMask. Posteriorment, aquesta base es va ampliar per incorporar un flux real d’anàlisi de transaccions, primer mitjançant un mètode invocat manualment des de la DApp i després mitjançant la intercepció automàtica amb \texttt{onTransaction}. 
+
+\subsubsection{Permisos i configuració}
+
+Perquè el Snap pogués operar dins del flux de transaccions, va ser necessari definir al \textit{manifest} un conjunt de permisos específics. Entre els més importants hi ha \texttt{snap\_dialog}, que permet mostrar diàlegs dins MetaMask; \texttt{endowment:network-access}, que habilita l’ús de \texttt{fetch()} per comunicar-se amb el \textit{backend} local; i \texttt{endowment:transaction-insight}, que permet generar \textit{transaction insights} abans de la confirmació de la transacció. En aquesta darrera capacitat també es fa servir l’opció \texttt{allowTransactionOrigin} per poder disposar d’informació sobre l’origen de la petició. 
+
+La configuració correcta d’aquests permisos va ser un pas crític en la implementació, ja que sense ells el Snap podia continuar mostrant diàlegs simples, però no podia ni consultar el \textit{backend} ni interceptar automàticament transaccions reals dins MetaMask.
+
+\subsubsection{Interacció manual mitjançant \texttt{onRpcRequest}}
+
+Abans d’activar la intercepció automàtica, es va implementar una primera via de prova a través de \texttt{onRpcRequest}. Aquest mecanisme permetia que la DApp local invoqués explícitament el Snap amb un mètode personalitzat, anomenat \texttt{analyzeTransaction}, enviant una estructura simplificada de transacció. El Snap rebia aquestes dades, les reenviava al \textit{backend} i mostrava el resultat amb un diàleg de MetaMask.
+
+Aquesta fase va ser especialment útil per validar de manera incremental la integració del sistema. Gràcies a ella es va poder comprovar, abans d’entrar en la intercepció real, que la comunicació Snap $\rightarrow$ \textit{backend} $\rightarrow$ Ollama funcionava correctament i que la resposta podia representar-se dins de la UI limitada de MetaMask. Aquest enfocament també va facilitar el procés de depuració inicial, ja que permetia provar el \textit{backend} sense dependre encara del flux complet d’una transacció real. 
+
+\subsubsection{Intercepció automàtica de transaccions amb \texttt{onTransaction}}
+
+Un cop validada la connexió amb el \textit{backend}, la implementació es va ampliar amb el punt d’entrada \texttt{onTransaction}, que és el mecanisme proporcionat per MetaMask Snaps per interceptar transaccions abans que l’usuari les confirmi. Aquest \textit{handler} s’executa automàticament quan MetaMask detecta una transacció compatible i hi ha un Snap instal·lat amb els permisos adequats. 
+
+Dins d’aquest \textit{handler}, el Snap extreu els camps principals de la transacció, entre els quals destaquen l’adreça d’origen, l’adreça de destinació, el valor enviat, la calldata, la xarxa utilitzada i l’origen de la transacció. Aquesta informació es transforma a una estructura JSON simplificada que després s’envia al \textit{backend} local per ser analitzada. El fet de treballar amb una estructura pròpia i normalitzada facilita tant el tractament posterior com la possible extensió del sistema amb nous tipus d’anàlisi.
+
+\subsubsection{Comunicació amb el backend}
+
+Per comunicar-se amb el \textit{backend}, el Snap utilitza una petició HTTP local mitjançant \texttt{fetch()} contra l’endpoint \texttt{http://localhost:3000/analyze}. Aquesta petició envia les dades de la transacció en format JSON i rep com a resposta una estructura amb el veredicte final, l’acció recomanada, els indicis del camp \texttt{findings}, el context disponible, la revisió complementària de la IA i l’explicació final. El Snap no implementa directament la lògica heurística ni la generació de text, sinó que delega aquestes responsabilitats al \textit{backend}, mantenint-se així com un component lleuger i centrat en la integració amb MetaMask.
+
+Aquesta decisió respon tant a motius arquitectònics com a limitacions de l’entorn del Snap. D’una banda, l’aïllament i les restriccions de MetaMask Snaps fan poc convenient carregar-lo amb processament més pesat. De l’altra, separar la lògica d’anàlisi en un servei local independent facilita l’evolució del sistema, la reutilització de codi i la incorporació de millores futures sense haver de modificar constantment el Snap.
+
+\subsubsection{Presentació dels \textit{insights} dins MetaMask}
+
+Un cop rebuda la resposta del \textit{backend}, el Snap construeix la interfície que es mostra dins de MetaMask. Aquesta interfície es genera amb els components oficials del sistema de Snaps, com ara \texttt{Box}, \texttt{Text}, \texttt{Bold} i \texttt{Heading}, ja que l’entorn de MetaMask no permet utilitzar una interfície web arbitrària.
+
+En les primeres versions del prototip, la informació presentada a l’usuari es limitava principalment al nivell de risc i a una explicació en llenguatge natural. Amb l’evolució del sistema, la resposta del \textit{backend} s’ha ampliat i el Snap pot mostrar un conjunt més ric d’elements, com ara el veredicte final, l’acció recomanada, els indicis principals, el context local detectat, la revisió complementària de la IA i la font que ha motivat el resultat.
+
+La versió final unifica en català totes les etiquetes visibles i les explicacions noves. El Snap transforma els codis interns de risc \texttt{BAJO}, \texttt{MEDIO}, \texttt{ALTO} i \texttt{DESCONOCIDO} en \textit{Baix}, \textit{Mitjà}, \textit{Alt} i \textit{Desconegut}, i presenta \texttt{ALLOW}, \texttt{REVIEW} i \texttt{BLOCK} com \textit{Permetre}, \textit{Revisar} i \textit{Bloquejar}. Els codis originals no es modifiquen dins del contracte JSON ni a SQLite, per mantenir la compatibilitat amb l’historial, les proves automatitzades i els consumidors de l’API.
+
+Aquesta ampliació permet que l’usuari no rebi només una alerta genèrica, sinó una visió més estructurada del motiu pel qual una transacció pot ser considerada segura, sospitosa o arriscada. Tot i això, el Snap continua mantenint una responsabilitat limitada: no reconstrueix l’anàlisi intern ni aplica les regles de risc, sinó que adapta la resposta rebuda al format visual permès per MetaMask.
+
+La limitació dels components disponibles condiciona el disseny de la interfície, però també ajuda a centrar el missatge en la informació essencial: el nivell de risc, els motius principals i l’explicació final que ha de servir de suport a la decisió de l’usuari.

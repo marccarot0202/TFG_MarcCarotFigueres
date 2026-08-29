@@ -5,7 +5,7 @@ var plugins = [{
     },{
       name: 'gatsby-plugin-manifest',
       plugin: require('C:/Users/marcc/Desktop/tfg_marc_v1/node_modules/gatsby-plugin-manifest/gatsby-ssr.js'),
-      options: {"plugins":[],"name":"Template Snap","icon":"src/assets/logo.svg","theme_color":"#6F4CFF","background_color":"#FFFFFF","display":"standalone","legacy":true,"theme_color_in_head":true,"cache_busting_mode":"query","crossOrigin":"anonymous","include_favicon":true,"cacheDigest":"80f001a0d61fe8748ba7f8e7aec97c23"},
+      options: {"plugins":[],"name":"Assistent de Seguretat Web3","icon":"src/assets/logo.svg","theme_color":"#6F4CFF","background_color":"#FFFFFF","display":"standalone","legacy":true,"theme_color_in_head":true,"cache_busting_mode":"query","crossOrigin":"anonymous","include_favicon":true,"cacheDigest":"39694e9b04b72af4c6ec4b5a9aa62ee3"},
     },{
       name: 'default-site-plugin',
       plugin: require('C:/Users/marcc/Desktop/tfg_marc_v1/packages/site/gatsby-ssr.tsx'),

@@ -8,6 +8,7 @@ const {
   getKnownAddresses,
   addKnownAddress,
   getDashboardMetrics,
+  getAnalysisHistoryDetail,
 } = require('./services/database');
 
 const { analyzeTransaction } = require('./services/analyzer');
@@ -41,9 +42,10 @@ async function checkOllama() {
       message: 'Ollama disponible',
     };
   } catch (error) {
+    console.warn('⚠️ No s’ha pogut connectar amb Ollama:', error.message);
     return {
       status: 'error',
-      message: error.message || 'No ha estat possible connectar amb Ollama',
+      message: 'No s’ha pogut connectar amb Ollama',
     };
   }
 }
@@ -71,8 +73,7 @@ app.get('/health', async (req, res) => {
   };
 
   const hasError =
-    health.database.status !== 'ok' ||
-    health.ollama.status !== 'ok';
+    health.database.status !== 'ok' || health.ollama.status !== 'ok';
 
   res.status(hasError ? 503 : 200).json(health);
 });
@@ -87,11 +88,11 @@ app.get('/stats', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error obtenint estadísticas:', error.message);
+    console.error('❌ Error obtenint les estadístiques:', error.message);
 
     res.status(500).json({
       success: false,
-      error: 'Error obtenint estadísticas',
+      error: 'Error obtenint les estadístiques',
       details: error.message,
     });
   }
@@ -107,11 +108,11 @@ app.get('/dashboard-metrics', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error obteniendo métricas del dashboard:', error.message);
+    console.error('❌ Error obtenint les mètriques del tauler:', error.message);
 
     res.status(500).json({
       success: false,
-      error: 'Error obteniendo métricas del dashboard',
+      error: 'Error obtenint les mètriques del tauler',
       details: error.message,
     });
   }
@@ -128,11 +129,38 @@ app.get('/analysis-history', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error obteniendo histórico:', error.message);
+    console.error("❌ Error obtenint l'historial:", error.message);
 
     res.status(500).json({
       success: false,
-      error: 'Error obteniendo histórico',
+      error: "Error obtenint l'historial",
+      details: error.message,
+    });
+  }
+});
+
+app.get('/analysis-history/:id', async (req, res) => {
+  try {
+    const detail = await getAnalysisHistoryDetail(req.params.id);
+
+    if (!detail) {
+      return res.status(404).json({
+        success: false,
+        error: 'No s’ha trobat l’anàlisi',
+      });
+    }
+
+    res.json({
+      success: true,
+      detail,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("❌ Error obtenint el detall de l'anàlisi:", error.message);
+
+    res.status(500).json({
+      success: false,
+      error: "Error obtenint el detall de l'anàlisi",
       details: error.message,
     });
   }
@@ -156,11 +184,11 @@ app.get('/known-addresses', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error obteniendo direcciones conocidas:', error.message);
+    console.error('❌ Error obtenint les adreces conegudes:', error.message);
 
     res.status(500).json({
       success: false,
-      error: 'Error obteniendo direcciones conocidas',
+      error: 'Error obtenint les adreces conegudes',
       details: error.message,
     });
   }
@@ -173,7 +201,7 @@ app.post('/known-addresses/manual', async (req, res) => {
     if (!isValidEthereumAddress(address)) {
       return res.status(400).json({
         success: false,
-        error: 'Dirección Ethereum no válida',
+        error: 'L’adreça Ethereum no és vàlida',
       });
     }
 
@@ -181,7 +209,7 @@ app.post('/known-addresses/manual', async (req, res) => {
     const cleanLabel =
       typeof label === 'string' && label.trim()
         ? label.trim()
-        : 'Etiqueta manual del usuario';
+        : "Etiqueta manual de l'usuari";
 
     const cleanType = normalizeManualAddressType(type);
 
@@ -194,7 +222,7 @@ app.post('/known-addresses/manual', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Dirección añadida correctamente al dataset local',
+      message: 'Adreça afegida correctament al conjunt de dades local',
       address: {
         address: cleanAddress,
         label: cleanLabel,
@@ -204,11 +232,11 @@ app.post('/known-addresses/manual', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error añadiendo dirección manual:', error.message);
+    console.error("❌ Error afegint l'adreça manual:", error.message);
 
     res.status(500).json({
       success: false,
-      error: 'Error añadiendo dirección manual',
+      error: "Error afegint l'adreça manual",
       details: error.message,
     });
   }
@@ -229,7 +257,9 @@ function normalizeManualAddressType(type) {
     'own_contract',
   ];
 
-  const normalized = String(type || '').trim().toLowerCase();
+  const normalized = String(type || '')
+    .trim()
+    .toLowerCase();
 
   if (allowedTypes.includes(normalized)) {
     return normalized;
@@ -258,7 +288,7 @@ app.post('/analyze', async (req, res) => {
         risk_score: analysis.risk_score,
         recommended_action: analysis.recommended_action,
         source: analysis.final_verdict?.source || 'deterministic_base',
-        reason: analysis.final_verdict?.reason || 'Sin motivo adicional',
+        reason: analysis.final_verdict?.reason || 'Sense cap motiu addicional',
       },
 
       findings: analysis.findings,
@@ -270,10 +300,13 @@ app.post('/analyze', async (req, res) => {
       local_memory_signals: analysis.local_memory_signals,
       ai_review: analysis.ai_review,
       final_verdict: analysis.final_verdict,
+      analysis_id: analysis.analysis_id,
+      performance: analysis.performance,
+      evaluation: analysis.evaluation,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('❌ Error analitzant la transacció:', error.message);
     res.status(500).json({
       success: false,
       error: 'Error analitzant la transacció',
@@ -294,7 +327,7 @@ async function bootstrap() {
       console.log(`🤖 Ollama esperat en http://localhost:11434`);
     });
   } catch (error) {
-    console.error('❌ Error inicialitzant  backend:', error.message);
+    console.error('❌ Error inicialitzant el backend:', error.message);
     process.exit(1);
   }
 }

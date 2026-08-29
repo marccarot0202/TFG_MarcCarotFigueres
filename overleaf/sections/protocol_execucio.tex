@@ -1,0 +1,166 @@
+\subsubsection{Protocol d'execució i recollida d'evidències}
+\label{sec:protocol_avaluacio}
+
+Amb l'objectiu de garantir que els resultats obtinguts siguin comparables i reproduïbles, s'ha definit un protocol comú per a l'execució dels diferents escenaris de prova. Aquest protocol estableix la configuració de l'entorn, l'estat inicial dels components, el nombre de repeticions, les dades que s'han de registrar i els criteris utilitzats per considerar una prova completada satisfactòriament.
+
+\paragraph{Configuració de l'entorn}
+
+Les proves s'executen sobre un mateix equip i mantenint una configuració estable durant tota la bateria d'avaluació. La Taula~\ref{tab:configuracio_avaluacio} resumeix els principals elements de l'entorn utilitzat.
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{p{0.31\textwidth} X}
+\hline
+\textbf{Element} & \textbf{Configuració utilitzada} \\
+\hline
+
+Processador &
+AMD Ryzen 7 3700U with Radeon Vega Mobile Gfx \\
+
+Memòria RAM &
+13,9 GB \\
+
+Targeta gràfica &
+AMD Radeon RX Vega 10 Graphics \\
+
+Sistema operatiu &
+Microsoft Windows 10 Home, versió 10.0.19045 \\
+
+Navegador &
+Google Chrome 149.0.7827.200 \\
+
+Entorn d'execució &
+Node.js 20.11.1 i npm 10.2.4 \\
+
+Cartera &
+MetaMask Flask 13.39.2-flask.0 amb el Snap instal·lat en local \\
+
+Backend &
+Servei local executat al port \texttt{3000} \\
+
+Base de dades &
+SQLite local \\
+
+Servei d'IA &
+Ollama 0.16.1, executat al port \texttt{11434} \\
+
+Model de llenguatge &
+\texttt{llama3.2:latest}, amb una mida aproximada de 2,0 GB \\
+
+Xarxa blockchain &
+Xarxa de proves Sepolia \\
+
+Proveïdor RPC &
+Google Cloud Web3 Portal \\
+
+Contractes de prova &
+\texttt{SecurityTestContract} i \texttt{SecurityTestNFT} desplegats a Sepolia \\
+\hline
+\end{tabularx}
+\caption{Configuració de l'entorn utilitzat durant l'avaluació}
+\label{tab:configuracio_avaluacio}
+\end{table}
+
+Les versions indicades es van mantenir constants durant les proves dels dies 17 i 18 de juliol de 2026. El codi i les evidències estructurades es conserven conjuntament al repositori local del projecte.
+
+\paragraph{Control de l'estat inicial}
+
+Abans d'iniciar cada grup de proves es comprova que la DApp, el servidor del Snap, el backend i Ollama es troben en execució. També es verifica l'estat dels serveis mitjançant els endpoints locals \texttt{/health} i \texttt{/stats}.
+
+Les proves s'executen, sempre que l'escenari no indiqui el contrari, amb el mateix compte de MetaMask i sobre les mateixes adreces dels contractes desplegats a Sepolia. Aquesta decisió permet reduir variables externes i comparar els resultats de diferents operacions sota unes condicions equivalents.
+
+L'estat de la base de dades també es controla abans de cada grup de proves. Els escenaris destinats a validar exclusivament les regles deterministes parteixen d'un estat inicial conegut, evitant que l'historial acumulat alteri el resultat. En canvi, l'escenari dedicat a la memòria local i a les adreces etiquetades utilitza una base de dades preparada amb els registres necessaris per comprovar aquesta funcionalitat.
+
+Quan una prova requereix un estat previ de la blockchain, les operacions s'executen en l'ordre corresponent. Per exemple, una prova de revocació necessita que el permís hagi estat concedit prèviament abans d'executar \texttt{approve(spender, 0)} o \texttt{setApprovalForAll(operator, false)}.
+
+\paragraph{Nombre de repeticions}
+
+L'avaluació quantitativa executa deu observacions per a cadascun dels vuit casos classificables A1, B1, B2, C1, C2, D1, D2 i E1, és a dir, 80 execucions del motor determinista. Un script reproduïble genera la \textit{calldata}, executa el descodificador i les regles i desa cada observació en formats JSON i CSV. El cas C2 introdueix deu quantitats d'aprovació diferents per estudiar el comportament al voltant del límit: set valors superiors a \(2^{255}\), però diferents de \texttt{MaxUint256}, i tres imports acotats de control. El cas E1 utilitza una adreça controlada amb l'etiqueta \texttt{scam}. Els escenaris d'interfície i integració A, G i H es validen addicionalment amb execucions manuals i captures de MetaMask, ja que impliquen components externs que no formen part de l'executor automatitzat.
+
+En particular, les repeticions resulten rellevants perquè les peticions actuals a Ollama no fixen explícitament una llavor de generació. Per tant, encara que la transacció i el veredicte determinista siguin els mateixos, la formulació textual de la resposta pot presentar petites variacions entre execucions.
+
+Cada observació automatitzada es registra als fitxers \texttt{evaluation-matrix.json} i \texttt{evaluation-matrix.csv}. Les execucions manuals del flux complet es registren també a SQLite. Les 80 observacions combinen repeticions dels patrons principals amb la variació explícita de quantitats del cas C2; per tant, la matriu mesura la consistència dels patrons implementats i incorpora una prova de frontera, però no constitueix una estimació general de seguretat davant de qualsevol transacció desconeguda.
+
+\paragraph{Procediment d'execució}
+
+Per a cada prova se segueix la seqüència següent:
+
+\begin{enumerate}
+    \item S'inicien la DApp, el servidor del Snap, el backend local i el servei d'Ollama.
+    
+    \item Es comprova que tots els components necessaris responen correctament i que MetaMask Flask té instal·lada la versió corresponent del Snap.
+    
+    \item Es verifica la xarxa seleccionada, el compte de proves i l'adreça del contracte o destinatari utilitzat.
+    
+    \item S'estableix la classe real de l'operació abans d'observar el resultat del sistema. Aquesta classe indica si l'operació es considera positiva, perquè conté un patró de risc, o negativa, perquè no presenta cap dels riscos contemplats.
+    
+    \item S'inicia l'operació des de la DApp local o des de la interfície \textit{Write Contract} d'Etherscan.
+    
+    \item MetaMask Flask rep la petició i activa el Snap mitjançant \texttt{onTransaction}.
+    
+    \item El Snap envia les dades al backend i espera la resposta estructurada.
+    
+    \item Es registra el veredicte determinista, la revisió complementària de la IA, el veredicte final i l'explicació mostrada.
+    
+    \item Es captura l'\textit{insight} presentat dins de MetaMask abans de confirmar o cancel·lar l'operació.
+    
+    \item Es registra si la transacció s'ha cancel·lat o confirmat i, quan es confirma, s'emmagatzema també el seu identificador o \textit{hash} a Sepolia.
+\end{enumerate}
+
+\paragraph{Mesura del temps de resposta}
+
+Per avaluar el rendiment es diferencien dos temps. El primer és el temps de processament del backend, mesurat des de la recepció de la petició a l'endpoint \texttt{/analyze} fins a la generació de la resposta JSON. El segon és el temps total d'anàlisi, mesurat des de l'activació de \texttt{onTransaction} fins que el Snap disposa del resultat que es mostrarà a MetaMask.
+
+La mesura principal de rendiment no inclou el temps posterior necessari perquè una transacció confirmada sigui incorporada a un bloc de Sepolia, ja que aquesta espera depèn de l'estat de la xarxa i es produeix després de l'anàlisi de seguretat. Quan sigui rellevant, el temps de confirmació a Sepolia es registra de manera separada.
+
+Per al conjunt de set anàlisis representatives executades amb Ollama es calcula el temps mínim, el temps màxim i la mitjana:
+
+\[
+\overline{T} =
+\frac{1}{n}
+\sum_{i=1}^{n} T_i
+\]
+
+on \(T_i\) representa el temps registrat en cada execució i \(n\) és el nombre total de repeticions.
+
+\paragraph{Dades recollides}
+
+Per a cada execució es registren, com a mínim, les dades següents:
+
+\begin{itemize}
+    \item \textbf{Identificació:} escenari, número de repetició, data i hora, origen de l'operació (DApp o Etherscan) i xarxa utilitzada.
+    \item \textbf{Transacció:} adreça de destinació, selector, tipus d'operació detectada i paràmetres rellevants.
+    \item \textbf{Classificació determinista:} classe real assignada prèviament, nivell i puntuació de risc, acció recomanada, indicis del camp \texttt{findings} i context local o etiquetes d'adreces.
+    \item \textbf{Capa d'IA:} contingut d'\texttt{ai\_review}, veredicte final i explicació mostrada a l'usuari.
+    \item \textbf{Execució:} temps de processament, resultat de la prova, decisió de confirmar o cancel·lar, \textit{hash} de la transacció quan escaigui i missatge d'error si no finalitza correctament.
+\end{itemize}
+
+Les dades estructurades es complementen amb registres del backend, consultes a SQLite i captures de la interfície de MetaMask. Les captures s'utilitzen com a evidència visual, però no substitueixen els valors registrats de manera estructurada.
+
+\paragraph{Confirmació o cancel·lació de les operacions}
+
+La major part dels escenaris tenen com a objectiu validar el comportament del sistema abans de la confirmació. En aquests casos, després de recollir l'\textit{insight} i la resta d'evidències, la transacció es pot cancel·lar sense necessitat de modificar l'estat de la blockchain.
+
+No obstant això, les proves que requereixen validar el flux complet sobre Sepolia o establir un estat previ es confirmen. Això inclou, entre d'altres, les operacions necessàries per concedir un permís abans de provar-ne la revocació i l'escenari de validació integral iniciat des d'Etherscan.
+
+Totes les transaccions confirmades es realitzen exclusivament sobre Sepolia i amb contractes i actius de prova, de manera que no impliquen l'ús de fons amb valor econòmic real.
+
+\paragraph{Criteris de finalització i compliment}
+
+Una execució funcional es considera completada quan es compleixen les condicions següents:
+
+\begin{itemize}
+    \item MetaMask invoca correctament el Snap;
+    \item el Snap envia la petició al backend;
+    \item el backend genera una resposta estructurada;
+    \item el resultat es mostra dins de MetaMask abans de la confirmació;
+    \item les dades i evidències de l'execució queden registrades.
+\end{itemize}
+
+La prova es considera \textbf{complerta} quan el comportament observat coincideix amb el resultat esperat i no es produeixen errors que impedeixin el flux principal. Es considera \textbf{parcialment complerta} quan la funcionalitat principal s'executa, però algun resultat secundari, com la classificació, l'explicació o el temps de resposta, no compleix completament el criteri establert. Finalment, es considera \textbf{no complerta} quan el sistema no pot executar el flux requerit o produeix un resultat incompatible amb l'objectiu de la prova.
+
+En l'escenari de tolerància a errors, la indisponibilitat intencionada d'un component no es considera per si mateixa un error de la prova. En aquest cas, el resultat satisfactori consisteix a comprovar que el sistema informa de la incidència de manera controlada i que no impedeix injustificadament que l'usuari continuï gestionant la transacció.
+
+Aquest protocol permet executar els escenaris següents sota unes condicions homogènies i relacionar els resultats observats amb els requisits funcionals i no funcionals definits prèviament.

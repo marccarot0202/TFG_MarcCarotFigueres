@@ -1,0 +1,55 @@
+\subsection{Estratègia d’avaluació i traçabilitat dels requisits}
+
+L’avaluació combina proves funcionals sobre transaccions reals, verificacions qualitatives de les explicacions generades i comprovacions estructurals de l’arquitectura local. No es pretén realitzar una comparació estadística amb productes comercials, sinó demostrar la viabilitat del prototip dins d’un entorn de proves controlat.
+
+La Taula~\ref{tab:tracabilitat_requisits} relaciona els requisits definits al Capítol~\ref{cap:design} amb els escenaris o verificacions utilitzats per comprovar-los. La correspondència és bidireccional: cada escenari de l'apartat~\ref{sec:escenaris_resultats} indica els requisits que valida i, inversament, aquesta taula recull tots els escenaris que intervenen en la validació de cada requisit.
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.45}
+\setlength{\tabcolsep}{9pt}
+\begin{tabularx}{\textwidth}{p{0.15\textwidth} | X | p{0.23\textwidth}}
+\hline
+\textbf{Requisit} & \textbf{Mètode de validació} & \textbf{Escenari o evidència} \\
+\hline
+RF1 -- Interceptació de transaccions &
+Comprovació que el Snap s’activa abans de la confirmació dins de MetaMask. &
+Escenaris A i G. \\
+\hline
+RF2 -- Anàlisi de risc basat en regles &
+Execució d’operacions ERC20 i ERC721 amb nivells de risc diferents. &
+Escenaris B, C, D, E i G. \\
+\hline
+RF3 -- Generació d’explicacions comprensibles &
+Revisió qualitativa de la coherència, la claredat i la utilitat de l’explicació generada. &
+Escenaris B, C, D, E i F. \\
+\hline
+RF4 -- Integració dins la interfície de la cartera &
+Comprovació que l’\textit{insight} es mostra dins de MetaMask abans de confirmar. &
+Escenaris A, B, C, D i G. \\
+\hline
+RNF1 -- Rendiment &
+Mesura del temps complet de resposta des de la petició fins a la visualització del resultat. &
+Escenari H i, parcialment, G. \\
+\hline
+RNF2 -- Privadesa &
+Verificació que l’anàlisi, la persistència i la generació de text s’executen localment sempre que és possible. &
+Escenaris E i G, i revisió arquitectònica. \\
+\hline
+RNF3 -- Fiabilitat &
+Comprovació del comportament del sistema quan el backend o el servei d’IA no estan disponibles. &
+Escenari H i, parcialment, A. \\
+\hline
+RNF4 -- Extensibilitat &
+Revisió de la separació modular entre normalització, descodificació, regles, persistència i IA. &
+Escenaris E i F, i revisió de la implementació (Capítol~\ref{cap:implementation}). \\
+\hline
+RNF5 -- Usabilitat &
+Valoració qualitativa del llenguatge i de la utilitat de la informació mostrada a l’usuari. &
+Escenari F. \\
+\hline
+\end{tabularx}
+\caption{Traçabilitat entre requisits i mecanismes de validació}
+\label{tab:tracabilitat_requisits}
+\end{table}

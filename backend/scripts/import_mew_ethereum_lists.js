@@ -18,7 +18,7 @@ async function fetchJson(url) {
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`No se pudo descargar ${url} (${response.status})`);
+    throw new Error(`No s'ha pogut descarregar ${url} (${response.status})`);
   }
 
   return await response.json();
@@ -34,8 +34,8 @@ function mapDarklistEntry(entry) {
   return {
     address,
     label: entry.comment
-      ? `MEW darklist: ${entry.comment}`.slice(0, 255)
-      : 'MEW darklist address',
+      ? `Llista fosca de MEW: ${entry.comment}`.slice(0, 255)
+      : 'Adreça de la llista fosca de MEW',
     type: 'warning',
     source: 'mew_ethereum_lists_darklist',
   };
@@ -51,8 +51,8 @@ function mapLightlistEntry(entry) {
   return {
     address,
     label: entry.comment
-      ? `MEW lightlist: ${entry.comment}`.slice(0, 255)
-      : 'MEW lightlist address',
+      ? `Llista de confiança de MEW: ${entry.comment}`.slice(0, 255)
+      : 'Adreça de la llista de confiança de MEW',
     type: 'trusted',
     source: 'mew_ethereum_lists_lightlist',
   };
@@ -86,14 +86,22 @@ async function importEntries(entries, mapper) {
 async function main() {
   await initDB();
 
-  console.log('🌐 Descargando darklist de MEW...');
+  console.log('🌐 Descarregant la llista fosca de MEW...');
   const darklist = await fetchJson(DARKLIST_URL);
 
-  console.log('🌐 Descargando lightlist de MEW...');
+  console.log('🌐 Descarregant la llista de confiança de MEW...');
   const lightlist = await fetchJson(LIGHTLIST_URL);
 
-  console.log(`📦 Darklist descargada: ${Array.isArray(darklist) ? darklist.length : 0} entradas`);
-  console.log(`📦 Lightlist descargada: ${Array.isArray(lightlist) ? lightlist.length : 0} entradas`);
+  console.log(
+    `📦 Llista fosca descarregada: ${
+      Array.isArray(darklist) ? darklist.length : 0
+    } entrades`,
+  );
+  console.log(
+    `📦 Llista de confiança descarregada: ${
+      Array.isArray(lightlist) ? lightlist.length : 0
+    } entrades`,
+  );
 
   const darkResult = await importEntries(
     Array.isArray(darklist) ? darklist : [],
@@ -105,19 +113,22 @@ async function main() {
     mapLightlistEntry,
   );
 
-  console.log('✅ Importación completada');
-  console.log(`   Darklist -> importadas: ${darkResult.imported}, omitidas: ${darkResult.skipped}`);
-  console.log(`   Lightlist -> importadas: ${lightResult.imported}, omitidas: ${lightResult.skipped}`);
+  console.log('✅ Importació completada');
+  console.log(
+    `   Llista fosca -> importades: ${darkResult.imported}, omeses: ${darkResult.skipped}`,
+  );
+  console.log(
+    `   Llista de confiança -> importades: ${lightResult.imported}, omeses: ${lightResult.skipped}`,
+  );
 }
 
 main()
   .catch(async (error) => {
-    console.error('❌ Error importando ethereum-lists:', error.message);
+    console.error('❌ Error important ethereum-lists:', error.message);
     process.exitCode = 1;
   })
   .finally(async () => {
     try {
       await closeDB();
-    } catch (_) {
-    }
+    } catch (_) {}
   });

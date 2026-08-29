@@ -1,0 +1,78 @@
+\subsubsection{Síntesi del compliment dels requisits}
+\label{sec:sintesi_requisits}
+
+Un cop executats els escenaris de prova i analitzats els resultats obtinguts, es pot valorar el grau de compliment dels requisits funcionals i no funcionals definits al Capítol~\ref{cap:design}. Aquesta síntesi permet relacionar les funcionalitats previstes inicialment amb les evidències recollides durant l’avaluació.
+
+Es considera que un requisit està \textbf{complert} quan la capacitat definida s'ha implementat i existeix almenys una evidència funcional que en demostra el comportament dins de l'abast del prototip. Les oportunitats d'ampliació detectades durant les proves s'analitzen separadament i no es confonen amb l'absència de la funcionalitat requerida.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{
+    p{0.14\textwidth}
+    p{0.20\textwidth}
+    X
+    p{0.19\textwidth}
+}
+\hline
+\textbf{Requisit} &
+\textbf{Estat} &
+\textbf{Justificació} &
+\textbf{Evidència principal} \\
+\hline
+
+RF1 -- Interceptació de transaccions &
+\textbf{Complert} &
+El Snap es va activar abans de la confirmació tant des de la DApp com des d'Etherscan. &
+Escenaris A i G. \\
+
+RF2 -- Anàlisi de risc basat en regles &
+\textbf{Complert} &
+El motor aplica regles reproduïbles sobre aprovacions ERC20, permisos ERC721 i adreces etiquetades, i la prova de frontera n'ha delimitat la cobertura. &
+Escenaris B, C, D i E. \\
+
+RF3 -- Generació d’explicacions comprensibles &
+\textbf{Complert} &
+El sistema genera explicacions breus i planeres, i el control semàntic comprova que siguin compatibles amb els fets detectats. &
+Escenari F. \\
+
+RF4 -- Integració dins la interfície de la cartera &
+\textbf{Complert} &
+MetaMask va mostrar risc, acció, indicis principals i explicació abans de confirmar o cancel·lar. &
+Escenaris A i G. \\
+
+RNF1 -- Rendiment &
+\textbf{Complert} &
+El sistema registra els temps de cada etapa i conserva una resposta determinista operativa quan el servei d'IA no està disponible. &
+Escenari H i registres temporals. \\
+
+RNF2 -- Privadesa &
+\textbf{Complert} &
+Backend, SQLite i Ollama s'executen localment; les connexions externes es limiten a Sepolia, Etherscan i les fonts de context. &
+Revisió arquitectònica i Escenari G. \\
+
+RNF3 -- Fiabilitat &
+\textbf{Complert} &
+La indisponibilitat d'Ollama conserva el veredicte determinista, proporciona una explicació local i no bloqueja MetaMask. &
+Escenari H. \\
+
+RNF4 -- Extensibilitat &
+\textbf{Complert} &
+Les correccions es van incorporar al sanejament i al fallback sense redissenyar el Snap, les regles ni la persistència. &
+Arquitectura i implementació del Capítol~\ref{cap:implementation}. \\
+
+RNF5 -- Usabilitat &
+\textbf{Complert} &
+La interfície presenta primer el veredicte, l'acció recomanada i els motius, i amplia després el context i l'explicació. &
+Escenaris A, F i G. \\
+
+\hline
+\end{tabularx}
+\caption{Síntesi del compliment dels requisits del sistema}
+\label{tab:sintesi_compliment_requisits}
+\end{table}
+
+La Taula~\ref{tab:sintesi_compliment_requisits} resumeix l’estat de cada requisit i les evidències principals utilitzades per justificar-ne la valoració.
+
+Els resultats mostren que tots els requisits definits disposen d'una implementació funcional i d'evidències associades. La valoració correspon a l'abast establert per al prototip; les ampliacions identificades durant l'avaluació es recullen com a línies d'evolució al Capítol~\ref{cap:conclusions}.

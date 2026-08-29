@@ -2,8 +2,59 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 
-const DB_PATH = path.join(__dirname, '../database/web3_security.db');
+const DB_PATH = process.env.WEB3_SECURITY_DB_PATH ||
+  path.join(__dirname, '../database/web3_security.db');
 let db = null;
+
+const ANALYSIS_HISTORY_EXTRA_COLUMNS = {
+  context_summary: 'TEXT',
+  deterministic_verdict_json: 'TEXT',
+  local_memory_signals_json: 'TEXT',
+  known_address_signals_json: 'TEXT',
+  ai_review_json: 'TEXT',
+  final_verdict_json: 'TEXT',
+  semantic_facts_json: 'TEXT',
+  performance_json: 'TEXT',
+  evaluation_json: 'TEXT',
+};
+
+function ensureAnalysisHistoryColumns() {
+  return new Promise((resolve, reject) => {
+    db.all('PRAGMA table_info(analysis_history)', [], (pragmaError, rows) => {
+      if (pragmaError) {
+        reject(pragmaError);
+        return;
+      }
+
+      const existingColumns = new Set((rows || []).map((row) => row.name));
+      const missingColumns = Object.entries(ANALYSIS_HISTORY_EXTRA_COLUMNS)
+        .filter(([name]) => !existingColumns.has(name));
+
+      const addNextColumn = (index) => {
+        if (index >= missingColumns.length) {
+          resolve();
+          return;
+        }
+
+        const [name, type] = missingColumns[index];
+        db.run(
+          `ALTER TABLE analysis_history ADD COLUMN ${name} ${type}`,
+          [],
+          (alterError) => {
+            if (alterError) {
+              reject(alterError);
+              return;
+            }
+
+            addNextColumn(index + 1);
+          },
+        );
+      };
+
+      addNextColumn(0);
+    });
+  });
+}
 
 /**
  * Inicializar base de datos
@@ -12,23 +63,23 @@ function initDB() {
   return new Promise((resolve, reject) => {
     db = new sqlite3.Database(DB_PATH, (err) => {
       if (err) {
-        console.error('❌ Error abriendo BD:', err.message);
+        console.error('❌ Error obrint la base de dades:', err.message);
         reject(err);
         return;
       }
 
-      console.log('✅ Base de datos conectada');
+      console.log('✅ Base de dades connectada');
 
       const schemaPath = path.join(__dirname, '../database/schema.sql');
       const schema = fs.readFileSync(schemaPath, 'utf8');
 
       db.exec(schema, (err) => {
         if (err) {
-          console.error('❌ Error creando tablas:', err.message);
+          console.error('❌ Error creant les taules:', err.message);
           reject(err);
         } else {
-          console.log('✅ Tablas inicializadas');
-          resolve();
+          console.log('✅ Taules inicialitzades');
+          ensureAnalysisHistoryColumns().then(resolve).catch(reject);
         }
       });
     });
@@ -165,9 +216,18 @@ function saveAnalysisHistory(rawTx, analysis) {
         normalized_tx_json,
         decoded_json,
         findings_json,
-        explanation
+        explanation,
+        context_summary,
+        deterministic_verdict_json,
+        local_memory_signals_json,
+        known_address_signals_json,
+        ai_review_json,
+        final_verdict_json,
+        semantic_facts_json,
+        performance_json,
+        evaluation_json
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.run(
@@ -187,10 +247,32 @@ function saveAnalysisHistory(rawTx, analysis) {
         JSON.stringify(decoded || null),
         JSON.stringify(findings || []),
         analysis.explanation || null,
+        analysis.context_summary || null,
+        JSON.stringify(analysis.deterministic_verdict || null),
+        JSON.stringify(analysis.local_memory_signals || null),
+        JSON.stringify(analysis.known_address_signals || null),
+        JSON.stringify(analysis.ai_review || null),
+        JSON.stringify(analysis.final_verdict || null),
+        JSON.stringify(analysis.semantic_facts || null),
+        JSON.stringify(analysis.performance || null),
+        JSON.stringify(analysis.evaluation || null),
       ],
       function (err) {
         if (err) reject(err);
         else resolve(this.lastID);
+      },
+    );
+  });
+}
+
+function updateAnalysisPerformance(id, performance) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'UPDATE analysis_history SET performance_json = ? WHERE id = ?',
+      [JSON.stringify(performance || null), id],
+      function (err) {
+        if (err) reject(err);
+        else resolve(this.changes);
       },
     );
   });
@@ -441,7 +523,7 @@ function getDashboardStats() {
     queries.forEach((query) => {
       db.get(query.sql, [], (err, row) => {
         if (err) {
-          console.warn(`⚠️ No se pudo calcular ${query.key}:`, err.message);
+          console.warn(`⚠️ No s'ha pogut calcular ${query.key}:`, err.message);
           stats[query.key] = 0;
         } else {
           stats[query.key] = row?.count || 0;
@@ -574,6 +656,115 @@ function getDashboardMetrics() {
   });
 }
 
+function safeJsonParse(value, fallback = null) {
+  if (!value) {
+    return fallback;
+  }
+
+  if (typeof value === 'object') {
+    return value;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function getAnalysisHistoryDetail(id) {
+  return new Promise((resolve, reject) => {
+    const safeId = Number(id);
+
+    if (!Number.isInteger(safeId) || safeId <= 0) {
+      reject(new Error("L'identificador de l'anàlisi no és vàlid"));
+      return;
+    }
+
+    const sql = `
+      SELECT rowid AS id, *
+      FROM analysis_history
+      WHERE rowid = ?
+      LIMIT 1
+    `;
+
+    db.get(sql, [safeId], (err, row) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!row) {
+        resolve(null);
+        return;
+      }
+
+      const detail = {
+        ...row,
+
+        final_verdict:
+          safeJsonParse(row.final_verdict_json, null) ||
+          safeJsonParse(row.final_verdict, null) ||
+          {
+            risk_level: row.risk_level,
+            risk_score: row.risk_score,
+            recommended_action: row.recommended_action,
+          },
+
+        findings:
+          safeJsonParse(row.findings_json, null) ||
+          safeJsonParse(row.findings, null) ||
+          [],
+
+        decoded:
+          safeJsonParse(row.decoded_json, null) ||
+          safeJsonParse(row.decoded, null) ||
+          {
+            method: row.decoded_method,
+            selector: row.method_selector,
+          },
+
+        ai_review:
+          safeJsonParse(row.ai_review_json, null) ||
+          safeJsonParse(row.ai_review, null) ||
+          null,
+
+        known_address_signals:
+          safeJsonParse(row.known_address_signals_json, null) ||
+          safeJsonParse(row.known_address_signals, null) ||
+          [],
+
+        normalized_tx:
+          safeJsonParse(row.normalized_tx_json, null) ||
+          safeJsonParse(row.normalized_tx, null) ||
+          {
+            chainId: row.chain_id,
+            from: row.from_address,
+            to: row.to_address,
+            origin: row.origin,
+          },
+
+        deterministic_verdict:
+          safeJsonParse(row.deterministic_verdict_json, null) || null,
+
+        local_memory_signals:
+          safeJsonParse(row.local_memory_signals_json, null) || null,
+
+        semantic_facts:
+          safeJsonParse(row.semantic_facts_json, null) || null,
+
+        performance:
+          safeJsonParse(row.performance_json, null) || null,
+
+        evaluation:
+          safeJsonParse(row.evaluation_json, null) || null,
+      };
+
+      resolve(detail);
+    });
+  });
+}
+
 module.exports = {
   initDB,
   lookupAddress,
@@ -581,6 +772,7 @@ module.exports = {
   saveContractAnalysis,
   saveTransaction,
   saveAnalysisHistory,
+  updateAnalysisPerformance,
   getAddressCache,
   upsertAddressCache,
   findSimilarTransactions,
@@ -592,4 +784,5 @@ module.exports = {
   getRecentAnalysisHistory,
   getKnownAddresses,
   getDashboardMetrics,
+  getAnalysisHistoryDetail,
 };

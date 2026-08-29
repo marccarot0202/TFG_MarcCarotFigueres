@@ -9633,7 +9633,7 @@ var plugins = [{
   plugin: __webpack_require__(/*! ../../node_modules/gatsby-plugin-manifest/gatsby-ssr.js */ "../../node_modules/gatsby-plugin-manifest/gatsby-ssr.js"),
   options: {
     "plugins": [],
-    "name": "Template Snap",
+    "name": "Assistent de Seguretat Web3",
     "icon": "src/assets/logo.svg",
     "theme_color": "#6F4CFF",
     "background_color": "#FFFFFF",
@@ -9643,7 +9643,7 @@ var plugins = [{
     "cache_busting_mode": "query",
     "crossOrigin": "anonymous",
     "include_favicon": true,
-    "cacheDigest": "80f001a0d61fe8748ba7f8e7aec97c23"
+    "cacheDigest": "39694e9b04b72af4c6ec4b5a9aa62ee3"
   }
 }, {
   name: 'default-site-plugin',
@@ -12417,7 +12417,7 @@ const InstallFlaskButton = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPO
   href: "https://metamask.io/flask/",
   target: "_blank",
   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_assets_flask_fox_svg__WEBPACK_IMPORTED_MODULE_0__.ReactComponent, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(ButtonText, {
-    children: "Install MetaMask Flask"
+    children: "Instal\xB7lar MetaMask Flask"
   })]
 });
 const ConnectButton = props => {
@@ -12463,14 +12463,14 @@ const HeaderButtons = () => {
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(ConnectedContainer, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(ConnectedIndicator, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(ButtonText, {
-      children: "Connected"
+      children: "Connectat"
     })]
   });
 };
 const AnalyzeButton = props => {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Button, {
     ...props,
-    children: "Analitzar Transacci\xF3"
+    children: "Analitzar transacci\xF3"
   });
 };
 
@@ -12494,9 +12494,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const CardWrapper = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div.withConfig({
   displayName: "Card__CardWrapper"
-})(["display:flex;flex-direction:column;width:", ";background-color:", ";margin-top:2.4rem;margin-bottom:2.4rem;padding:2.4rem;border:1px solid ", ";border-radius:", ";box-shadow:", ";filter:opacity(", ");align-self:stretch;", "{width:100%;margin-top:1.2rem;margin-bottom:1.2rem;padding:1.6rem;}"], ({
-  fullWidth
-}) => fullWidth ? '100%' : '250px', ({
+})(["display:flex;flex-direction:column;width:100%;background-color:", ";padding:1.8rem;border:1px solid ", ";border-radius:", ";box-shadow:", ";filter:opacity(", ");align-self:stretch;", "{width:100%;padding:1.6rem;}"], ({
   theme
 }) => {
   var _theme$colors$card;
@@ -12526,7 +12524,12 @@ const Title = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].h2.withC
 }) => theme.fontSizes.text);
 const Description = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div.withConfig({
   displayName: "Card__Description"
-})(["margin-top:2.4rem;margin-bottom:2.4rem;"]);
+})(["margin-top:1rem;margin-bottom:1.6rem;color:", ";"], ({
+  theme
+}) => {
+  var _theme$colors$text;
+  return (_theme$colors$text = theme.colors.text) === null || _theme$colors$text === void 0 ? void 0 : _theme$colors$text.alternative;
+});
 const Card = ({
   content,
   disabled = false,
@@ -12871,7 +12874,7 @@ const Toggle = ({
       checked: checked
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(ToggleInput, {
       type: "checkbox",
-      "aria-label": "Toggle Button"
+      "aria-label": "Canviar el tema"
     })]
   });
 };
@@ -12988,16 +12991,16 @@ const theme = {
     code: 'ui-monospace,Menlo,Monaco,"Cascadia Mono","Segoe UI Mono","Roboto Mono","Oxygen Mono","Ubuntu Monospace","Source Code Pro","Fira Mono","Droid Sans Mono","Courier New", monospace'
   },
   fontSizes: {
-    heading: '5.2rem',
-    mobileHeading: '3.6rem',
-    title: '2.4rem',
-    large: '2rem',
+    heading: '3.2rem',
+    mobileHeading: '2.6rem',
+    title: '2rem',
+    large: '1.8rem',
     text: '1.6rem',
     small: '1.4rem'
   },
   radii: {
-    default: '24px',
-    button: '8px'
+    default: '8px',
+    button: '6px'
   },
   breakpoints,
   mediaQueries: {
@@ -13006,8 +13009,8 @@ const theme = {
     large: `@media screen and (min-width: ${breakpoints[2]})`
   },
   shadows: {
-    default: '0px 7px 42px rgba(0, 0, 0, 0.1)',
-    button: '0px 0px 16.1786px rgba(0, 0, 0, 0.15);'
+    default: '0 1px 2px rgba(31, 35, 40, 0.08)',
+    button: '0 1px 2px rgba(31, 35, 40, 0.12)'
   }
 };
 
@@ -13018,24 +13021,24 @@ const light = {
   colors: {
     background: {
       default: '#FFFFFF',
-      alternative: '#F2F4F6',
-      inverse: '#141618'
+      alternative: '#F6F8FA',
+      inverse: '#1F2328'
     },
     icon: {
       default: '#141618',
       alternative: '#BBC0C5'
     },
     text: {
-      default: '#24272A',
-      muted: '#6A737D',
-      alternative: '#535A61',
+      default: '#1F2328',
+      muted: '#656D76',
+      alternative: '#57606A',
       inverse: '#FFFFFF'
     },
     border: {
-      default: '#BBC0C5'
+      default: '#D0D7DE'
     },
     primary: {
-      default: '#6F4CFF',
+      default: '#0969DA',
       inverse: '#FFFFFF'
     },
     card: {
@@ -13056,8 +13059,8 @@ const light = {
 const dark = {
   colors: {
     background: {
-      default: '#24272A',
-      alternative: '#141618',
+      default: '#0D1117',
+      alternative: '#161B22',
       inverse: '#FFFFFF'
     },
     icon: {
@@ -13065,16 +13068,16 @@ const dark = {
       alternative: '#BBC0C5'
     },
     text: {
-      default: '#FFFFFF',
-      muted: '#FFFFFF',
-      alternative: '#D6D9DC',
-      inverse: '#24272A'
+      default: '#F0F6FC',
+      muted: '#8C959F',
+      alternative: '#B1BAC4',
+      inverse: '#0D1117'
     },
     border: {
-      default: '#848C96'
+      default: '#30363D'
     },
     primary: {
-      default: '#6F4CFF',
+      default: '#58A6FF',
       inverse: '#FFFFFF'
     },
     card: {
@@ -13095,13 +13098,13 @@ const dark = {
  * @param props - Styled Components props.
  * @returns Global style React component.
  */
-const GlobalStyle = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.createGlobalStyle)(["html{font-size:62.5%;}body{background-color:", ";color:", ";font-family:", ";font-size:", ";margin:0;}*{transition:background-color .1s linear;}h1,h2,h3,h4,h5,h6{font-size:", ";", "{font-size:", ";}}code{background-color:", ";font-family:", ";padding:1.2rem;font-weight:normal;font-size:", ";}button{font-size:", ";border-radius:", ";background-color:", ";color:", ";border:1px solid ", ";font-weight:bold;padding:1rem;min-height:4.2rem;cursor:pointer;transition:all .2s ease-in-out;&:hover{background-color:transparent;border:1px solid ", ";color:", ";}&:disabled,&[disabled]{border:1px solid ", ";cursor:not-allowed;}&:disabled:hover,&[disabled]:hover{background-color:", ";color:", ";border:1px solid ", ";}}"], props => {
+const GlobalStyle = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.createGlobalStyle)(["html{font-size:62.5%;}body{background-color:", ";color:", ";font-family:", ";font-size:", ";margin:0;line-height:1.5;}*{box-sizing:border-box;transition:background-color .1s linear,border-color .1s linear;}h1,h2,h3,h4,h5,h6{line-height:1.25;letter-spacing:0;}code{background-color:", ";font-family:", ";padding:1.2rem;font-weight:normal;font-size:", ";}button{font-size:", ";border-radius:", ";background-color:", ";color:", ";border:1px solid ", ";font-weight:bold;padding:1rem;min-height:4.2rem;cursor:pointer;transition:all .2s ease-in-out;&:hover{background-color:transparent;border:1px solid ", ";color:", ";}&:disabled,&[disabled]{border:1px solid ", ";cursor:not-allowed;}&:disabled:hover,&[disabled]:hover{background-color:", ";color:", ";border:1px solid ", ";}}"], props => {
   var _props$theme$colors$b;
   return (_props$theme$colors$b = props.theme.colors.background) === null || _props$theme$colors$b === void 0 ? void 0 : _props$theme$colors$b.default;
 }, props => {
   var _props$theme$colors$t;
   return (_props$theme$colors$t = props.theme.colors.text) === null || _props$theme$colors$t === void 0 ? void 0 : _props$theme$colors$t.default;
-}, props => props.theme.fonts.default, props => props.theme.fontSizes.text, props => props.theme.fontSizes.heading, props => props.theme.mediaQueries.small, props => props.theme.fontSizes.mobileHeading, props => {
+}, props => props.theme.fonts.default, props => props.theme.fontSizes.text, props => {
   var _props$theme$colors$b2;
   return (_props$theme$colors$b2 = props.theme.colors.background) === null || _props$theme$colors$b2 === void 0 ? void 0 : _props$theme$colors$b2.alternative;
 }, props => props.theme.fonts.code, props => props.theme.fontSizes.text, props => props.theme.fontSizes.small, props => props.theme.radii.button, props => {
@@ -13519,9 +13522,14 @@ const shouldDisplayReconnectButton = installedSnap => installedSnap && (0,_snap_
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getActionLabel: () => (/* reexport safe */ _presentation__WEBPACK_IMPORTED_MODULE_5__.getActionLabel),
+/* harmony export */   getAddressTypeLabel: () => (/* reexport safe */ _presentation__WEBPACK_IMPORTED_MODULE_5__.getAddressTypeLabel),
 /* harmony export */   getLocalStorage: () => (/* reexport safe */ _localStorage__WEBPACK_IMPORTED_MODULE_3__.getLocalStorage),
 /* harmony export */   getMetaMaskEIP6963Provider: () => (/* reexport safe */ _metamask__WEBPACK_IMPORTED_MODULE_0__.getMetaMaskEIP6963Provider),
+/* harmony export */   getMetricLabel: () => (/* reexport safe */ _presentation__WEBPACK_IMPORTED_MODULE_5__.getMetricLabel),
+/* harmony export */   getRiskLabel: () => (/* reexport safe */ _presentation__WEBPACK_IMPORTED_MODULE_5__.getRiskLabel),
 /* harmony export */   getSnapsProvider: () => (/* reexport safe */ _metamask__WEBPACK_IMPORTED_MODULE_0__.getSnapsProvider),
+/* harmony export */   getSourceLabel: () => (/* reexport safe */ _presentation__WEBPACK_IMPORTED_MODULE_5__.getSourceLabel),
 /* harmony export */   getThemePreference: () => (/* reexport safe */ _theme__WEBPACK_IMPORTED_MODULE_2__.getThemePreference),
 /* harmony export */   hasSnapsSupport: () => (/* reexport safe */ _metamask__WEBPACK_IMPORTED_MODULE_0__.hasSnapsSupport),
 /* harmony export */   isLocalSnap: () => (/* reexport safe */ _snap__WEBPACK_IMPORTED_MODULE_1__.isLocalSnap),
@@ -13533,6 +13541,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./theme */ "./src/utils/theme.ts");
 /* harmony import */ var _localStorage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./localStorage */ "./src/utils/localStorage.ts");
 /* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./button */ "./src/utils/button.ts");
+/* harmony import */ var _presentation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./presentation */ "./src/utils/presentation.ts");
+
 
 
 
@@ -13706,6 +13716,76 @@ async function getSnapsProvider() {
   }
   return null;
 }
+
+/***/ }),
+
+/***/ "./src/utils/presentation.ts":
+/*!***********************************!*\
+  !*** ./src/utils/presentation.ts ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getActionLabel: () => (/* binding */ getActionLabel),
+/* harmony export */   getAddressTypeLabel: () => (/* binding */ getAddressTypeLabel),
+/* harmony export */   getMetricLabel: () => (/* binding */ getMetricLabel),
+/* harmony export */   getRiskLabel: () => (/* binding */ getRiskLabel),
+/* harmony export */   getSourceLabel: () => (/* binding */ getSourceLabel)
+/* harmony export */ });
+const RISK_LABELS = {
+  BAJO: 'Baix',
+  MEDIO: 'Mitjà',
+  ALTO: 'Alt',
+  DESCONOCIDO: 'Desconegut',
+  LOW: 'Baix',
+  MEDIUM: 'Mitjà',
+  HIGH: 'Alt',
+  UNKNOWN: 'Desconegut'
+};
+const ACTION_LABELS = {
+  ALLOW: 'Permetre',
+  REVIEW: 'Revisar',
+  BLOCK: 'Bloquejar'
+};
+const ADDRESS_TYPE_LABELS = new Map([['warning', 'Advertiment'], ['suspicious', 'Sospitosa'], ['scam', 'Estafa'], ['blacklist', 'Llista de bloqueig'], ['blacklisted', 'Llista de bloqueig'], ['trusted', 'De confiança'], ['known_protocol', 'Protocol conegut'], ['test_contract', 'Contracte de prova'], ['own_contract', 'Contracte propi']]);
+const SOURCE_LABELS = new Map([['user_manual_report', 'Informe manual'], ['mew_ethereum_lists_darklist', 'Llista pública MEW']]);
+const getRiskLabel = risk => {
+  var _RISK_LABELS$risk$toU;
+  if (!risk) {
+    return 'Desconegut';
+  }
+  return (_RISK_LABELS$risk$toU = RISK_LABELS[risk.toUpperCase()]) !== null && _RISK_LABELS$risk$toU !== void 0 ? _RISK_LABELS$risk$toU : risk;
+};
+const getActionLabel = action => {
+  var _ACTION_LABELS$action;
+  if (!action) {
+    return 'Sense decisió';
+  }
+  return (_ACTION_LABELS$action = ACTION_LABELS[action.toUpperCase()]) !== null && _ACTION_LABELS$action !== void 0 ? _ACTION_LABELS$action : action;
+};
+const getAddressTypeLabel = type => {
+  var _ADDRESS_TYPE_LABELS$;
+  if (!type) {
+    return 'Sense tipus';
+  }
+  return (_ADDRESS_TYPE_LABELS$ = ADDRESS_TYPE_LABELS.get(type.toLowerCase())) !== null && _ADDRESS_TYPE_LABELS$ !== void 0 ? _ADDRESS_TYPE_LABELS$ : type;
+};
+const getSourceLabel = source => {
+  var _SOURCE_LABELS$get;
+  if (!source) {
+    return 'Sense font';
+  }
+  return (_SOURCE_LABELS$get = SOURCE_LABELS.get(source.toLowerCase())) !== null && _SOURCE_LABELS$get !== void 0 ? _SOURCE_LABELS$get : source;
+};
+const getMetricLabel = label => {
+  var _RISK_LABELS$label$to;
+  if (!label) {
+    return 'Desconegut';
+  }
+  return (_RISK_LABELS$label$to = RISK_LABELS[label.toUpperCase()]) !== null && _RISK_LABELS$label$to !== void 0 ? _RISK_LABELS$label$to : label;
+};
 
 /***/ }),
 

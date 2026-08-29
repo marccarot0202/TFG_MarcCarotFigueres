@@ -72,8 +72,9 @@ contract SecurityTestContract is ERC20, Ownable {
     }
     
     /**
-     * @dev Aprobar gasto de tokens (PELIGROSO si es ilimitado)
-     * Esta función es común en DeFi y puede ser explotada
+     * @dev Funcion auxiliar de demostracion. Los escenarios del analizador deben
+     * usar approve(address,uint256), heredada de ERC20, cuyo selector reconoce
+     * actualmente el backend.
      */
     function approveSpending(address spender, uint256 amount) public returns (bool) {
         _approve(msg.sender, spender, amount);

@@ -3158,6 +3158,509 @@ module.exports = function(stream_module) {
 
 /***/ }),
 
+/***/ "../../node_modules/lucide-react/dist/esm/Icon.js":
+/*!********************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/Icon.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Icon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _defaultAttributes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./defaultAttributes.js */ "../../node_modules/lucide-react/dist/esm/defaultAttributes.js");
+/* harmony import */ var _shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shared/src/utils.js */ "../../node_modules/lucide-react/dist/esm/shared/src/utils.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+
+
+const Icon = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(
+  ({
+    color = "currentColor",
+    size = 24,
+    strokeWidth = 2,
+    absoluteStrokeWidth,
+    className = "",
+    children,
+    iconNode,
+    ...rest
+  }, ref) => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(
+      "svg",
+      {
+        ref,
+        ..._defaultAttributes_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+        width: size,
+        height: size,
+        stroke: color,
+        strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
+        className: (0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.mergeClasses)("lucide", className),
+        ...rest
+      },
+      [
+        ...iconNode.map(([tag, attrs]) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(tag, attrs)),
+        ...Array.isArray(children) ? children : [children]
+      ]
+    );
+  }
+);
+
+
+//# sourceMappingURL=Icon.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js":
+/*!********************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/createLucideIcon.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ createLucideIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shared/src/utils.js */ "../../node_modules/lucide-react/dist/esm/shared/src/utils.js");
+/* harmony import */ var _Icon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icon.js */ "../../node_modules/lucide-react/dist/esm/Icon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+
+
+const createLucideIcon = (iconName, iconNode) => {
+  const Component = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(
+    ({ className, ...props }, ref) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Icon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      ref,
+      iconNode,
+      className: (0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.mergeClasses)(`lucide-${(0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.toKebabCase)(iconName)}`, className),
+      ...props
+    })
+  );
+  Component.displayName = `${iconName}`;
+  return Component;
+};
+
+
+//# sourceMappingURL=createLucideIcon.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/defaultAttributes.js":
+/*!*********************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/defaultAttributes.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ defaultAttributes)
+/* harmony export */ });
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+
+
+//# sourceMappingURL=defaultAttributes.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/chart-column.js":
+/*!**********************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/chart-column.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ChartColumn)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const ChartColumn = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("ChartColumn", [
+  ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
+  ["path", { d: "M18 17V9", key: "2bz60n" }],
+  ["path", { d: "M13 17V5", key: "1frdt8" }],
+  ["path", { d: "M8 17v-3", key: "17ska0" }]
+]);
+
+
+//# sourceMappingURL=chart-column.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/database.js":
+/*!******************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/database.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Database)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const Database = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("Database", [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+]);
+
+
+//# sourceMappingURL=database.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/history.js":
+/*!*****************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/history.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ History)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const History = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("History", [
+  ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
+  ["path", { d: "M3 3v5h5", key: "1xhq8a" }],
+  ["path", { d: "M12 7v5l4 2", key: "1fdv2h" }]
+]);
+
+
+//# sourceMappingURL=history.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/list-filter.js":
+/*!*********************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/list-filter.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ListFilter)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const ListFilter = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("ListFilter", [
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M7 12h10", key: "b7w52i" }],
+  ["path", { d: "M10 18h4", key: "1ulq68" }]
+]);
+
+
+//# sourceMappingURL=list-filter.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/refresh-cw.js":
+/*!********************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/refresh-cw.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ RefreshCw)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const RefreshCw = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("RefreshCw", [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+]);
+
+
+//# sourceMappingURL=refresh-cw.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/search.js":
+/*!****************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/search.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Search)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const Search = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("Search", [
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
+  ["path", { d: "m21 21-4.3-4.3", key: "1qie3q" }]
+]);
+
+
+//# sourceMappingURL=search.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/shield-check.js":
+/*!**********************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/shield-check.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ShieldCheck)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const ShieldCheck = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("ShieldCheck", [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+]);
+
+
+//# sourceMappingURL=shield-check.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/tag.js":
+/*!*************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/tag.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Tag)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const Tag = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("Tag", [
+  [
+    "path",
+    {
+      d: "M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z",
+      key: "vktsd0"
+    }
+  ],
+  ["circle", { cx: "7.5", cy: "7.5", r: ".5", fill: "currentColor", key: "kqv944" }]
+]);
+
+
+//# sourceMappingURL=tag.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/test-tube-diagonal.js":
+/*!****************************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/test-tube-diagonal.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TestTubeDiagonal)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const TestTubeDiagonal = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("TestTubeDiagonal", [
+  [
+    "path",
+    { d: "M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01a2.83 2.83 0 0 1 0-4L17 3", key: "1ub6xw" }
+  ],
+  ["path", { d: "m16 2 6 6", key: "1gw87d" }],
+  ["path", { d: "M12 16H4", key: "1cjfip" }]
+]);
+
+
+//# sourceMappingURL=test-tube-diagonal.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/icons/x.js":
+/*!***********************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/icons/x.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ X)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "../../node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const X = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("X", [
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+]);
+
+
+//# sourceMappingURL=x.js.map
+
+
+/***/ }),
+
+/***/ "../../node_modules/lucide-react/dist/esm/shared/src/utils.js":
+/*!********************************************************************!*\
+  !*** ../../node_modules/lucide-react/dist/esm/shared/src/utils.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   mergeClasses: () => (/* binding */ mergeClasses),
+/* harmony export */   toKebabCase: () => (/* binding */ toKebabCase)
+/* harmony export */ });
+/**
+ * @license lucide-react v0.468.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const mergeClasses = (...classes) => classes.filter((className, index, array) => {
+  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
+}).join(" ").trim();
+
+
+//# sourceMappingURL=utils.js.map
+
+
+/***/ }),
+
 /***/ "../../node_modules/node-fetch/lib/index.js":
 /*!**************************************************!*\
   !*** ../../node_modules/node-fetch/lib/index.js ***!
@@ -7238,6 +7741,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/shield-check.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/chart-column.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/history.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/tag.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/test-tube-diagonal.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/refresh-cw.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/list-filter.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/x.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/search.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! lucide-react */ "../../node_modules/lucide-react/dist/esm/icons/database.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! styled-components */ "../../node_modules/styled-components/dist/styled-components.esm.js");
@@ -7254,21 +7767,65 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-///////////////////////////////////TIPOS//////////////////////////////////////////
+
+// /////////////////////////////////TIPOS//////////////////////////////////////////
+
+/* eslint-disable @typescript-eslint/naming-convention --
+ * These DTOs mirror the backend JSON contract, whose public keys use snake_case.
+ */
+
+/* eslint-enable @typescript-eslint/naming-convention */
 
 
-/////////////////////////////////////////////////////////////////////////////////
+const getActionBadgeBackground = action => {
+  if (action === 'ALLOW') {
+    return 'rgba(26, 127, 55, 0.12)';
+  }
+  if (action === 'BLOCK') {
+    return 'rgba(207, 34, 46, 0.12)';
+  }
+  return 'rgba(154, 103, 0, 0.14)';
+};
+const getRiskBarColor = risk => {
+  if (risk === 'ALTO') {
+    return '#cf222e';
+  }
+  if (risk === 'MEDIO') {
+    return '#9a6700';
+  }
+  if (risk === 'BAJO') {
+    return '#1a7f37';
+  }
+  return undefined;
+};
+const getAddressRisk = type => {
+  const normalizedType = type !== null && type !== void 0 ? type : '';
+  if (['scam', 'blacklist', 'blacklisted'].includes(normalizedType)) {
+    return 'ALTO';
+  }
+  if (['warning', 'suspicious'].includes(normalizedType)) {
+    return 'MEDIO';
+  }
+  return 'BAJO';
+};
+const reportUnexpectedError = context => unexpectedError => {
+  console.error(`Error inesperat ${context}:`, unexpectedError);
+};
 
-////////////////////////////////ESTILOS//////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////
+
+// //////////////////////////////ESTILOS//////////////////////////////////////////
 
 const Container = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__Container"
-})(["display:flex;flex-direction:column;align-items:center;flex:1;margin-top:7.6rem;margin-bottom:7.6rem;", "{padding-left:2.4rem;padding-right:2.4rem;margin-top:2rem;margin-bottom:2rem;width:auto;}"], ({
+})(["flex:1;width:100%;max-width:132rem;margin:0 auto;padding:3.2rem 3.2rem 6.4rem;", "{padding:2rem 1.6rem 4rem;}"], ({
   theme
 }) => theme.mediaQueries.small);
 const Heading = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].h1.withConfig({
   displayName: "pages__Heading"
-})(["margin-top:0;margin-bottom:2.4rem;text-align:center;"]);
+})(["margin:0;font-size:3.2rem;", "{font-size:2.6rem;}"], ({
+  theme
+}) => theme.mediaQueries.small);
 const Span = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].span.withConfig({
   displayName: "pages__Span"
 })(["color:", ";"], props => {
@@ -7277,19 +7834,77 @@ const Span = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].span.with
 });
 const Subtitle = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].p.withConfig({
   displayName: "pages__Subtitle"
-})(["font-size:", ";font-weight:500;margin-top:0;margin-bottom:0;", "{font-size:", ";}"], ({
+})(["color:", ";margin:0.4rem 0 0;"], ({
   theme
-}) => theme.fontSizes.large, ({
+}) => {
+  var _theme$colors$text;
+  return (_theme$colors$text = theme.colors.text) === null || _theme$colors$text === void 0 ? void 0 : _theme$colors$text.alternative;
+});
+const WorkspaceHeader = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__WorkspaceHeader"
+})(["display:flex;align-items:flex-end;justify-content:space-between;gap:2.4rem;margin-bottom:2.4rem;", "{align-items:flex-start;flex-direction:column;gap:1.2rem;}"], ({
   theme
-}) => theme.mediaQueries.small, ({
+}) => theme.mediaQueries.small);
+const WorkspaceIdentity = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__WorkspaceIdentity"
+})(["min-width:0;"]);
+const WorkspaceKicker = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__WorkspaceKicker"
+})(["display:flex;align-items:center;gap:0.6rem;color:", ";font-size:", ";font-weight:700;margin-bottom:0.6rem;text-transform:uppercase;"], ({
   theme
-}) => theme.fontSizes.text);
-const CardContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
-  displayName: "pages__CardContainer"
-})(["width:100%;"]);
-const Notice = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
-  displayName: "pages__Notice"
-})(["background-color:", ";border:1px solid ", ";color:", ";border-radius:", ";padding:2.4rem;margin-top:2.4rem;max-width:60rem;width:100%;& > *{margin:0;}", "{margin-top:1.2rem;padding:1.6rem;}"], ({
+}) => {
+  var _theme$colors$text2;
+  return (_theme$colors$text2 = theme.colors.text) === null || _theme$colors$text2 === void 0 ? void 0 : _theme$colors$text2.alternative;
+}, ({
+  theme
+}) => theme.fontSizes.small);
+const HeaderMeta = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__HeaderMeta"
+})(["display:flex;align-items:center;gap:0.8rem;color:", ";font-size:", ";"], ({
+  theme
+}) => {
+  var _theme$colors$text3;
+  return (_theme$colors$text3 = theme.colors.text) === null || _theme$colors$text3 === void 0 ? void 0 : _theme$colors$text3.alternative;
+}, ({
+  theme
+}) => theme.fontSizes.small);
+const HeaderStatusDot = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].span.withConfig({
+  displayName: "pages__HeaderStatusDot"
+})(["width:0.8rem;height:0.8rem;border-radius:50%;background-color:", ";"], ({
+  $status
+}) => $status === 'ok' ? '#1a7f37' : '#cf222e');
+const SectionTabs = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__SectionTabs"
+})(["display:flex;gap:0.4rem;overflow-x:auto;padding:0.4rem;margin-bottom:3.2rem;border-bottom:1px solid ", ";", "{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0.2rem;overflow:visible;padding:0.2rem 0;margin-bottom:2.4rem;}"], ({
+  theme
+}) => {
+  var _theme$colors$border;
+  return (_theme$colors$border = theme.colors.border) === null || _theme$colors$border === void 0 ? void 0 : _theme$colors$border.default;
+}, ({
+  theme
+}) => theme.mediaQueries.small);
+const TabButton = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].button.withConfig({
+  displayName: "pages__TabButton"
+})(["display:inline-flex;align-items:center;gap:0.8rem;min-height:4rem;padding:0.8rem 1.2rem;white-space:nowrap;border:0;border-bottom:2px solid ", ";border-radius:0;background:transparent;color:", ";font-weight:", ";&:hover{border-color:", ";background-color:", ";color:", ";}", "{justify-content:center;gap:0.4rem;min-width:0;padding:0.8rem 0.4rem;}"], ({
+  $active,
+  theme
+}) => {
+  var _theme$colors$primary;
+  return $active ? (_theme$colors$primary = theme.colors.primary) === null || _theme$colors$primary === void 0 ? void 0 : _theme$colors$primary.default : 'transparent';
+}, ({
+  $active,
+  theme
+}) => {
+  var _theme$colors$text4, _theme$colors$text5;
+  return $active ? (_theme$colors$text4 = theme.colors.text) === null || _theme$colors$text4 === void 0 ? void 0 : _theme$colors$text4.default : (_theme$colors$text5 = theme.colors.text) === null || _theme$colors$text5 === void 0 ? void 0 : _theme$colors$text5.alternative;
+}, ({
+  $active
+}) => $active ? 700 : 500, ({
+  theme
+}) => {
+  var _theme$colors$border2;
+  return (_theme$colors$border2 = theme.colors.border) === null || _theme$colors$border2 === void 0 ? void 0 : _theme$colors$border2.default;
+}, ({
   theme
 }) => {
   var _theme$colors$backgro;
@@ -7297,21 +7912,17 @@ const Notice = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.wit
 }, ({
   theme
 }) => {
-  var _theme$colors$border;
-  return (_theme$colors$border = theme.colors.border) === null || _theme$colors$border === void 0 ? void 0 : _theme$colors$border.default;
+  var _theme$colors$text6;
+  return (_theme$colors$text6 = theme.colors.text) === null || _theme$colors$text6 === void 0 ? void 0 : _theme$colors$text6.default;
 }, ({
-  theme
-}) => {
-  var _theme$colors$text;
-  return (_theme$colors$text = theme.colors.text) === null || _theme$colors$text === void 0 ? void 0 : _theme$colors$text.alternative;
-}, ({
-  theme
-}) => theme.radii.default, ({
   theme
 }) => theme.mediaQueries.small);
+const ViewSection = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].section.withConfig({
+  displayName: "pages__ViewSection"
+})(["width:100%;"]);
 const ErrorMessage = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__ErrorMessage"
-})(["background-color:", ";border:1px solid ", ";color:", ";border-radius:", ";padding:2.4rem;margin-bottom:2.4rem;margin-top:2.4rem;max-width:60rem;width:100%;", "{padding:1.6rem;margin-bottom:1.2rem;margin-top:1.2rem;max-width:100%;}"], ({
+})(["background-color:", ";border:1px solid ", ";color:", ";border-radius:", ";padding:1.2rem 1.4rem;margin:1.2rem 0;width:100%;", "{padding:1.6rem;margin-bottom:1.2rem;margin-top:1.2rem;max-width:100%;}"], ({
   theme
 }) => {
   var _theme$colors$error;
@@ -7333,20 +7944,34 @@ const ErrorMessage = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].d
 }) => theme.mediaQueries.small);
 const DashboardWrapper = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__DashboardWrapper"
-})(["width:100%;max-width:110rem;margin-top:2.4rem;"]);
+})(["width:100%;"]);
 const DashboardTitle = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].h2.withConfig({
   displayName: "pages__DashboardTitle"
-})(["margin:0 0 1.6rem 0;font-size:", ";"], ({
+})(["margin:0;font-size:2rem;"]);
+const SectionHeader = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__SectionHeader"
+})(["display:flex;align-items:flex-start;justify-content:space-between;gap:1.6rem;margin-bottom:1.6rem;", "{flex-direction:column;}"], ({
   theme
-}) => theme.fontSizes.large);
+}) => theme.mediaQueries.small);
+const SectionHeadingGroup = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__SectionHeadingGroup"
+})(["min-width:0;"]);
+const SectionDescription = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].p.withConfig({
+  displayName: "pages__SectionDescription"
+})(["margin:0.4rem 0 0;color:", ";"], ({
+  theme
+}) => {
+  var _theme$colors$text7;
+  return (_theme$colors$text7 = theme.colors.text) === null || _theme$colors$text7 === void 0 ? void 0 : _theme$colors$text7.alternative;
+});
 const StatusGrid = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__StatusGrid"
-})(["display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.6rem;width:100%;", "{grid-template-columns:1fr;}"], ({
+})(["display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;width:100%;margin-bottom:2.4rem;", "{grid-template-columns:1fr;}"], ({
   theme
 }) => theme.mediaQueries.small);
 const StatusCard = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__StatusCard"
-})(["background-color:", ";border:1px solid ", ";border-radius:", ";padding:1.6rem;"], ({
+})(["background-color:", ";border:1px solid ", ";border-radius:", ";padding:1.4rem 1.6rem;"], ({
   theme
 }) => {
   var _theme$colors$backgro2;
@@ -7354,8 +7979,8 @@ const StatusCard = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div
 }, ({
   theme
 }) => {
-  var _theme$colors$border2;
-  return (_theme$colors$border2 = theme.colors.border) === null || _theme$colors$border2 === void 0 ? void 0 : _theme$colors$border2.default;
+  var _theme$colors$border3;
+  return (_theme$colors$border3 = theme.colors.border) === null || _theme$colors$border3 === void 0 ? void 0 : _theme$colors$border3.default;
 }, ({
   theme
 }) => theme.radii.default);
@@ -7366,28 +7991,37 @@ const StatusDot = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].span
   displayName: "pages__StatusDot"
 })(["width:1rem;height:1rem;border-radius:50%;background-color:", ";"], ({
   $status
-}) => $status === 'ok' ? '#22c55e' : '#ef4444');
+}) => $status === 'ok' ? '#1a7f37' : '#cf222e');
 const StatusMessage = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].p.withConfig({
   displayName: "pages__StatusMessage"
 })(["margin:0;color:", ";font-size:", ";"], ({
   theme
 }) => {
-  var _theme$colors$text2;
-  return (_theme$colors$text2 = theme.colors.text) === null || _theme$colors$text2 === void 0 ? void 0 : _theme$colors$text2.alternative;
+  var _theme$colors$text8;
+  return (_theme$colors$text8 = theme.colors.text) === null || _theme$colors$text8 === void 0 ? void 0 : _theme$colors$text8.alternative;
 }, ({
   theme
 }) => theme.fontSizes.small);
-const DashboardActions = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
-  displayName: "pages__DashboardActions"
-})(["display:flex;gap:1.2rem;margin-top:1.6rem;flex-wrap:wrap;"]);
 const SmallButton = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].button.withConfig({
   displayName: "pages__SmallButton"
-})(["border:1px solid ", ";background-color:", ";color:", ";border-radius:", ";padding:0.9rem 1.4rem;cursor:pointer;font-weight:700;&:hover{opacity:0.85;}"], ({
+})(["display:inline-flex;align-items:center;justify-content:center;gap:0.7rem;border:1px solid ", ";background-color:", ";color:", ";border-radius:", ";padding:0.9rem 1.4rem;cursor:pointer;font-weight:700;&:hover{background-color:", ";border-color:", ";color:", ";}"], ({
   theme
 }) => {
-  var _theme$colors$border3;
-  return (_theme$colors$border3 = theme.colors.border) === null || _theme$colors$border3 === void 0 ? void 0 : _theme$colors$border3.default;
+  var _theme$colors$border4;
+  return (_theme$colors$border4 = theme.colors.border) === null || _theme$colors$border4 === void 0 ? void 0 : _theme$colors$border4.default;
 }, ({
+  theme
+}) => {
+  var _theme$colors$card;
+  return (_theme$colors$card = theme.colors.card) === null || _theme$colors$card === void 0 ? void 0 : _theme$colors$card.default;
+}, ({
+  theme
+}) => {
+  var _theme$colors$text9;
+  return (_theme$colors$text9 = theme.colors.text) === null || _theme$colors$text9 === void 0 ? void 0 : _theme$colors$text9.default;
+}, ({
+  theme
+}) => theme.radii.default, ({
   theme
 }) => {
   var _theme$colors$backgro3;
@@ -7395,29 +8029,35 @@ const SmallButton = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].bu
 }, ({
   theme
 }) => {
-  var _theme$colors$text3;
-  return (_theme$colors$text3 = theme.colors.text) === null || _theme$colors$text3 === void 0 ? void 0 : _theme$colors$text3.default;
+  var _theme$colors$text10;
+  return (_theme$colors$text10 = theme.colors.text) === null || _theme$colors$text10 === void 0 ? void 0 : _theme$colors$text10.muted;
 }, ({
   theme
-}) => theme.radii.default);
+}) => {
+  var _theme$colors$text11;
+  return (_theme$colors$text11 = theme.colors.text) === null || _theme$colors$text11 === void 0 ? void 0 : _theme$colors$text11.default;
+});
+const IconButton = (0,styled_components__WEBPACK_IMPORTED_MODULE_6__["default"])(SmallButton).withConfig({
+  displayName: "pages__IconButton"
+})(["width:4rem;min-width:4rem;padding:0.8rem;"]);
 const LastCheck = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].p.withConfig({
   displayName: "pages__LastCheck"
 })(["margin:1.2rem 0 0 0;color:", ";font-size:", ";"], ({
   theme
 }) => {
-  var _theme$colors$text4;
-  return (_theme$colors$text4 = theme.colors.text) === null || _theme$colors$text4 === void 0 ? void 0 : _theme$colors$text4.alternative;
+  var _theme$colors$text12;
+  return (_theme$colors$text12 = theme.colors.text) === null || _theme$colors$text12 === void 0 ? void 0 : _theme$colors$text12.alternative;
 }, ({
   theme
 }) => theme.fontSizes.small);
 const StatsGrid = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__StatsGrid"
-})(["display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1.2rem;width:100%;margin-top:2.4rem;", "{grid-template-columns:1fr 1fr;}"], ({
+})(["display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1rem;width:100%;margin-bottom:2.4rem;", "{grid-template-columns:1fr 1fr;}"], ({
   theme
 }) => theme.mediaQueries.small);
 const HistorySection = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__HistorySection"
-})(["width:100%;margin-top:2.4rem;"]);
+})(["width:100%;"]);
 const TableWrapper = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__TableWrapper"
 })(["width:100%;overflow-x:auto;background-color:", ";border:1px solid ", ";border-radius:", ";"], ({
@@ -7428,14 +8068,14 @@ const TableWrapper = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].d
 }, ({
   theme
 }) => {
-  var _theme$colors$border4;
-  return (_theme$colors$border4 = theme.colors.border) === null || _theme$colors$border4 === void 0 ? void 0 : _theme$colors$border4.default;
+  var _theme$colors$border5;
+  return (_theme$colors$border5 = theme.colors.border) === null || _theme$colors$border5 === void 0 ? void 0 : _theme$colors$border5.default;
 }, ({
   theme
 }) => theme.radii.default);
 const HistoryTable = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].table.withConfig({
   displayName: "pages__HistoryTable"
-})(["width:100%;border-collapse:collapse;min-width:90rem;"]);
+})(["width:100%;border-collapse:collapse;min-width:76rem;"]);
 const TableHead = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].thead.withConfig({
   displayName: "pages__TableHead"
 })(["background-color:", ";"], ({
@@ -7446,21 +8086,21 @@ const TableHead = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].thea
 });
 const TableHeader = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].th.withConfig({
   displayName: "pages__TableHeader"
-})(["text-align:left;padding:1.2rem;font-size:", ";border-bottom:1px solid ", ";"], ({
+})(["text-align:left;padding:1rem 1.2rem;font-size:", ";border-bottom:1px solid ", ";"], ({
   theme
 }) => theme.fontSizes.small, ({
   theme
 }) => {
-  var _theme$colors$border5;
-  return (_theme$colors$border5 = theme.colors.border) === null || _theme$colors$border5 === void 0 ? void 0 : _theme$colors$border5.default;
+  var _theme$colors$border6;
+  return (_theme$colors$border6 = theme.colors.border) === null || _theme$colors$border6 === void 0 ? void 0 : _theme$colors$border6.default;
 });
 const TableCell = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].td.withConfig({
   displayName: "pages__TableCell"
-})(["padding:1.2rem;border-bottom:1px solid ", ";font-size:", ";vertical-align:top;"], ({
+})(["padding:1rem 1.2rem;border-bottom:1px solid ", ";font-size:", ";vertical-align:top;"], ({
   theme
 }) => {
-  var _theme$colors$border6;
-  return (_theme$colors$border6 = theme.colors.border) === null || _theme$colors$border6 === void 0 ? void 0 : _theme$colors$border6.default;
+  var _theme$colors$border7;
+  return (_theme$colors$border7 = theme.colors.border) === null || _theme$colors$border7 === void 0 ? void 0 : _theme$colors$border7.default;
 }, ({
   theme
 }) => theme.fontSizes.small);
@@ -7469,22 +8109,39 @@ const RiskBadge = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].span
 })(["display:inline-block;padding:0.4rem 0.8rem;border-radius:999px;font-weight:700;font-size:1.2rem;background-color:", ";color:white;"], ({
   $risk
 }) => {
-  if ($risk === 'ALTO') return '#7f1d1d';
-  if ($risk === 'MEDIO') return '#78350f';
-  if ($risk === 'BAJO') return '#14532d';
-  return '#374151';
+  if ($risk === 'ALTO' || $risk === 'HIGH') {
+    return '#cf222e';
+  }
+  if ($risk === 'MEDIO' || $risk === 'MEDIUM') {
+    return '#9a6700';
+  }
+  if ($risk === 'BAJO' || $risk === 'LOW') {
+    return '#1a7f37';
+  }
+  return '#57606a';
+});
+const ActionBadge = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].span.withConfig({
+  displayName: "pages__ActionBadge"
+})(["display:inline-block;padding:0.35rem 0.7rem;border-radius:4px;background-color:", ";color:", ";font-size:1.2rem;font-weight:700;"], ({
+  $action
+}) => getActionBadgeBackground($action), ({
+  $action,
+  theme
+}) => {
+  var _theme$colors$text13, _theme$colors$text14;
+  return $action ? (_theme$colors$text13 = theme.colors.text) === null || _theme$colors$text13 === void 0 ? void 0 : _theme$colors$text13.default : (_theme$colors$text14 = theme.colors.text) === null || _theme$colors$text14 === void 0 ? void 0 : _theme$colors$text14.alternative;
 });
 const EmptyState = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__EmptyState"
 })(["padding:1.6rem;color:", ";"], ({
   theme
 }) => {
-  var _theme$colors$text5;
-  return (_theme$colors$text5 = theme.colors.text) === null || _theme$colors$text5 === void 0 ? void 0 : _theme$colors$text5.alternative;
+  var _theme$colors$text15;
+  return (_theme$colors$text15 = theme.colors.text) === null || _theme$colors$text15 === void 0 ? void 0 : _theme$colors$text15.alternative;
 });
 const StatCard = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__StatCard"
-})(["background-color:", ";border:1px solid ", ";border-radius:", ";padding:1.6rem;"], ({
+})(["background-color:", ";border:1px solid ", ";border-radius:", ";min-width:0;padding:1.4rem;"], ({
   theme
 }) => {
   var _theme$colors$backgro6;
@@ -7492,61 +8149,59 @@ const StatCard = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.w
 }, ({
   theme
 }) => {
-  var _theme$colors$border7;
-  return (_theme$colors$border7 = theme.colors.border) === null || _theme$colors$border7 === void 0 ? void 0 : _theme$colors$border7.default;
+  var _theme$colors$border8;
+  return (_theme$colors$border8 = theme.colors.border) === null || _theme$colors$border8 === void 0 ? void 0 : _theme$colors$border8.default;
 }, ({
   theme
 }) => theme.radii.default);
 const StatValue = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__StatValue"
-})(["font-size:2.4rem;font-weight:800;margin-bottom:0.4rem;"]);
+})(["font-size:2.2rem;font-weight:800;margin-bottom:0.4rem;"]);
 const StatLabel = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__StatLabel"
 })(["color:", ";font-size:", ";"], ({
   theme
 }) => {
-  var _theme$colors$text6;
-  return (_theme$colors$text6 = theme.colors.text) === null || _theme$colors$text6 === void 0 ? void 0 : _theme$colors$text6.alternative;
+  var _theme$colors$text16;
+  return (_theme$colors$text16 = theme.colors.text) === null || _theme$colors$text16 === void 0 ? void 0 : _theme$colors$text16.alternative;
 }, ({
   theme
 }) => theme.fontSizes.small);
 const QuickActionsSection = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__QuickActionsSection"
-})(["width:100%;max-width:110rem;margin-top:3.2rem;"]);
+})(["width:100%;"]);
 const QuickActionsHeader = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__QuickActionsHeader"
 })(["margin-bottom:1.6rem;"]);
 const QuickActionsTitle = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].h2.withConfig({
   displayName: "pages__QuickActionsTitle"
-})(["margin:0;font-size:", ";"], ({
-  theme
-}) => theme.fontSizes.large);
+})(["margin:0;font-size:2rem;"]);
 const QuickActionsDescription = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].p.withConfig({
   displayName: "pages__QuickActionsDescription"
 })(["margin:0.8rem 0 0 0;color:", ";"], ({
   theme
 }) => {
-  var _theme$colors$text7;
-  return (_theme$colors$text7 = theme.colors.text) === null || _theme$colors$text7 === void 0 ? void 0 : _theme$colors$text7.alternative;
+  var _theme$colors$text17;
+  return (_theme$colors$text17 = theme.colors.text) === null || _theme$colors$text17 === void 0 ? void 0 : _theme$colors$text17.alternative;
 });
 const QuickActionsGrid = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__QuickActionsGrid"
-})(["display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.6rem;width:100%;", "{grid-template-columns:1fr;}"], ({
+})(["display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem;width:100%;", "{grid-template-columns:1fr;}"], ({
   theme
 }) => theme.mediaQueries.small);
 const KnownAddressesSection = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__KnownAddressesSection"
-})(["width:100%;margin-top:2.4rem;"]);
+})(["width:100%;"]);
 const FilterBar = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__FilterBar"
 })(["display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:1.2rem;"]);
 const SearchInput = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].input.withConfig({
   displayName: "pages__SearchInput"
-})(["flex:1;min-width:24rem;border:1px solid ", ";background-color:", ";color:", ";border-radius:", ";padding:0.9rem 1.2rem;"], ({
+})(["flex:1;min-width:24rem;border:1px solid ", ";background-color:", ";color:", ";border-radius:", ";padding:0.9rem 1.2rem;min-height:4.2rem;"], ({
   theme
 }) => {
-  var _theme$colors$border8;
-  return (_theme$colors$border8 = theme.colors.border) === null || _theme$colors$border8 === void 0 ? void 0 : _theme$colors$border8.default;
+  var _theme$colors$border9;
+  return (_theme$colors$border9 = theme.colors.border) === null || _theme$colors$border9 === void 0 ? void 0 : _theme$colors$border9.default;
 }, ({
   theme
 }) => {
@@ -7555,18 +8210,18 @@ const SearchInput = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].in
 }, ({
   theme
 }) => {
-  var _theme$colors$text8;
-  return (_theme$colors$text8 = theme.colors.text) === null || _theme$colors$text8 === void 0 ? void 0 : _theme$colors$text8.default;
+  var _theme$colors$text18;
+  return (_theme$colors$text18 = theme.colors.text) === null || _theme$colors$text18 === void 0 ? void 0 : _theme$colors$text18.default;
 }, ({
   theme
 }) => theme.radii.default);
 const SelectInput = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].select.withConfig({
   displayName: "pages__SelectInput"
-})(["border:1px solid ", ";background-color:", ";color:", ";border-radius:", ";padding:0.9rem 1.2rem;"], ({
+})(["border:1px solid ", ";background-color:", ";color:", ";border-radius:", ";padding:0.9rem 1.2rem;min-height:4.2rem;"], ({
   theme
 }) => {
-  var _theme$colors$border9;
-  return (_theme$colors$border9 = theme.colors.border) === null || _theme$colors$border9 === void 0 ? void 0 : _theme$colors$border9.default;
+  var _theme$colors$border10;
+  return (_theme$colors$border10 = theme.colors.border) === null || _theme$colors$border10 === void 0 ? void 0 : _theme$colors$border10.default;
 }, ({
   theme
 }) => {
@@ -7575,19 +8230,14 @@ const SelectInput = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].se
 }, ({
   theme
 }) => {
-  var _theme$colors$text9;
-  return (_theme$colors$text9 = theme.colors.text) === null || _theme$colors$text9 === void 0 ? void 0 : _theme$colors$text9.default;
+  var _theme$colors$text19;
+  return (_theme$colors$text19 = theme.colors.text) === null || _theme$colors$text19 === void 0 ? void 0 : _theme$colors$text19.default;
 }, ({
   theme
 }) => theme.radii.default);
 const ManualReportSection = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__ManualReportSection"
-})(["width:100%;margin-top:2.4rem;"]);
-const FormGrid = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
-  displayName: "pages__FormGrid"
-})(["display:grid;grid-template-columns:2fr 2fr 1fr;gap:1.2rem;width:100%;", "{grid-template-columns:1fr;}"], ({
-  theme
-}) => theme.mediaQueries.small);
+})(["width:100%;"]);
 const FormMessage = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__FormMessage"
 })(["margin-top:1.2rem;padding:1.2rem;border-radius:", ";border:1px solid ", ";color:", ";"], ({
@@ -7599,7 +8249,7 @@ const FormMessage = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].di
 }) => $success ? '#22c55e' : '#ef4444');
 const ChartsSection = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__ChartsSection"
-})(["width:100%;margin-top:2.4rem;"]);
+})(["width:100%;"]);
 const ChartsGrid = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__ChartsGrid"
 })(["display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.6rem;width:100%;", "{grid-template-columns:1fr;}"], ({
@@ -7615,14 +8265,14 @@ const ChartCard = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.
 }, ({
   theme
 }) => {
-  var _theme$colors$border10;
-  return (_theme$colors$border10 = theme.colors.border) === null || _theme$colors$border10 === void 0 ? void 0 : _theme$colors$border10.default;
+  var _theme$colors$border11;
+  return (_theme$colors$border11 = theme.colors.border) === null || _theme$colors$border11 === void 0 ? void 0 : _theme$colors$border11.default;
 }, ({
   theme
 }) => theme.radii.default);
 const ChartTitle = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].h3.withConfig({
   displayName: "pages__ChartTitle"
-})(["margin:0 0 1.4rem 0;"]);
+})(["margin:0 0 1.4rem 0;font-size:1.7rem;"]);
 const BarRow = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__BarRow"
 })(["margin-bottom:1.2rem;"]);
@@ -7633,7 +8283,7 @@ const BarHeader = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.
 }) => theme.fontSizes.small);
 const BarTrack = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__BarTrack"
-})(["width:100%;height:1rem;border-radius:999px;background-color:", ";overflow:hidden;"], ({
+})(["width:100%;height:1rem;border-radius:3px;background-color:", ";overflow:hidden;"], ({
   theme
 }) => {
   var _theme$colors$backgro10;
@@ -7641,30 +8291,196 @@ const BarTrack = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.w
 });
 const BarFill = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__BarFill"
-})(["width:", ";height:100%;border-radius:999px;background-color:", ";"], ({
+})(["width:", ";height:100%;border-radius:3px;background-color:", ";"], ({
   $width
 }) => `${$width}%`, ({
+  $color,
   theme
 }) => {
-  var _theme$colors$primary;
-  return ((_theme$colors$primary = theme.colors.primary) === null || _theme$colors$primary === void 0 ? void 0 : _theme$colors$primary.default) || '#0376c9';
+  var _ref, _theme$colors$primary2;
+  return (_ref = $color !== null && $color !== void 0 ? $color : (_theme$colors$primary2 = theme.colors.primary) === null || _theme$colors$primary2 === void 0 ? void 0 : _theme$colors$primary2.default) !== null && _ref !== void 0 ? _ref : '#0969da';
 });
 const ChartEmptyState = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
   displayName: "pages__ChartEmptyState"
 })(["color:", ";font-size:", ";"], ({
   theme
 }) => {
-  var _theme$colors$text10;
-  return (_theme$colors$text10 = theme.colors.text) === null || _theme$colors$text10 === void 0 ? void 0 : _theme$colors$text10.alternative;
+  var _theme$colors$text20;
+  return (_theme$colors$text20 = theme.colors.text) === null || _theme$colors$text20 === void 0 ? void 0 : _theme$colors$text20.alternative;
 }, ({
   theme
 }) => theme.fontSizes.small);
+const DetailPanel = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__DetailPanel"
+})(["min-width:0;background-color:", ";border:1px solid ", ";border-radius:", ";padding:1.8rem;"], ({
+  theme
+}) => {
+  var _theme$colors$backgro11;
+  return (_theme$colors$backgro11 = theme.colors.background) === null || _theme$colors$backgro11 === void 0 ? void 0 : _theme$colors$backgro11.alternative;
+}, ({
+  theme
+}) => {
+  var _theme$colors$border12;
+  return (_theme$colors$border12 = theme.colors.border) === null || _theme$colors$border12 === void 0 ? void 0 : _theme$colors$border12.default;
+}, ({
+  theme
+}) => theme.radii.default);
+const DetailHeader = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__DetailHeader"
+})(["display:flex;justify-content:space-between;gap:1.2rem;align-items:flex-start;margin-bottom:1.6rem;", "{flex-direction:column;}"], ({
+  theme
+}) => theme.mediaQueries.small);
+const DetailTitle = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].h3.withConfig({
+  displayName: "pages__DetailTitle"
+})(["margin:0;font-size:2rem;"]);
+const DetailSubtitle = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].p.withConfig({
+  displayName: "pages__DetailSubtitle"
+})(["margin:0.4rem 0 0 0;color:", ";font-size:", ";"], ({
+  theme
+}) => {
+  var _theme$colors$text21;
+  return (_theme$colors$text21 = theme.colors.text) === null || _theme$colors$text21 === void 0 ? void 0 : _theme$colors$text21.alternative;
+}, ({
+  theme
+}) => theme.fontSizes.small);
+const DetailGrid = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__DetailGrid"
+})(["display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-bottom:1.6rem;border-top:1px solid ", ";border-left:1px solid ", ";", "{grid-template-columns:1fr;}"], ({
+  theme
+}) => {
+  var _theme$colors$border13;
+  return (_theme$colors$border13 = theme.colors.border) === null || _theme$colors$border13 === void 0 ? void 0 : _theme$colors$border13.default;
+}, ({
+  theme
+}) => {
+  var _theme$colors$border14;
+  return (_theme$colors$border14 = theme.colors.border) === null || _theme$colors$border14 === void 0 ? void 0 : _theme$colors$border14.default;
+}, ({
+  theme
+}) => theme.mediaQueries.small);
+const DetailBox = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__DetailBox"
+})(["min-width:0;border-right:1px solid ", ";border-bottom:1px solid ", ";padding:1.2rem;"], ({
+  theme
+}) => {
+  var _theme$colors$border15;
+  return (_theme$colors$border15 = theme.colors.border) === null || _theme$colors$border15 === void 0 ? void 0 : _theme$colors$border15.default;
+}, ({
+  theme
+}) => {
+  var _theme$colors$border16;
+  return (_theme$colors$border16 = theme.colors.border) === null || _theme$colors$border16 === void 0 ? void 0 : _theme$colors$border16.default;
+});
+const DetailLabel = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__DetailLabel"
+})(["color:", ";font-size:", ";margin-bottom:0.4rem;"], ({
+  theme
+}) => {
+  var _theme$colors$text22;
+  return (_theme$colors$text22 = theme.colors.text) === null || _theme$colors$text22 === void 0 ? void 0 : _theme$colors$text22.alternative;
+}, ({
+  theme
+}) => theme.fontSizes.small);
+const DetailValue = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__DetailValue"
+})(["font-weight:700;word-break:break-word;"]);
+const DetailSectionTitle = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].h4.withConfig({
+  displayName: "pages__DetailSectionTitle"
+})(["margin:1.6rem 0 0.8rem 0;font-size:1.6rem;"]);
+const JsonBlock = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].pre.withConfig({
+  displayName: "pages__JsonBlock"
+})(["margin:0;padding:1.2rem;overflow-x:auto;white-space:pre-wrap;word-break:break-word;border-radius:", ";background-color:", ";border:1px solid ", ";font-size:", ";"], ({
+  theme
+}) => theme.radii.default, ({
+  theme
+}) => {
+  var _theme$colors$backgro12;
+  return (_theme$colors$backgro12 = theme.colors.background) === null || _theme$colors$backgro12 === void 0 ? void 0 : _theme$colors$backgro12.default;
+}, ({
+  theme
+}) => {
+  var _theme$colors$border17;
+  return (_theme$colors$border17 = theme.colors.border) === null || _theme$colors$border17 === void 0 ? void 0 : _theme$colors$border17.default;
+}, ({
+  theme
+}) => theme.fontSizes.small);
+const FindingsList = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].ul.withConfig({
+  displayName: "pages__FindingsList"
+})(["margin:0;padding-left:2rem;li + li{margin-top:0.5rem;}"]);
+const ClickableRow = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].tr.withConfig({
+  displayName: "pages__ClickableRow"
+})(["cursor:pointer;background-color:", ";&:hover{background-color:", ";}&:focus-visible{outline:2px solid ", ";outline-offset:-2px;}"], ({
+  $selected,
+  theme
+}) => {
+  var _theme$colors$backgro13;
+  return $selected ? (_theme$colors$backgro13 = theme.colors.background) === null || _theme$colors$backgro13 === void 0 ? void 0 : _theme$colors$backgro13.default : 'transparent';
+}, ({
+  theme
+}) => {
+  var _theme$colors$backgro14;
+  return (_theme$colors$backgro14 = theme.colors.background) === null || _theme$colors$backgro14 === void 0 ? void 0 : _theme$colors$backgro14.default;
+}, ({
+  theme
+}) => {
+  var _theme$colors$primary3;
+  return (_theme$colors$primary3 = theme.colors.primary) === null || _theme$colors$primary3 === void 0 ? void 0 : _theme$colors$primary3.default;
+});
+const HistoryLayout = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__HistoryLayout"
+})(["display:grid;grid-template-columns:", ";gap:1.6rem;align-items:start;@media screen and (max-width:1050px){grid-template-columns:1fr;}"], ({
+  $hasDetail
+}) => $hasDetail ? 'minmax(52rem, 1.2fr) minmax(38rem, 0.8fr)' : '1fr');
+const TechnicalDetails = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].details.withConfig({
+  displayName: "pages__TechnicalDetails"
+})(["border-top:1px solid ", ";&:last-child{border-bottom:1px solid ", ";}"], ({
+  theme
+}) => {
+  var _theme$colors$border18;
+  return (_theme$colors$border18 = theme.colors.border) === null || _theme$colors$border18 === void 0 ? void 0 : _theme$colors$border18.default;
+}, ({
+  theme
+}) => {
+  var _theme$colors$border19;
+  return (_theme$colors$border19 = theme.colors.border) === null || _theme$colors$border19 === void 0 ? void 0 : _theme$colors$border19.default;
+});
+const TechnicalSummary = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].summary.withConfig({
+  displayName: "pages__TechnicalSummary"
+})(["cursor:pointer;padding:1.1rem 0;font-weight:700;"]);
+const TechnicalContent = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__TechnicalContent"
+})(["padding-bottom:1.2rem;"]);
+const AddressWorkspace = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__AddressWorkspace"
+})(["display:grid;grid-template-columns:minmax(0,1.6fr) minmax(30rem,0.8fr);gap:2.4rem;align-items:start;@media screen and (max-width:950px){grid-template-columns:1fr;}"]);
+const FormPanel = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__FormPanel"
+})(["padding-left:2.4rem;border-left:1px solid ", ";@media screen and (max-width:950px){padding-left:0;padding-top:2.4rem;border-left:0;border-top:1px solid ", ";}"], ({
+  theme
+}) => {
+  var _theme$colors$border20;
+  return (_theme$colors$border20 = theme.colors.border) === null || _theme$colors$border20 === void 0 ? void 0 : _theme$colors$border20.default;
+}, ({
+  theme
+}) => {
+  var _theme$colors$border21;
+  return (_theme$colors$border21 = theme.colors.border) === null || _theme$colors$border21 === void 0 ? void 0 : _theme$colors$border21.default;
+});
+const FieldLabel = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].label.withConfig({
+  displayName: "pages__FieldLabel"
+})(["display:block;margin-bottom:0.5rem;font-size:", ";font-weight:700;"], ({
+  theme
+}) => theme.fontSizes.small);
+const FormField = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div.withConfig({
+  displayName: "pages__FormField"
+})(["margin-bottom:1.2rem;"]);
 
-//////////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////ESTADOS DENTRO DE INDEX///////////////////////////////
+// //////////////////////////ESTADOS DENTRO DE INDEX///////////////////////////////
 
 const Index = () => {
+  var _health$backend, _health$backend2, _dashboardMetrics$ris, _dashboardMetrics$met, _selectedAnalysisDeta, _selectedAnalysisDeta2, _selectedAnalysisDeta3, _selectedAnalysisDeta4;
   const {
     error
   } = (0,_hooks__WEBPACK_IMPORTED_MODULE_3__.useMetaMaskContext)();
@@ -7711,6 +8527,14 @@ const Index = () => {
     0: isLoadingHistory,
     1: setIsLoadingHistory
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    0: historySearch,
+    1: setHistorySearch
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const {
+    0: historyRisk,
+    1: setHistoryRisk
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('all');
   const {
     0: knownAddresses,
     1: setKnownAddresses
@@ -7767,8 +8591,28 @@ const Index = () => {
     0: isLoadingDashboardMetrics,
     1: setIsLoadingDashboardMetrics
   } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    0: selectedAnalysisId,
+    1: setSelectedAnalysisId
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const {
+    0: selectedAnalysisDetail,
+    1: setSelectedAnalysisDetail
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const {
+    0: analysisDetailError,
+    1: setAnalysisDetailError
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const {
+    0: isLoadingAnalysisDetail,
+    1: setIsLoadingAnalysisDetail
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const {
+    0: activeView,
+    1: setActiveView
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('overview');
 
-  /////////////////////////////FUNCIONES///////////////////////////////////////////
+  // ///////////////////////////FUNCIONES///////////////////////////////////////////
 
   const loadHealth = async () => {
     try {
@@ -7780,7 +8624,7 @@ const Index = () => {
     } catch (loadError) {
       console.error('Error consultant /health:', loadError);
       setHealth(null);
-      setHealthError('No si ha pogut conectar amb el backend');
+      setHealthError('No s’ha pogut connectar amb el backend');
     } finally {
       setIsLoadingHealth(false);
     }
@@ -7798,7 +8642,7 @@ const Index = () => {
     } catch (loadError) {
       console.error('Error consultant /stats:', loadError);
       setStats(null);
-      setStatsError('No si han pogut carregar les estadístiques');
+      setStatsError('No s’han pogut carregar les estadístiques');
     } finally {
       setIsLoadingStats(false);
     }
@@ -7809,14 +8653,14 @@ const Index = () => {
       const response = await fetch('http://localhost:3000/analysis-history?limit=10');
       const data = await response.json();
       if (!data.success) {
-        throw new Error('Respuesta inválida de /analysis-history');
+        throw new Error('Resposta invàlida de /analysis-history');
       }
       setHistory(data.history || []);
       setHistoryError(null);
     } catch (loadError) {
-      console.error('Error consultando /analysis-history:', loadError);
+      console.error('Error consultant /analysis-history:', loadError);
       setHistory([]);
-      setHistoryError('No se pudo cargar el histórico de análisis');
+      setHistoryError('No s’ha pogut carregar l’historial d’anàlisis');
     } finally {
       setIsLoadingHistory(false);
     }
@@ -7860,7 +8704,7 @@ const Index = () => {
     } catch (loadError) {
       console.error('Error consultant /dashboard-metrics:', loadError);
       setDashboardMetrics(null);
-      setDashboardMetricsError('No s’han pogut carregar els gràfics del dashboard');
+      setDashboardMetricsError('No s’han pogut carregar els gràfics del panell');
     } finally {
       setIsLoadingDashboardMetrics(false);
     }
@@ -7882,29 +8726,25 @@ const Index = () => {
       });
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error || 'No s’ha pogut guardar el reporte manual');
+        var _data$error;
+        throw new Error((_data$error = data.error) !== null && _data$error !== void 0 ? _data$error : 'No s’ha pogut guardar l’informe manual');
       }
       setManualReportSuccess(true);
       setManualReportMessage('Direcció afegida correctament al dataset local.');
       setManualAddress('');
       setManualLabel('');
       setManualType('warning');
-      loadKnownAddresses();
-      loadStats();
+      await Promise.all([loadKnownAddresses(), loadStats()]);
     } catch (submitError) {
-      console.error('Error enviant reporte manual:', submitError);
+      console.error('Error enviant l’informe manual:', submitError);
       setManualReportSuccess(false);
-      setManualReportMessage(submitError instanceof Error ? submitError.message : 'Error desconegut enviant el reporte manual');
+      setManualReportMessage(submitError instanceof Error ? submitError.message : 'Error desconegut enviant l’informe manual');
     } finally {
       setIsSubmittingManualReport(false);
     }
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    loadHealth();
-    loadStats();
-    loadHistory();
-    loadKnownAddresses();
-    loadDashboardMetrics();
+    Promise.all([loadHealth(), loadStats(), loadHistory(), loadKnownAddresses(), loadDashboardMetrics()]).catch(reportUnexpectedError('durant la càrrega inicial'));
   }, []);
   const shortenAddress = address => {
     if (!address) {
@@ -7917,14 +8757,21 @@ const Index = () => {
       return '—';
     }
     const date = new Date(timestamp < 1000000000000 ? timestamp * 1000 : timestamp);
-    return date.toLocaleString();
+    return date.toLocaleString('ca-ES');
   };
   const getMethodLabel = item => {
-    return item.decoded_method || item.method_selector || 'desconocido';
+    if (item.decoded_method) {
+      return item.decoded_method;
+    }
+    if (item.method_selector) {
+      return item.method_selector;
+    }
+    return 'desconegut';
   };
   const renderStatusCard = (title, service, fallbackMessage = 'Sense informació') => {
-    const status = (service === null || service === void 0 ? void 0 : service.status) || 'error';
-    const message = (service === null || service === void 0 ? void 0 : service.message) || fallbackMessage;
+    var _service$status, _service$message;
+    const status = (_service$status = service === null || service === void 0 ? void 0 : service.status) !== null && _service$status !== void 0 ? _service$status : 'error';
+    const message = (_service$message = service === null || service === void 0 ? void 0 : service.message) !== null && _service$message !== void 0 ? _service$message : fallbackMessage;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(StatusCard, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(StatusHeader, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(StatusDot, {
@@ -7953,7 +8800,7 @@ const Index = () => {
     });
   };
 
-  // Handler para analizar transacciones con IA
+  // Analitza una transacció simulada mitjançant el Snap.
   const handleAnalyzeTransaction = async () => {
     await invokeSnap({
       method: 'analyzeTransaction',
@@ -7967,10 +8814,10 @@ const Index = () => {
     });
   };
 
-  // 🔥 Simular transacción real para probar onTransaction
+  // Simula una transacció real per comprovar el hook onTransaction.
   const handleSendTransaction = async () => {
     try {
-      // Obtener la cuenta actual
+      // Obté el compte actiu de MetaMask.
       const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts'
       });
@@ -7980,19 +8827,19 @@ const Index = () => {
       }
       const from = accounts[0];
 
-      // Enviar transacción de prueba (0 ETH a dirección nula)
+      // Envia una transacció de prova de 0 ETH a l'adreça nul·la.
       await window.ethereum.request({
         method: 'eth_sendTransaction',
         params: [{
-          from: from,
+          from,
           to: '0x0000000000000000000000000000000000000000',
           value: '0x0',
           // 0 ETH
           data: '0x' // Sin datos
         }]
       });
-    } catch (error) {
-      console.error('Error:', error);
+    } catch (requestError) {
+      console.error('Error:', requestError);
     }
   };
   const renderBarChart = (items = []) => {
@@ -8004,335 +8851,768 @@ const Index = () => {
     }
     return items.map(item => {
       const width = Math.round(item.count / maxValue * 100);
+      const normalizedLabel = item.label.toUpperCase();
+      const color = getRiskBarColor(normalizedLabel);
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(BarRow, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(BarHeader, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-            children: item.label || 'desconegut'
+            children: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.getMetricLabel)(item.label)
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
             children: item.count
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(BarTrack, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(BarFill, {
-            $width: width
+            $width: width,
+            $color: color
           })
         })]
       }, item.label);
     });
   };
+  const loadAnalysisDetail = async id => {
+    try {
+      setSelectedAnalysisId(id);
+      setIsLoadingAnalysisDetail(true);
+      setAnalysisDetailError(null);
+      const response = await fetch(`http://localhost:3000/analysis-history/${id}`);
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error('Resposta invàlida de /analysis-history/:id');
+      }
+      setSelectedAnalysisDetail(data.detail);
+    } catch (loadError) {
+      console.error('Error carregant el detall de l’anàlisi:', loadError);
+      setSelectedAnalysisDetail(null);
+      setAnalysisDetailError('No s’ha pogut carregar el detall de l’anàlisi seleccionada');
+    } finally {
+      setIsLoadingAnalysisDetail(false);
+    }
+  };
+  const formatUnknownValue = value => {
+    if (value === null || value === undefined || value === '') {
+      return 'No disponible';
+    }
+    if (typeof value === 'string') {
+      return value;
+    }
+    return JSON.stringify(value, null, 2);
+  };
+  const getObjectField = (value, field, fallback = '—') => {
+    var _JSON$stringify;
+    if (!value || typeof value !== 'object') {
+      return fallback;
+    }
+    const objectValue = value;
+    const fieldValue = objectValue[field];
+    if (fieldValue === null || fieldValue === undefined || fieldValue === '') {
+      return fallback;
+    }
+    if (typeof fieldValue === 'string' || typeof fieldValue === 'number' || typeof fieldValue === 'boolean' || typeof fieldValue === 'bigint') {
+      return String(fieldValue);
+    }
+    return (_JSON$stringify = JSON.stringify(fieldValue)) !== null && _JSON$stringify !== void 0 ? _JSON$stringify : fallback;
+  };
+  const normalizeFindings = value => {
+    if (!value) {
+      return [];
+    }
+    if (Array.isArray(value)) {
+      return value.map(item => String(item));
+    }
+    if (typeof value === 'string') {
+      return [value];
+    }
+    return [JSON.stringify(value, null, 2)];
+  };
+  const getDetailRisk = detail => {
+    var _detail$risk_level;
+    const riskLevel = getObjectField(detail.final_verdict, 'risk_level', '');
+    if (riskLevel) {
+      return riskLevel;
+    }
+    const risk = getObjectField(detail.final_verdict, 'risk', '');
+    if (risk) {
+      return risk;
+    }
+    return (_detail$risk_level = detail.risk_level) !== null && _detail$risk_level !== void 0 ? _detail$risk_level : '—';
+  };
+  const getDetailScore = detail => {
+    var _detail$risk_score;
+    const score = getObjectField(detail.final_verdict, 'risk_score', '');
+    if (score) {
+      return score;
+    }
+    return String((_detail$risk_score = detail.risk_score) !== null && _detail$risk_score !== void 0 ? _detail$risk_score : '—');
+  };
+  const getDetailAction = detail => {
+    var _detail$recommended_a;
+    const action = getObjectField(detail.final_verdict, 'recommended_action', '');
+    if (action) {
+      return action;
+    }
+    return (_detail$recommended_a = detail.recommended_action) !== null && _detail$recommended_a !== void 0 ? _detail$recommended_a : '—';
+  };
+  const filteredHistory = history.filter(item => {
+    const query = historySearch.trim().toLowerCase();
+    const matchesRisk = historyRisk === 'all' || item.risk_level === historyRisk;
+    const matchesQuery = !query || [item.decoded_method, item.method_selector, item.to_address, item.origin].some(value => value === null || value === void 0 ? void 0 : value.toLowerCase().includes(query));
+    return matchesRisk && matchesQuery;
+  });
 
-  //////////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////////
 
+  const closeAnalysisDetail = () => {
+    setSelectedAnalysisId(null);
+    setSelectedAnalysisDetail(null);
+    setAnalysisDetailError(null);
+  };
+  const refreshDashboard = () => {
+    Promise.all([loadHealth(), loadStats(), loadHistory(), loadKnownAddresses(), loadDashboardMetrics()]).catch(reportUnexpectedError('actualitzant el panell'));
+  };
+  const isRefreshing = isLoadingHealth || isLoadingStats || isLoadingHistory || isLoadingKnownAddresses || isLoadingDashboardMetrics;
+  const detailIsVisible = isLoadingAnalysisDetail || Boolean(analysisDetailError) || Boolean(selectedAnalysisDetail);
+  const getHistoryEmptyMessage = () => {
+    if (history.length === 0) {
+      return isLoadingHistory ? 'Carregant l’historial...' : 'Encara no hi ha anàlisis desades.';
+    }
+    if (filteredHistory.length === 0) {
+      return 'Cap anàlisi coincideix amb els filtres aplicats.';
+    }
+    return null;
+  };
+  const historyEmptyMessage = getHistoryEmptyMessage();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(Container, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(Heading, {
-      children: ["Assistent de ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Span, {
-        children: "Seguretat Web3"
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Subtitle, {
-      children: "Panell local de monitoritzaci\xF3, an\xE0lisi i suport per al Snap."
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DashboardWrapper, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
-        children: "Estat del sistema"
-      }), healthError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
-          children: "Backend desconectat:"
-        }), " ", healthError]
-      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(StatusGrid, {
-        children: [renderStatusCard('Backend', health === null || health === void 0 ? void 0 : health.backend, isLoadingHealth ? 'Comprovant backend...' : 'Sense resposta'), renderStatusCard('Base de dades', health === null || health === void 0 ? void 0 : health.database, isLoadingHealth ? 'Comprovant base de dades...' : 'Sense resposta'), renderStatusCard('Ollama', health === null || health === void 0 ? void 0 : health.ollama, isLoadingHealth ? 'Comprovant Ollama...' : 'Sense resposta')]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
-        style: {
-          marginTop: '2.4rem'
-        },
-        children: "Resum local"
-      }), statsError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
-          children: "Error carregant estad\xEDstiques:"
-        }), " ", statsError]
-      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(StatsGrid, {
-        children: [renderStatCard('Anàlisis totals', stats === null || stats === void 0 ? void 0 : stats.total_analysis), renderStatCard('Risc baix', stats === null || stats === void 0 ? void 0 : stats.low_risk), renderStatCard('Risc mitjà', stats === null || stats === void 0 ? void 0 : stats.medium_risk), renderStatCard('Risc alt', stats === null || stats === void 0 ? void 0 : stats.high_risk), renderStatCard('Direccions conegudes', stats === null || stats === void 0 ? void 0 : stats.known_addresses), renderStatCard('Direccions en memoria', stats === null || stats === void 0 ? void 0 : stats.cached_addresses)]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartsSection, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
-          style: {
-            marginTop: '2.4rem'
-          },
-          children: "Gr\xE0fics del dashboard"
-        }), dashboardMetricsError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
-            children: "Error carregant gr\xE0fics:"
-          }), " ", dashboardMetricsError]
-        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartsGrid, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartCard, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartTitle, {
-              children: "Distribuci\xF3 de risc"
-            }), isLoadingDashboardMetrics ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartEmptyState, {
-              children: "Carregant dades..."
-            }) : renderBarChart((dashboardMetrics === null || dashboardMetrics === void 0 ? void 0 : dashboardMetrics.risk_distribution) || [])]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartCard, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartTitle, {
-              children: "M\xE8todes m\xE9s detectats"
-            }), isLoadingDashboardMetrics ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartEmptyState, {
-              children: "Carregant dades..."
-            }) : renderBarChart((dashboardMetrics === null || dashboardMetrics === void 0 ? void 0 : dashboardMetrics.method_distribution) || [])]
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(WorkspaceHeader, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(WorkspaceIdentity, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(WorkspaceKicker, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            size: 16,
+            "aria-hidden": "true"
+          }), "Supervisi\xF3 local"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(Heading, {
+          children: ["Assistent de ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Span, {
+            children: "Seguretat Web3"
           })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Subtitle, {
+          children: "Monitoritzaci\xF3 del Snap, an\xE0lisi de risc i mem\xF2ria local."
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HistorySection, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
-          style: {
-            marginTop: '2.4rem'
-          },
-          children: "\xDAltims an\xE0lisis"
-        }), historyError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
-            children: "Error carregant hist\xF2ric:"
-          }), " ", historyError]
-        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableWrapper, {
-          children: history.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(EmptyState, {
-            children: isLoadingHistory ? 'Carregant últims anàlisis...' : 'Encara no hi ha anàlisis guardats.'
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HistoryTable, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHead, {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Fecha"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Riesgo"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Score"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "M\xE9todo"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Destino"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Origen"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Acci\xF3n"
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
-              children: history.map(item => {
-                var _item$risk_score;
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                    children: formatHistoryDate(item.created_at)
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(RiskBadge, {
-                      $risk: item.risk_level || 'DESCONOCIDO',
-                      children: item.risk_level || '—'
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                    children: (_item$risk_score = item.risk_score) !== null && _item$risk_score !== void 0 ? _item$risk_score : '—'
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                    children: getMethodLabel(item)
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                    title: item.to_address || '',
-                    children: shortenAddress(item.to_address)
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                    children: item.origin || '—'
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                    children: item.recommended_action || '—'
-                  })]
-                }, item.id);
-              })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HeaderMeta, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(HeaderStatusDot, {
+          $status: (health === null || health === void 0 ? void 0 : (_health$backend = health.backend) === null || _health$backend === void 0 ? void 0 : _health$backend.status) === 'ok' ? 'ok' : 'error'
+        }), (health === null || health === void 0 ? void 0 : (_health$backend2 = health.backend) === null || _health$backend2 === void 0 ? void 0 : _health$backend2.status) === 'ok' ? 'Sistema operatiu' : 'Sistema no disponible']
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SectionTabs, {
+      role: "tablist",
+      "aria-label": "Vistes del panell",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TabButton, {
+        id: "overview-tab",
+        type: "button",
+        role: "tab",
+        "aria-controls": "overview-panel",
+        "aria-selected": activeView === 'overview',
+        tabIndex: activeView === 'overview' ? 0 : -1,
+        $active: activeView === 'overview',
+        onClick: () => setActiveView('overview'),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          size: 17,
+          "aria-hidden": "true"
+        }), "Resum"]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TabButton, {
+        id: "history-tab",
+        type: "button",
+        role: "tab",
+        "aria-controls": "history-panel",
+        "aria-selected": activeView === 'history',
+        tabIndex: activeView === 'history' ? 0 : -1,
+        $active: activeView === 'history',
+        onClick: () => setActiveView('history'),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          size: 17,
+          "aria-hidden": "true"
+        }), "Historial"]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TabButton, {
+        id: "addresses-tab",
+        type: "button",
+        role: "tab",
+        "aria-controls": "addresses-panel",
+        "aria-selected": activeView === 'addresses',
+        tabIndex: activeView === 'addresses' ? 0 : -1,
+        $active: activeView === 'addresses',
+        onClick: () => setActiveView('addresses'),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          size: 17,
+          "aria-hidden": "true"
+        }), "Adreces"]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TabButton, {
+        id: "tests-tab",
+        type: "button",
+        role: "tab",
+        "aria-controls": "tests-panel",
+        "aria-selected": activeView === 'tests',
+        tabIndex: activeView === 'tests' ? 0 : -1,
+        $active: activeView === 'tests',
+        onClick: () => setActiveView('tests'),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          size: 17,
+          "aria-hidden": "true"
+        }), "Proves"]
+      })]
+    }), activeView === 'overview' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ViewSection, {
+      id: "overview-panel",
+      role: "tabpanel",
+      "aria-labelledby": "overview-tab",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DashboardWrapper, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SectionHeader, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SectionHeadingGroup, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
+              id: "overview-title",
+              children: "Visi\xF3 general"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SectionDescription, {
+              children: "Estat dels serveis i resum de l\u2019activitat registrada."
             })]
-          })
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(KnownAddressesSection, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
-          style: {
-            marginTop: '2.4rem'
-          },
-          children: "Direccions conegudes"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SmallButton, {
+            type: "button",
+            onClick: refreshDashboard,
+            disabled: isRefreshing,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_12__["default"], {
+              size: 16,
+              "aria-hidden": "true"
+            }), isRefreshing ? 'Actualitzant...' : 'Actualitzar']
+          })]
+        }), healthError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
+            children: "Backend desconnectat:"
+          }), " ", healthError]
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(StatusGrid, {
+          children: [renderStatusCard('Backend', health === null || health === void 0 ? void 0 : health.backend, isLoadingHealth ? 'Comprovant backend...' : 'Sense resposta'), renderStatusCard('Base de dades', health === null || health === void 0 ? void 0 : health.database, isLoadingHealth ? 'Comprovant base de dades...' : 'Sense resposta'), renderStatusCard('Ollama', health === null || health === void 0 ? void 0 : health.ollama, isLoadingHealth ? 'Comprovant Ollama...' : 'Sense resposta')]
+        }), statsError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
+            children: "Error carregant les estad\xEDstiques:"
+          }), " ", statsError]
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(StatsGrid, {
+          children: [renderStatCard('Anàlisis totals', stats === null || stats === void 0 ? void 0 : stats.total_analysis), renderStatCard('Risc baix', stats === null || stats === void 0 ? void 0 : stats.low_risk), renderStatCard('Risc mitjà', stats === null || stats === void 0 ? void 0 : stats.medium_risk), renderStatCard('Risc alt', stats === null || stats === void 0 ? void 0 : stats.high_risk), renderStatCard('Adreces conegudes', stats === null || stats === void 0 ? void 0 : stats.known_addresses), renderStatCard('Adreces en memòria', stats === null || stats === void 0 ? void 0 : stats.cached_addresses)]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartsSection, {
+          children: [dashboardMetricsError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
+              children: "Error carregant els gr\xE0fics:"
+            }), " ", dashboardMetricsError]
+          }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartsGrid, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartCard, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartTitle, {
+                children: "Distribuci\xF3 del risc"
+              }), isLoadingDashboardMetrics ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartEmptyState, {
+                children: "Carregant dades..."
+              }) : renderBarChart((_dashboardMetrics$ris = dashboardMetrics === null || dashboardMetrics === void 0 ? void 0 : dashboardMetrics.risk_distribution) !== null && _dashboardMetrics$ris !== void 0 ? _dashboardMetrics$ris : [])]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ChartCard, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartTitle, {
+                children: "M\xE8todes m\xE9s detectats"
+              }), isLoadingDashboardMetrics ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ChartEmptyState, {
+                children: "Carregant dades..."
+              }) : renderBarChart((_dashboardMetrics$met = dashboardMetrics === null || dashboardMetrics === void 0 ? void 0 : dashboardMetrics.method_distribution) !== null && _dashboardMetrics$met !== void 0 ? _dashboardMetrics$met : [])]
+            })]
+          })]
+        }), health !== null && health !== void 0 && health.timestamp ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(LastCheck, {
+          children: ["Darrera comprovaci\xF3:", ' ', new Date(health.timestamp).toLocaleString('ca-ES')]
+        }) : null]
+      })
+    }) : null, activeView === 'history' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ViewSection, {
+      id: "history-panel",
+      role: "tabpanel",
+      "aria-labelledby": "history-tab",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HistorySection, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SectionHeader, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SectionHeadingGroup, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
+              id: "history-title",
+              children: "Historial d\u2019an\xE0lisis"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SectionDescription, {
+              children: "Selecciona un registre per consultar-ne el veredicte i les dades t\xE8cniques."
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SmallButton, {
+            type: "button",
+            onClick: () => {
+              loadHistory().catch(reportUnexpectedError('actualitzant l’historial'));
+            },
+            disabled: isLoadingHistory,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_12__["default"], {
+              size: 16,
+              "aria-hidden": "true"
+            }), isLoadingHistory ? 'Actualitzant...' : 'Actualitzar']
+          })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(FilterBar, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SearchInput, {
-            value: knownAddressSearch,
-            onChange: event => setKnownAddressSearch(event.target.value),
-            placeholder: "Cercar per adre\xE7a, etiqueta o font"
+            value: historySearch,
+            onChange: event => setHistorySearch(event.target.value),
+            placeholder: "Cercar per m\xE8tode, adre\xE7a o origen",
+            "aria-label": "Cercar a l\u2019historial"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SelectInput, {
-            value: knownAddressType,
-            onChange: event => setKnownAddressType(event.target.value),
+            value: historyRisk,
+            onChange: event => setHistoryRisk(event.target.value),
+            "aria-label": "Filtrar l\u2019historial per risc",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
               value: "all",
-              children: "Tots els tipus"
+              children: "Tots els nivells"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "warning",
-              children: "Warning"
+              value: "BAJO",
+              children: "Risc baix"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "suspicious",
-              children: "Suspicious"
+              value: "MEDIO",
+              children: "Risc mitj\xE0"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "scam",
-              children: "Scam"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "blacklisted",
-              children: "Blacklisted"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "trusted",
-              children: "Trusted"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "test_contract",
-              children: "Test contract"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "own_contract",
-              children: "Own contract"
+              value: "ALTO",
+              children: "Risc alt"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SmallButton, {
-            onClick: loadKnownAddresses,
-            disabled: isLoadingKnownAddresses,
-            children: isLoadingKnownAddresses ? 'Cercant...' : 'Aplicar filtres'
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SmallButton, {
+            type: "button",
+            onClick: () => {
+              setHistorySearch('');
+              setHistoryRisk('all');
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_13__["default"], {
+              size: 16,
+              "aria-hidden": "true"
+            }), "Netejar"]
           })]
-        }), knownAddressesError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
+        }), historyError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
-            children: "Error carregant direccions:"
-          }), " ", knownAddressesError]
-        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableWrapper, {
-          children: knownAddresses.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(EmptyState, {
-            children: isLoadingKnownAddresses ? 'Carregant direccions conegudes...' : 'No hi ha direccions conegudes per mostrar.'
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HistoryTable, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHead, {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Direcci\xF3"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Etiqueta"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Tipus"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Font"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
-                  children: "Afegida"
+            children: "Error carregant l\u2019historial:"
+          }), " ", historyError]
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HistoryLayout, {
+          $hasDetail: detailIsVisible,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableWrapper, {
+            children: historyEmptyMessage ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(EmptyState, {
+              children: historyEmptyMessage
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HistoryTable, {
+              role: "grid",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHead, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Data"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Risc"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "M\xE8tode"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Destinaci\xF3"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Acci\xF3"
+                  })]
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
+                children: filteredHistory.map(item => {
+                  var _item$risk_level, _item$to_address, _item$recommended_act;
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ClickableRow, {
+                    $selected: selectedAnalysisId === item.id,
+                    tabIndex: 0,
+                    role: "row",
+                    "aria-selected": selectedAnalysisId === item.id,
+                    "aria-label": `Obrir el detall de l’anàlisi ${item.id}`,
+                    onClick: () => {
+                      loadAnalysisDetail(item.id).catch(reportUnexpectedError('carregant el detall de l’anàlisi'));
+                    },
+                    onKeyDown: event => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        loadAnalysisDetail(item.id).catch(reportUnexpectedError('carregant el detall de l’anàlisi'));
+                      }
+                    },
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: formatHistoryDate(item.created_at)
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(RiskBadge, {
+                        $risk: (_item$risk_level = item.risk_level) !== null && _item$risk_level !== void 0 ? _item$risk_level : 'DESCONOCIDO',
+                        children: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.getRiskLabel)(item.risk_level)
+                      })
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: getMethodLabel(item)
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      title: (_item$to_address = item.to_address) !== null && _item$to_address !== void 0 ? _item$to_address : '',
+                      children: shortenAddress(item.to_address)
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ActionBadge, {
+                        $action: (_item$recommended_act = item.recommended_action) !== null && _item$recommended_act !== void 0 ? _item$recommended_act : '',
+                        children: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.getActionLabel)(item.recommended_action)
+                      })
+                    })]
+                  }, item.id);
+                })
+              })]
+            })
+          }), isLoadingAnalysisDetail ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailPanel, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailTitle, {
+              children: "Carregant el detall..."
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailSubtitle, {
+              children: "S\u2019est\xE0 recuperant la informaci\xF3 completa de l\u2019an\xE0lisi."
+            })]
+          }) : null, analysisDetailError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
+              children: "Error carregant el detall:"
+            }), " ", analysisDetailError]
+          }) : null, selectedAnalysisDetail ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailPanel, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailHeader, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailTitle, {
+                  children: "Detall de l\u2019an\xE0lisi"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailSubtitle, {
+                  children: ["An\xE0lisi #", selectedAnalysisDetail.id, " \xB7", ' ', formatHistoryDate(selectedAnalysisDetail.created_at)]
                 })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
-              children: knownAddresses.map(item => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                  title: item.address,
-                  children: shortenAddress(item.address)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                  children: item.label || '—'
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(IconButton, {
+                type: "button",
+                onClick: closeAnalysisDetail,
+                "aria-label": "Tancar el detall",
+                title: "Tancar el detall",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_14__["default"], {
+                  size: 18,
+                  "aria-hidden": "true"
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailGrid, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailBox, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailLabel, {
+                  children: "Veredicte final"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailValue, {
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(RiskBadge, {
-                    $risk: item.type === 'warning' ? 'MEDIO' : 'BAJO',
-                    children: item.type || '—'
+                    $risk: getDetailRisk(selectedAnalysisDetail),
+                    children: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.getRiskLabel)(getDetailRisk(selectedAnalysisDetail))
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                  children: item.source || '—'
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
-                  children: formatHistoryDate(item.added)
                 })]
-              }, item.id))
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailBox, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailLabel, {
+                  children: "Puntuaci\xF3"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailValue, {
+                  children: getDetailScore(selectedAnalysisDetail)
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailBox, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailLabel, {
+                  children: "Acci\xF3 recomanada"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailValue, {
+                  children: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.getActionLabel)(getDetailAction(selectedAnalysisDetail))
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailBox, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailLabel, {
+                  children: "Origen"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailValue, {
+                  children: (_selectedAnalysisDeta = selectedAnalysisDetail.origin) !== null && _selectedAnalysisDeta !== void 0 ? _selectedAnalysisDeta : '—'
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailBox, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailLabel, {
+                  children: "Remitent"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailValue, {
+                  children: (_selectedAnalysisDeta2 = selectedAnalysisDetail.from_address) !== null && _selectedAnalysisDeta2 !== void 0 ? _selectedAnalysisDeta2 : '—'
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(DetailBox, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailLabel, {
+                  children: "Destinaci\xF3"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailValue, {
+                  children: (_selectedAnalysisDeta3 = selectedAnalysisDetail.to_address) !== null && _selectedAnalysisDeta3 !== void 0 ? _selectedAnalysisDeta3 : '—'
+                })]
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailSectionTitle, {
+              children: "Explicaci\xF3"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailSubtitle, {
+              children: (_selectedAnalysisDeta4 = selectedAnalysisDetail.explanation) !== null && _selectedAnalysisDeta4 !== void 0 ? _selectedAnalysisDeta4 : 'No disponible'
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailSectionTitle, {
+              children: "Indicadors detectats"
+            }), normalizeFindings(selectedAnalysisDetail.findings).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FindingsList, {
+              children: normalizeFindings(selectedAnalysisDetail.findings).map(finding => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("li", {
+                children: finding
+              }, finding))
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailSubtitle, {
+              children: "No hi ha indicadors desats per a aquesta an\xE0lisi."
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DetailSectionTitle, {
+              children: "Dades t\xE8cniques"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TechnicalDetails, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalSummary, {
+                children: "Transacci\xF3 descodificada"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalContent, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(JsonBlock, {
+                  children: formatUnknownValue(selectedAnalysisDetail.decoded)
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TechnicalDetails, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalSummary, {
+                children: "Revisi\xF3 de la IA"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalContent, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(JsonBlock, {
+                  children: formatUnknownValue(selectedAnalysisDetail.ai_review)
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TechnicalDetails, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalSummary, {
+                children: "Senyals d\u2019adreces conegudes"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalContent, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(JsonBlock, {
+                  children: formatUnknownValue(selectedAnalysisDetail.known_address_signals)
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TechnicalDetails, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalSummary, {
+                children: "Veredicte complet"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalContent, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(JsonBlock, {
+                  children: formatUnknownValue(selectedAnalysisDetail.final_verdict)
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TechnicalDetails, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalSummary, {
+                children: "Rendiment"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalContent, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(JsonBlock, {
+                  children: formatUnknownValue(selectedAnalysisDetail.performance)
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(TechnicalDetails, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalSummary, {
+                children: "Metadades d\u2019avaluaci\xF3"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TechnicalContent, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(JsonBlock, {
+                  children: formatUnknownValue(selectedAnalysisDetail.evaluation)
+                })
+              })]
             })]
-          })
+          }) : null]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ManualReportSection, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
-          style: {
-            marginTop: '2.4rem'
-          },
-          children: "Report manual de direccions"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(QuickActionsDescription, {
-          children: "Permet afegir direccions al dataset local per marcar-les com a sospitoses, de confian\xE7a o pr\xF2pies de l\u2019entorn de proves."
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(FormGrid, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SearchInput, {
-            value: manualAddress,
-            onChange: event => setManualAddress(event.target.value),
-            placeholder: "Adre\xE7a Ethereum: 0x..."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SearchInput, {
-            value: manualLabel,
-            onChange: event => setManualLabel(event.target.value),
-            placeholder: "Etiqueta o descripci\xF3"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SelectInput, {
-            value: manualType,
-            onChange: event => setManualType(event.target.value),
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "warning",
-              children: "Warning"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "suspicious",
-              children: "Suspicious"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "scam",
-              children: "Scam"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "blacklisted",
-              children: "Blacklisted"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "trusted",
-              children: "Trusted"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "test_contract",
-              children: "Test contract"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-              value: "own_contract",
-              children: "Own contract"
-            })]
+      })
+    }) : null, activeView === 'addresses' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ViewSection, {
+      id: "addresses-panel",
+      role: "tabpanel",
+      "aria-labelledby": "addresses-tab",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SectionHeader, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SectionHeadingGroup, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
+            id: "addresses-title",
+            children: "Adreces conegudes"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SectionDescription, {
+            children: "Consulta les fonts de context i incorpora etiquetes locals."
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardActions, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SmallButton, {
-            onClick: submitManualReport,
-            disabled: isSubmittingManualReport,
-            children: isSubmittingManualReport ? 'Guardant...' : 'Afegir al dataset local'
-          })
-        }), manualReportMessage ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FormMessage, {
-          $success: manualReportSuccess,
-          children: manualReportMessage
-        }) : null]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardActions, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SmallButton, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SmallButton, {
+          type: "button",
           onClick: () => {
-            loadHealth();
-            loadStats();
-            loadHistory();
-            loadKnownAddresses();
-            loadDashboardMetrics();
+            loadKnownAddresses().catch(reportUnexpectedError('actualitzant les adreces'));
           },
-          disabled: isLoadingHealth || isLoadingStats || isLoadingHistory || isLoadingKnownAddresses || isLoadingDashboardMetrics,
-          children: isLoadingHealth || isLoadingStats || isLoadingHistory || isLoadingKnownAddresses || isLoadingDashboardMetrics ? 'Actualitzant...' : 'Actualitzar panell'
-        })
-      }), health !== null && health !== void 0 && health.timestamp ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(LastCheck, {
-        children: ["\xDAltima comprovaci\xF3 : ", new Date(health.timestamp).toLocaleString()]
-      }) : null]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(QuickActionsSection, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(QuickActionsHeader, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(QuickActionsTitle, {
-          children: "Accions r\xE0pides"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(QuickActionsDescription, {
-          children: "Eines de connexi\xF3, proves manuals i validaci\xF3 del Snap durant el desenvolupament."
+          disabled: isLoadingKnownAddresses,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_12__["default"], {
+            size: 16,
+            "aria-hidden": "true"
+          }), isLoadingKnownAddresses ? 'Actualitzant...' : 'Actualitzar']
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(CardContainer, {
-        children: [error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(AddressWorkspace, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(KnownAddressesSection, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(FilterBar, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SearchInput, {
+              value: knownAddressSearch,
+              onChange: event => setKnownAddressSearch(event.target.value),
+              placeholder: "Cercar per adre\xE7a, etiqueta o font",
+              "aria-label": "Cercar adreces conegudes"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SelectInput, {
+              value: knownAddressType,
+              onChange: event => setKnownAddressType(event.target.value),
+              "aria-label": "Filtrar les adreces per tipus",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "all",
+                children: "Tots els tipus"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "warning",
+                children: "Advertiment"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "suspicious",
+                children: "Sospitosa"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "scam",
+                children: "Estafa"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "blacklisted",
+                children: "Llista de bloqueig"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "trusted",
+                children: "De confian\xE7a"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "test_contract",
+                children: "Contracte de prova"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                value: "own_contract",
+                children: "Contracte propi"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SmallButton, {
+              type: "button",
+              onClick: () => {
+                loadKnownAddresses().catch(reportUnexpectedError('filtrant les adreces'));
+              },
+              disabled: isLoadingKnownAddresses,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_15__["default"], {
+                size: 16,
+                "aria-hidden": "true"
+              }), "Aplicar"]
+            })]
+          }), knownAddressesError ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
+              children: "Error carregant les adreces:"
+            }), " ", knownAddressesError]
+          }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableWrapper, {
+            children: knownAddresses.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(EmptyState, {
+              children: isLoadingKnownAddresses ? 'Carregant les adreces conegudes...' : 'No hi ha adreces conegudes per mostrar.'
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(HistoryTable, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHead, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Adre\xE7a"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Etiqueta"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Tipus"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Font"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableHeader, {
+                    children: "Afegida"
+                  })]
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
+                children: knownAddresses.map(item => {
+                  var _item$label;
+                  const addressRisk = getAddressRisk(item.type);
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      title: item.address,
+                      children: shortenAddress(item.address)
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: (_item$label = item.label) !== null && _item$label !== void 0 ? _item$label : '—'
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(RiskBadge, {
+                        $risk: addressRisk,
+                        children: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.getAddressTypeLabel)(item.type)
+                      })
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.getSourceLabel)(item.source)
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(TableCell, {
+                      children: formatHistoryDate(item.added)
+                    })]
+                  }, item.id);
+                })
+              })]
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FormPanel, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ManualReportSection, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DashboardTitle, {
+              children: "Informe manual"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(QuickActionsDescription, {
+              children: "Afegeix una adre\xE7a al conjunt de dades local per aportar context a les an\xE0lisis posteriors."
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(FormField, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FieldLabel, {
+                htmlFor: "manual-address",
+                children: "Adre\xE7a Ethereum"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SearchInput, {
+                id: "manual-address",
+                value: manualAddress,
+                onChange: event => setManualAddress(event.target.value),
+                placeholder: "0x..."
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(FormField, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FieldLabel, {
+                htmlFor: "manual-label",
+                children: "Etiqueta o descripci\xF3"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(SearchInput, {
+                id: "manual-label",
+                value: manualLabel,
+                onChange: event => setManualLabel(event.target.value),
+                placeholder: "Context de l\u2019adre\xE7a"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(FormField, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FieldLabel, {
+                htmlFor: "manual-type",
+                children: "Tipus"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SelectInput, {
+                id: "manual-type",
+                value: manualType,
+                onChange: event => setManualType(event.target.value),
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                  value: "warning",
+                  children: "Advertiment"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                  value: "suspicious",
+                  children: "Sospitosa"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                  value: "scam",
+                  children: "Estafa"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                  value: "blacklisted",
+                  children: "Llista de bloqueig"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                  value: "trusted",
+                  children: "De confian\xE7a"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                  value: "test_contract",
+                  children: "Contracte de prova"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+                  value: "own_contract",
+                  children: "Contracte propi"
+                })]
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(SmallButton, {
+              type: "button",
+              onClick: () => {
+                submitManualReport().catch(reportUnexpectedError('desant l’informe manual'));
+              },
+              disabled: isSubmittingManualReport,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_16__["default"], {
+                size: 16,
+                "aria-hidden": "true"
+              }), isSubmittingManualReport ? 'Desant...' : 'Afegir al conjunt local']
+            }), manualReportMessage ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FormMessage, {
+              $success: manualReportSuccess,
+              children: manualReportMessage
+            }) : null]
+          })
+        })]
+      })]
+    }) : null, activeView === 'tests' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ViewSection, {
+      id: "tests-panel",
+      role: "tabpanel",
+      "aria-labelledby": "tests-tab",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(QuickActionsSection, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(QuickActionsHeader, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(QuickActionsTitle, {
+            id: "tests-title",
+            children: "Eines de prova"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(QuickActionsDescription, {
+            children: "Connexi\xF3, comprovacions manuals i validaci\xF3 del Snap durant el desenvolupament."
+          })]
+        }), error ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(ErrorMessage, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("b", {
-            children: "S'ha produ\xEFt un error:"
+            children: "S\u2019ha produ\xEFt un error:"
           }), " ", error.message]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(QuickActionsGrid, {
-          children: [!isMetaMaskReady && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(QuickActionsGrid, {
+          children: [isMetaMaskReady ? null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
             content: {
               title: 'Instal·lar MetaMask Flask',
-              description: 'MetaMask Snaps requereix MetaMask Flask o una versió compatible amb Snaps durant el desenvolupament.',
+              description: 'Instal·la una versió compatible amb Snaps per executar les proves locals.',
               button: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.InstallFlaskButton, {})
             },
             disabled: false
-          }), !installedSnap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
+          }), installedSnap ? null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
             content: {
               title: 'Connectar el Snap',
-              description: 'Instal·la i connecta el Snap local per poder analitzar transaccions des de MetaMask.',
+              description: 'Instal·la i connecta el Snap local abans d’analitzar transaccions.',
               button: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.ConnectButton, {
                 onClick: requestSnap,
                 disabled: !isMetaMaskReady
               })
             },
             disabled: !isMetaMaskReady
-          }), (0,_utils__WEBPACK_IMPORTED_MODULE_4__.shouldDisplayReconnectButton)(installedSnap) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
+          }), (0,_utils__WEBPACK_IMPORTED_MODULE_4__.shouldDisplayReconnectButton)(installedSnap) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
             content: {
               title: 'Reconnectar el Snap',
-              description: 'Actualitza la connexió amb el Snap local després de canvis en el codi o reinicis de l’entorn.',
+              description: 'Actualitza la connexió després d’un canvi de codi o un reinici de l’entorn.',
               button: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.ReconnectButton, {
                 onClick: requestSnap,
                 disabled: !installedSnap
               })
             },
             disabled: !installedSnap
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
+          }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
             content: {
-              title: 'Provar el diàleg del Snap',
-              description: 'Envia un missatge simple al Snap per comprovar la comunicació DApp → MetaMask → Snap.',
+              title: 'Comprovar el diàleg',
+              description: 'Verifica la comunicació entre la DApp, MetaMask i el Snap.',
               button: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.SendHelloButton, {
                 onClick: handleSendHelloClick,
                 disabled: !installedSnap
@@ -8341,8 +9621,8 @@ const Index = () => {
             disabled: !installedSnap
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
             content: {
-              title: 'Anàlisi manual de prova',
-              description: 'Envia una transacció simulada al Snap per validar el flux d’anàlisi amb el backend.',
+              title: 'Executar una anàlisi manual',
+              description: 'Envia una operació simulada per validar el flux complet amb el backend.',
               button: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.AnalyzeButton, {
                 onClick: handleAnalyzeTransaction,
                 disabled: !installedSnap
@@ -8351,8 +9631,8 @@ const Index = () => {
             disabled: !installedSnap
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.Card, {
             content: {
-              title: 'Transacció real de prova',
-              description: 'Llança una transacció des de la DApp per comprovar que el hook onTransaction s’activa dins de MetaMask.',
+              title: 'Provar una transacció real',
+              description: 'Obre una transacció de prova i comprova la intercepció automàtica de MetaMask.',
               button: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components__WEBPACK_IMPORTED_MODULE_1__.SendHelloButton, {
                 onClick: handleSendTransaction,
                 disabled: !installedSnap
@@ -8361,8 +9641,8 @@ const Index = () => {
             disabled: !installedSnap
           })]
         })]
-      })]
-    })]
+      })
+    }) : null]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Index);

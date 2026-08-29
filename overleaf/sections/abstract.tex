@@ -1,0 +1,80 @@
+\newpage
+
+\thispagestyle{plain}
+{
+    \selectlanguage{catalan}
+    \paragraph{} % Hack to ensure that TOC link works
+    \begin{abstract}
+        \addcontentsline{toc}{section}{\abstractname}
+
+        L’augment de l’ús d’aplicacions descentralitzades basades en blockchain ha incrementat la necessitat de millorar la seguretat durant la signatura de transaccions. En molts casos, els usuaris autoritzen operacions sense comprendre completament les implicacions dels permisos concedits a contractes intel·ligents, especialment en casos com les aprovacions il·limitades de tokens o els permisos globals sobre actius NFT.
+
+        Aquest treball presenta el disseny i la implementació d’un assistent de seguretat Web3 integrat dins de MetaMask mitjançant MetaMask Snaps. El sistema intercepta transaccions abans de la seva confirmació, n’analitza la informació rellevant i genera un veredicte basat en regles deterministes. Un model d’intel·ligència artificial local, executat amb Ollama, aporta una revisió complementària i explicacions en llenguatge natural per facilitar la comprensió de l’operació.
+        
+        La proposta adopta una arquitectura modular formada per un Snap, un backend local d’anàlisi, una base de dades SQLite per mantenir historial i context local, i contractes intel·ligents de prova desplegats a Sepolia. El sistema permet identificar patrons de risc relacionats amb aprovacions ERC20 i permisos globals ERC721, integrant el resultat directament dins de la interfície de confirmació de MetaMask.
+
+        L'avaluació de 80 execucions controlades va obtenir una exactitud del 91,25\,\% i va identificar set falsos negatius en aprovacions extraordinàriament elevades, però diferents de \texttt{MaxUint256}. El flux complet es va confirmar sobre Sepolia. Els resultats delimiten amb precisió la cobertura actual i situen l'ampliació de les regles i l'optimització del model local com a treball futur.
+
+        \vspace{30pt}
+
+        \textbf{Paraules clau—} Web3, MetaMask Snaps, Seguretat, Blockchain, Contractes Intel·ligents, Intel·ligència Artificial Generativa, IA Local, Privadesa.
+
+    \end{abstract}
+}
+
+\newpage
+
+\vspace{50pt}
+
+{
+    \selectlanguage{spanish}
+    \paragraph{} % Hack to ensure that TOC link works
+    \begin{abstract}
+        \addcontentsline{toc}{section}{\abstractname}
+
+        El aumento del uso de aplicaciones descentralizadas basadas en blockchain ha incrementado la necesidad de mejorar la seguridad durante la firma de transacciones. En muchos casos, los usuarios autorizan operaciones sin comprender por completo las implicaciones de los permisos concedidos a contratos inteligentes, especialmente en casos como las aprobaciones ilimitadas de tokens o los permisos globales sobre activos NFT.
+
+        Este trabajo presenta el diseño y la implementación de un asistente de seguridad Web3 integrado en MetaMask mediante MetaMask Snaps. El sistema intercepta transacciones antes de su confirmación, analiza su información relevante y genera un veredicto basado en reglas deterministas. Un modelo de inteligencia artificial local, ejecutado con Ollama, aporta una revisión complementaria y explicaciones en lenguaje natural para facilitar la comprensión de la operación.
+        
+        La propuesta adopta una arquitectura modular formada por un Snap, un backend local de análisis, una base de datos SQLite para mantener historial y contexto local, y contratos inteligentes de prueba desplegados en Sepolia. El sistema permite identificar patrones de riesgo relacionados con aprobaciones ERC20 y permisos globales ERC721, integrando el resultado directamente dentro de la interfaz de confirmación de MetaMask.
+
+        La evaluación de 80 ejecuciones controladas obtuvo una exactitud del 91,25\,\% e identificó siete falsos negativos en aprobaciones extraordinariamente elevadas, pero distintas de \texttt{MaxUint256}. El flujo completo se confirmó sobre Sepolia. Los resultados delimitan con precisión la cobertura actual y sitúan la ampliación de las reglas y la optimización del modelo local como trabajo futuro.
+
+
+        \vspace{30pt}
+
+        \textbf{Palabras Clave — } Web3, MetaMask Snaps, Seguridad, Blockchain, Contratos Inteligentes, Inteligencia Artificial Generativa, IA Local, Privacidad.
+
+        
+    \end{abstract}
+}
+
+\newpage
+
+\vspace{50pt}
+
+{
+    \selectlanguage{english}
+    \paragraph{} % Hack to ensure that TOC link works
+    \begin{abstract}
+        \addcontentsline{toc}{section}{\abstractname}
+
+        
+        The rise of decentralized blockchain-based applications has increased the need to improve security during transaction signing. In many cases, users authorize operations without fully understanding the implications of the permissions granted to smart contracts, especially in cases with unlimited token approvals or global permissions over NFT assets.
+
+        This project presents the design and implementation of a Web3 security assistant integrated with MetaMask using MetaMask Snaps. The system intercepts transactions before confirmation, analyzes the relevant information, and generates a verdict based on deterministic rules. A local AI model, executed with Ollama, provides a complementary review and natural-language explanations to help users understand the operation.
+        
+        The proposal adopts a modular architecture consisting of a Snap, a local analysis backend, an SQLite database to maintain history and local context, and test smart contracts deployed to Sepolia. The system identifies risk patterns related to ERC20 approvals and ERC721 global permissions, integrating the results directly into the MetaMask confirmation interface.
+
+        The evaluation of 80 controlled executions achieved 91.25\,\% accuracy and identified seven false negatives for extraordinarily high approvals below \texttt{MaxUint256}. The complete flow was confirmed on Sepolia. These results accurately delimit the current coverage and identify rule expansion and local-model optimization as future work.
+
+        \vspace{30pt}
+
+        \textbf{Keywords — } Web3, MetaMask Snaps, Security, Blockchain, Smart Contracts, Generative Artificial Intelligence, Local AI, Privacy.
+
+        
+    \end{abstract}
+}
+
+\newpage
+ 

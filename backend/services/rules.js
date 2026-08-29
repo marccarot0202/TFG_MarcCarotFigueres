@@ -5,72 +5,80 @@ function buildDeterministicVerdict(tx) {
   let recommended_action = 'ALLOW';
 
   if (tx.decoded?.method === 'approve') {
-    findings.push('Se ha detectado una aprobación de tokens');
-    findings.push(`Dirección autorizada: ${tx.decoded.spender}`);
+    findings.push("S'ha detectat una aprovació de tokens");
+    findings.push(`Adreça autoritzada: ${tx.decoded.spender}`);
 
     if (tx.decoded.is_infinite_approval) {
-      findings.push('Cantidad aprobada: ilimitada');
-      findings.push('La aprobación es ilimitada');
-      findings.push('La dirección autorizada podría mover todos los tokens permitidos sin pedir permiso de nuevo');
+      findings.push('Quantitat aprovada: il·limitada');
+      findings.push("L'aprovació és il·limitada");
+      findings.push(
+        "L'adreça autoritzada podria moure tots els tokens permesos sense tornar a demanar permís",
+      );
       risk_level = 'ALTO';
       risk_score = 90;
       recommended_action = 'REVIEW';
     } else {
-      findings.push(`Cantidad aprobada: ${tx.decoded.amount}`);
-      findings.push('La aprobación no es ilimitada');
+      findings.push(`Quantitat aprovada: ${tx.decoded.amount}`);
+      findings.push("L'aprovació no és il·limitada");
 
       if (tx.decoded.amount === '0') {
-        findings.push('Esto parece una revocación de permiso');
+        findings.push('Això sembla una revocació de permís');
         risk_level = 'BAJO';
         risk_score = 5;
         recommended_action = 'ALLOW';
       } else {
-        findings.push('Se concede un permiso limitado');
+        findings.push('Es concedeix un permís limitat');
         risk_level = 'BAJO';
         risk_score = 20;
         recommended_action = 'ALLOW';
       }
     }
   } else if (tx.decoded?.method === 'setApprovalForAll') {
-    findings.push('Se ha detectado un permiso global sobre activos tipo NFT o similares');
-    findings.push(`Operador afectado: ${tx.decoded.operator}`);
+    findings.push(
+      "S'ha detectat un permís global sobre actius de tipus NFT o similars",
+    );
+    findings.push(`Operador afectat: ${tx.decoded.operator}`);
 
     if (tx.decoded.approved) {
-      findings.push('Se activa un permiso global');
-      findings.push('El operador podrá gestionar todos los activos cubiertos por este permiso');
+      findings.push("S'activa un permís global");
+      findings.push(
+        "L'operador podrà gestionar tots els actius coberts per aquest permís",
+      );
       risk_level = 'ALTO';
       risk_score = 95;
       recommended_action = 'REVIEW';
     } else {
-      findings.push('Se revoca el permiso global');
+      findings.push('Es revoca el permís global');
       risk_level = 'BAJO';
       risk_score = 5;
       recommended_action = 'ALLOW';
     }
   } else if (tx.is_contract_interaction) {
-    findings.push('La transacción interactúa con un contrato inteligente');
+    findings.push('La transacció interactua amb un contracte intel·ligent');
 
     if (tx.method_selector) {
-      findings.push(`Selector detectado: ${tx.method_selector}`);
-      findings.push('La función exacta todavía no está soportada por el decodificador actual');
+      findings.push(`Selector detectat: ${tx.method_selector}`);
+      findings.push(
+        'La funció exacta encara no és compatible amb el descodificador actual',
+      );
     }
 
     risk_level = 'MEDIO';
     risk_score = 50;
     recommended_action = 'REVIEW';
   } else {
-    findings.push('Parece una transferencia simple');
+    findings.push('Sembla una transferència simple');
     risk_level = 'BAJO';
     risk_score = 10;
     recommended_action = 'ALLOW';
   }
 
   if (tx.has_value) {
-    findings.push(`También envía ETH: ${tx.value}`);
+    findings.push(`També envia ETH: ${tx.value}`);
   }
 
   if (tx.origin) {
-    findings.push(`Origen de la solicitud: ${tx.origin}`);
+    findings.push(`Origen de la sol·licitud: ${tx.origin}`);
   }
 
   return {

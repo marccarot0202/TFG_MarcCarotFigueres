@@ -1,0 +1,83 @@
+\subsection{Escala de puntuació del risc}
+\label{sec:escala_risc}
+
+Els resultats dels escenaris següents s'expressen mitjançant tres valors complementaris: un nivell de risc (\texttt{BAJO}, \texttt{MEDIO} o \texttt{ALTO}), una puntuació numèrica entre 0 i 100, i una acció recomanada (\texttt{ALLOW} o \texttt{REVIEW}). Aquest apartat descriu com s'assignen aquests valors, de manera que les puntuacions observades a l'avaluació es puguin interpretar correctament.
+
+\paragraph{Naturalesa de la puntuació}
+
+La puntuació no és una probabilitat ni una estimació estadística de la perillositat d'una operació. Es tracta d'una \textbf{escala ordinal} en què cada patró reconegut pel motor determinista té assignat un valor fix, escollit de manera que l'ordre relatiu entre patrons reflecteixi l'abast del permís que es concedeix. Aquesta decisió és coherent amb la prioritat del motor determinista descrita al Capítol~\ref{cap:design}: davant de la mateixa entrada, el sistema ha de produir sempre la mateixa puntuació, sense que intervingui cap component probabilístic.
+
+El criteri que ordena l'escala és la \textbf{capacitat de disposició sobre els actius} que l'operació atorga a un tercer. Com més ampli i més durador és el permís, més alta és la puntuació.
+
+\paragraph{Puntuacions base del motor determinista}
+
+La Taula~\ref{tab:escala_risc} recull el valor assignat a cada patró reconegut.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\setlength{\tabcolsep}{8pt}
+\begin{tabularx}{\textwidth}{X | c | c | c}
+\hline
+\textbf{Patró detectat} & \textbf{Nivell} & \textbf{Punt.} & \textbf{Acció} \\
+\hline
+\texttt{setApprovalForAll(operator, true)} — permís global sobre una col·lecció &
+\texttt{ALTO} & 95 & \texttt{REVIEW} \\
+\hline
+\texttt{approve} amb quantitat igual a \texttt{MaxUint256} — aprovació il·limitada &
+\texttt{ALTO} & 90 & \texttt{REVIEW} \\
+\hline
+Interacció amb un contracte que el descodificador no reconeix &
+\texttt{MEDIO} & 50 & \texttt{REVIEW} \\
+\hline
+\texttt{approve} amb una quantitat limitada &
+\texttt{BAJO} & 20 & \texttt{ALLOW} \\
+\hline
+Transferència simple, sense crida a contracte &
+\texttt{BAJO} & 10 & \texttt{ALLOW} \\
+\hline
+\texttt{approve} amb quantitat 0 — revocació d'un permís &
+\texttt{BAJO} & 5 & \texttt{ALLOW} \\
+\hline
+\texttt{setApprovalForAll(operator, false)} — revocació del permís global &
+\texttt{BAJO} & 5 & \texttt{ALLOW} \\
+\hline
+\end{tabularx}
+\caption{Puntuacions base assignades pel motor determinista a cada patró}
+\label{tab:escala_risc}
+\end{table}
+
+L'ordre d'aquests valors respon a criteris concrets. El permís global ERC721 rep la puntuació més alta (95) perquè autoritza un operador a disposar de \textit{tots} els actius de l'usuari dins d'una col·lecció, sense cap límit de quantitat i fins que es revoqui explícitament. L'aprovació il·limitada ERC20 (90) és igualment persistent, però queda circumscrita a un únic token, motiu pel qual se situa immediatament per sota. La franja intermèdia (50) correspon a les crides que el descodificador no reconeix: no hi ha evidència de perill, però tampoc context suficient per descartar-lo, i per això el sistema recomana una revisió manual sense afirmar que l'operació sigui maliciosa. Finalment, les revocacions reben la puntuació més baixa (5) perquè \textit{redueixen} l'exposició de l'usuari, per sota fins i tot d'una transferència simple (10).
+
+\paragraph{Ajust per context d'adreces}
+
+Sobre la puntuació base, el sistema aplica un ajust quan alguna de les adreces implicades —destinació, \textit{spender} o \textit{operator}— coincideix amb un registre de la taula d'adreces conegudes. La Taula~\ref{tab:ajust_context} en resumeix els valors.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\setlength{\tabcolsep}{8pt}
+\begin{tabularx}{\textwidth}{p{0.30\textwidth} | c | X}
+\hline
+\textbf{Tipus d'etiqueta} & \textbf{Ajust} & \textbf{Efecte sobre el nivell} \\
+\hline
+\texttt{scam}, \texttt{blacklist} & $+50$ & Força el nivell a \texttt{ALTO} i l'acció a \texttt{REVIEW}. \\
+\hline
+\texttt{warning}, \texttt{suspicious} & $+25$ & Eleva a \texttt{MEDIO} si el nivell era \texttt{BAJO}. \\
+\hline
+\texttt{trusted}, \texttt{known\_protocol}, \texttt{test\_contract} & $-10$ & Cap. Aporta context de confiança, però no rebaixa el nivell. \\
+\hline
+\end{tabularx}
+\caption{Ajustos aplicats a la puntuació segons el context d'adreces conegudes}
+\label{tab:ajust_context}
+\end{table}
+
+El resultat de la suma es limita sempre a l'interval $[0, 100]$. És important remarcar que una etiqueta de confiança redueix la puntuació però \textbf{no pot rebaixar el nivell de risc} ja establert pel motor: una aprovació il·limitada dirigida a un contracte de prova continua sent \texttt{ALTO}. Aquesta asimetria és deliberada i evita que una etiqueta incorrecta o desactualitzada emmascari un patró crític.
+
+\paragraph{Interpretació dels valors observats}
+
+Amb aquestes regles, les puntuacions que apareixen als escenaris següents queden completament explicades. Una puntuació de 95 correspon sempre a l'activació d'un permís global i una de 90 a una aprovació il·limitada, tots dos patrons crítics detectats directament per les regles. Una puntuació de 60, com la de l'escenari E, és el resultat de combinar una transferència simple (10) amb una etiqueta \texttt{scam} ($+50$): el patró tècnic és inofensiu, però el destinatari està marcat com a maliciós, i és el context el que eleva el veredicte. De manera anàloga, una aprovació limitada dirigida a una adreça etiquetada assoleix 70, resultat de sumar la base 20 i el mateix ajust.
+
+Finalment, l'acció recomanada es deriva directament del nivell. Els nivells \texttt{MEDIO} i \texttt{ALTO} produeixen \texttt{REVIEW}, mentre que \texttt{BAJO} produeix \texttt{ALLOW}. Aquesta correspondència és la que s'utilitza a l'apartat~\ref{sec:analisi_resultats} per agrupar les prediccions en dues classes i construir la matriu de confusió.

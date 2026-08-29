@@ -1,0 +1,119 @@
+\documentclass [12pt]{article}
+
+% !TEX options = -synctex=1 -interaction=nonstopmode -shell-escape -file-line-error "%DOC%"
+
+
+\input{preamble.tex}
+
+
+\begin{document}
+
+\input{post-preamble.tex}
+
+\subfile{sections/titlepage}
+
+
+\setcounter{page}{1}
+\pagenumbering{roman}
+
+\subfile{sections/index}
+
+\setlength{\parskip}{0.6em}
+
+
+\subfile{sections/abstract}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ------------------------------------------------------------------
+
+
+\newpage
+
+
+\subfile{sections/introduction}
+
+%Resum: FINAL
+%-Intro% 1-2 linies - àmbit. 
+%-Intro% 1 Problemàtica
+%-Conclusions% Què has fet per resoldre-ho.
+%-Conclusions% Resultats.
+
+%%%1. Introducció
+% Àmbit.
+% Avantatges. 
+% Problemàtica. 
+
+%%1.1 Objectius
+% Què faras? Vols resoldre el problema. 
+%%% Sub-objectius. / Tasques!!
+
+%%1.2 Justificació
+%% Necessitat. Pq interessant.
+%% Viabilitat.
+ 
+%%1.3 Planificació (opcional)
+%% Tasques. Temps.
+%% Diagrama de Gantt
+
+%%1.4 Organitzazió memòria - FINAL
+%% Cap 2.... , Cap 3... 
+
+\newpage
+\subfile{sections/general_description}
+
+
+%%2 Background
+
+%2.1 Tecnologia
+
+%2.2 Productes similars
+
+%%3- Disseny de la proposta
+%% Requisits.
+%% Arquitectura
+%% Actors
+%% Funcions
+%% Decisions de disseny.
+
+%%4-Implementació
+
+%%5-Avaluació
+
+%%Verificar que complim amb els requisits, i es poden fer les funcions especificades. 
+
+%%6-Conclusions
+%% Què has fet? ... Objectius.
+%%6.1-Treball Futur
+%% Com continuaries el treball.
+
+
+\newpage
+
+\subfile{sections/design}
+
+\newpage
+
+\subfile{sections/implementation}
+
+
+\newpage
+
+\subfile{sections/evaluation}
+
+\newpage
+\subfile{sections/conclusions}
+
+\clearpage
+\subfile{sections/bibliography}
+
+% Annexos
+\clearpage
+\appendix
+
+\input{annexes/annex_installation}
+\input{annexes/annex_json}
+\input{annexes/annex_sepolia}
+
+\end{document}

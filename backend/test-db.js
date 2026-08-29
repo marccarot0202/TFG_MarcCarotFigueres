@@ -2,14 +2,14 @@ const { initDB, getStats, addKnownAddress, closeDB } = require('./services/datab
 
 async function test() {
   try {
-    console.log('🧪 Iniciando BD...');
+    console.log('🧪 Inicialitzant la base de dades...');
     await initDB();
     
-    console.log('📊 Estadísticas iniciales:');
+    console.log('📊 Estadístiques inicials:');
     const stats = await getStats();
     console.log(stats);
     
-    console.log('✅ Test completado');
+    console.log('✅ Prova completada');
     await closeDB();
   } catch (error) {
     console.error('❌ Error:', error);

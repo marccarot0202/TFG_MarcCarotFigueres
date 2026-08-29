@@ -1,0 +1,52 @@
+\subsection{Entorn d’implementació i execució del prototip}
+
+El prototip s’executa en un entorn local de desenvolupament, amb Visual Studio Code com a espai principal de treball i diversos components que cooperen entre si. L’objectiu d’aquest entorn no és únicament programar el Snap, sinó reproduir un flux complet i realista en què una transacció es genera, s’intercepta, s’analitza i s’explica abans de la seva confirmació.
+
+Per a la part de cartera i extensió s’utilitza MetaMask Flask, la variant orientada al desenvolupament i a la prova de funcionalitats experimentals com els Snaps. Dins d’aquest entorn s’executa el Snap, que constitueix la capa integrada dins MetaMask encarregada d’interceptar transaccions i mostrar els \textit{insights} a l’usuari.
+
+Cada component del prototip s’executa com un servei local independent i escolta en un port propi. La Taula~\ref{tab:serveis_ports} identifica cada servei amb una etiqueta breu, que s’utilitza com a referència en la resta del capítol, i en resumeix el port i la funció principal.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\setlength{\tabcolsep}{9pt}
+\begin{tabularx}{\textwidth}{c | p{0.21\textwidth} | c | X}
+\hline
+\textbf{Id.} & \textbf{Servei} & \textbf{Port} & \textbf{Funció principal} \\
+\hline
+S1 & DApp local & \texttt{8000} &
+Interfície de proves, instal·lació del Snap i quadre de comandament de monitorització. \\
+\hline
+S2 & Servidor del Snap & \texttt{8080} &
+Serveix el Snap en desenvolupament perquè MetaMask Flask el pugui instal·lar en local. \\
+\hline
+S3 & \textit{Backend} d’anàlisi & \texttt{3000} &
+Normalitza i descodifica la transacció, aplica les regles deterministes, gestiona la persistència i construeix el veredicte. \\
+\hline
+S4 & Servei d’IA (Ollama) & \texttt{11434} &
+Executa el model de llenguatge local que genera la revisió complementària i les explicacions. \\
+\hline
+\end{tabularx}
+\caption{Serveis locals del prototip, ports assignats i funció principal}
+\label{tab:serveis_ports}
+\end{table}
+
+Aquesta separació respon a una decisió de disseny deliberada. El Snap es manté com un component lleuger, integrat dins MetaMask i limitat a la interceptació, la preparació de dades i la presentació dels resultats. En canvi, el \textit{backend} (S3) concentra la lògica d’anàlisi, les heurístiques de risc i la comunicació amb el servei d’IA (S4), i evita carregar el Snap amb tasques més costoses o més difícils de mantenir.
+
+A més de l’entorn local, el projecte incorpora una infraestructura de prova sobre la xarxa Sepolia, que permet validar el comportament del sistema amb transaccions reals sobre blockchain sense utilitzar actius econòmics reals. Aquesta part, però, s’explica amb més detall a l’apartat dedicat als contractes intel·ligents i a l’entorn de proves.
+
+
+\subsubsection{Control de versions i repositori del projecte}
+
+El desenvolupament del prototip es gestiona mitjançant Git i es manté en un repositori de GitHub. Aquest repositori conserva l’historial de canvis, permet controlar l’evolució dels diferents components i manté sincronitzat el codi de la DApp, el Snap, el backend, els contractes intel·ligents i els scripts auxiliars.
+
+El codi font actualitzat del projecte, juntament amb les instruccions necessàries per instal·lar les dependències i executar l’entorn de proves, es troba disponible al repositori següent:
+
+\begin{center}
+\url{https://github.com/marccarot0202/TFG_MarcCarotFigueres.git}
+\end{center}
+
+Per facilitar la reproductibilitat, la versió del codi corresponent a aquesta memòria s’identificarà mitjançant una etiqueta o versió específica dins del repositori.
+
+

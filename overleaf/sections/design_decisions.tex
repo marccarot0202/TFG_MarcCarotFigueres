@@ -1,0 +1,72 @@
+\subsubsection{Separació de responsabilitats i Snap lleuger}
+\label{sec:snap_lleuger}
+
+Una de les principals decisions arquitectòniques ha estat mantenir el Snap com un component lleuger, encarregat únicament de les funcions que requereixen una integració directa amb MetaMask. Concretament, el Snap intercepta la transacció abans de la seva confirmació, extreu la informació rellevant, la transmet al backend local i adapta la resposta rebuda al format visual permès per MetaMask Snaps.
+
+La lògica d’anàlisi no s’executa directament dins del Snap, sinó que es delega a un backend independent. Aquest component concentra la normalització de la transacció, la descodificació de la \textit{calldata}, l’aplicació de les regles deterministes, la consulta de la base de dades local, l’enriquiment amb fonts externes de context i la comunicació amb el model de llenguatge.
+
+Aquesta separació respon, en primer lloc, a les limitacions pròpies de l’entorn d’execució dels Snaps, que funciona dins d’un entorn aïllat i sotmès a un conjunt restringit de permisos. Incorporar tota la lògica d’anàlisi, persistència i generació de text dins del Snap augmentaria la complexitat del component i dificultaria tant el seu manteniment com la incorporació de noves funcionalitats.
+
+En segon lloc, l’ús d’un \textit{backend} independent permet desacoblar la interfície integrada dins de MetaMask del motor d’anàlisi. D’aquesta manera, és possible modificar les regles, incorporar noves fonts de reputació, substituir el model de llenguatge o ampliar la base de dades sense alterar necessàriament el comportament principal del Snap.
+
+Aquesta arquitectura també facilita les proves. Els mòduls del backend poden validar-se de manera independent mitjançant entrades controlades, sense haver d’executar en cada cas el flux complet de MetaMask. Al mateix temps, el Snap pot centrar-se en comprovar la intercepció, la comunicació i la presentació del resultat.
+
+Per tant, la distribució de responsabilitats adoptada és la següent:
+
+\begin{itemize}
+    \item \textbf{DApp:} genera les operacions i facilita l’execució d’escenaris controlats.
+    
+    \item \textbf{MetaMask Flask:} rep la sol·licitud de transacció i gestiona la decisió final de l’usuari.
+    
+    \item \textbf{Snap:} intercepta la transacció, prepara les dades, consulta el backend i mostra l’\textit{insight}.
+    
+    \item \textbf{Backend:} centralitza l’anàlisi del risc, el context, la persistència i la construcció del resultat.
+    
+    \item \textbf{Ollama:} executa el model local utilitzat per generar explicacions i revisions complementàries.
+\end{itemize}
+
+Aquesta separació permet mantenir un baix acoblament entre els components i afavoreix l’extensibilitat del prototip. El Snap es manté centrat en la integració amb la cartera, mentre que el backend actua com a nucli funcional del sistema.
+
+
+\subsubsection{Prioritat del motor determinista}
+\label{sec:prioritat_motor_determinista}
+
+Una segona decisió central del disseny ha estat establir el motor de regles deterministes com a mecanisme principal de classificació del risc. La intel·ligència artificial s’utilitza com una capa complementària, però no substitueix els criteris explícits implementats al backend.
+
+Les regles deterministes analitzen la informació normalitzada i descodificada de la transacció i produeixen un veredicte inicial format pel nivell de risc, la puntuació associada, l’acció recomanada i els indicis que justifiquen el resultat. Aquest enfocament permet que els patrons coneguts siguin avaluats mitjançant criteris reproduïbles i auditables.
+
+Per exemple, una aprovació ERC20 amb una quantitat igual a zero es considera una revocació, mentre que una aprovació equivalent a \texttt{MaxUint256} es tracta com una autorització pràcticament il·limitada. De manera similar, una operació \texttt{setApprovalForAll(operator,true)} s’interpreta com la concessió d’un permís global sobre una col·lecció NFT, mentre que el valor \texttt{false} indica una revocació.
+
+En aquests casos, el resultat no depèn de la interpretació probabilística del model de llenguatge. El mateix patró d’entrada ha de produir el mateix resultat determinista, fet que facilita tant la verificació del comportament com la construcció de proves reproduïbles.
+
+La revisió generada per la IA s’incorpora posteriorment com una font complementària. Aquesta revisió pot aportar una explicació més accessible, destacar elements que mereixen cautela o suggerir un nivell de risc més conservador en situacions amb informació ambigua. No obstant això, la IA no pot reduir un nivell de risc que ja hagi estat establert pel motor determinista.
+
+Aquesta restricció és especialment important en els patrons crítics. Si les regles detecten una aprovació il·limitada, un permís global actiu o una coincidència amb una adreça etiquetada com a maliciosa, una resposta menys alarmista del model no pot rebaixar el veredicte. D’aquesta manera, la decisió de seguretat no queda subordinada a una resposta probabilística que podria variar entre execucions.
+
+De manera simplificada, la combinació dels dos mecanismes segueix els principis següents:
+
+\begin{itemize}
+    \item les regles deterministes defineixen el veredicte base;
+    
+    \item els patrons crítics detectats per regles mantenen la seva prioritat;
+    
+    \item la IA pot aportar una explicació en llenguatge natural;
+    
+    \item la IA pot suggerir un increment de cautela en casos no crítics o ambigus;
+    
+    \item la IA no pot reduir un risc determinista prèviament identificat;
+    
+    \item el resultat final es valida mitjançant una capa de control semàntic.
+\end{itemize}
+
+La capa de control semàntic comprova que les afirmacions generades pel model siguin compatibles amb els fets detectats pel backend. Per exemple, una explicació no ha d’afirmar que existeix una aprovació il·limitada si la quantitat analitzada és limitada, ni indicar que s’envia ETH quan el valor de la transacció és zero. Igualment, el sistema no ha de presentar una adreça com a maliciosa si no existeix una etiqueta que justifiqui aquesta afirmació.
+
+Quan es detecta una contradicció, una resposta buida o una explicació que no compleix els criteris establerts, el backend pot sanejar-la o substituir-la per una explicació construïda a partir dels resultats deterministes. D’aquesta manera, la intel·ligència artificial queda limitada a un marc definit pels fets verificables de la transacció.
+
+Aquesta decisió permet combinar els avantatges dels dos enfocaments. El motor determinista aporta consistència, traçabilitat i capacitat d’auditoria, mentre que el model de llenguatge millora la comunicació amb l’usuari. El resultat és un sistema en què la IA contribueix a l’explicabilitat, però no es converteix en l’única autoritat sobre la seguretat de l’operació.
+
+\subsubsection{Motivació de l’ús d’IA local}
+
+L’ús d’un model local es justifica principalment per criteris de privadesa, autonomia i cost. En primer lloc, evita la dependència d’APIs externes de pagament durant el desenvolupament i la validació del prototip. En segon lloc, permet mantenir el processament dins de l’entorn local, en coherència amb l’objectiu de reduir l’exposició de dades a tercers. Finalment, facilita l’experimentació amb models de llenguatge dins d’una arquitectura Web3 funcional sense introduir dependències externes innecessàries.
+
+En el prototip implementat, Ollama s’executa com un servei local accessible al port 11434. El \textit{backend} hi envia peticions mitjançant l’endpoint \texttt{/api/generate}, proporcionant el \textit{prompt} corresponent i recuperant el text generat pel model.

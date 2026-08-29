@@ -1,0 +1,13 @@
+\begin{tikzpicture}[font=\sffamily\scriptsize, >=Latex]
+  \foreach \x/\name in {0/Usuari,2.5/Etherscan,5/MetaMask i Snap,7.8/Decoder,10.6/Regles} {
+    \node[draw, fill=white, minimum width=21mm, minimum height=7mm, align=center] at (\x,0) {\name};
+    \draw[densely dashed] (\x,-0.4) -- (\x,-5.7);
+  }
+  \draw[->] (0,-0.8) -- node[above, xshift=2mm]{\texttt{setApprovalForAll(...)}} (2.5,-0.8);
+  \draw[->] (2.5,-1.5) -- node[above]{transacci\'o} (5,-1.5);
+  \draw[->] (5,-2.2) -- node[above]{selector i par\`ametres} (7.8,-2.2);
+  \draw[->] (7.8,-2.9) -- node[above]{operador i \texttt{approved}} (10.6,-2.9);
+  \draw[->] (10.6,-3.7) -- node[above]{\texttt{true}: perm\'is global, risc ALT} (5,-3.7);
+  \draw[->] (10.6,-4.7) -- node[above]{\texttt{false}: revocaci\'o, risc BAIX} (5,-4.7);
+  \draw[->] (5,-5.5) -- node[above]{\textit{insight} diferenciat} (0,-5.5);
+\end{tikzpicture}

@@ -1,0 +1,15 @@
+\begin{tikzpicture}[font=\sffamily\scriptsize, >=Latex]
+  \foreach \x/\name in {0/Usuari,2.2/DApp,4.4/MetaMask,6.6/Snap,8.8/Backend,11/LLM} {
+    \node[draw, fill=white, minimum width=18mm, minimum height=7mm, align=center] (h\x) at (\x,0) {\name};
+    \draw[densely dashed] (\x,-0.4) -- (\x,-6.1);
+  }
+  \draw[->] (0,-0.8) -- node[above]{inicia operaci\'o} (2.2,-0.8);
+  \draw[->] (2.2,-1.5) -- node[above]{\texttt{eth\_sendTransaction}} (4.4,-1.5);
+  \draw[->] (4.4,-2.2) -- node[above]{\texttt{onTransaction}} (6.6,-2.2);
+  \draw[->] (6.6,-2.9) -- node[above]{\texttt{POST /analyze}} (8.8,-2.9);
+  \draw[->] (8.8,-3.6) -- node[above]{revisi\'o i explicaci\'o} (11,-3.6);
+  \draw[->] (11,-4.3) -- node[above]{resposta estructurada} (8.8,-4.3);
+  \draw[->] (8.8,-5.0) -- node[above]{veredicte i indicis} (6.6,-5.0);
+  \draw[->] (6.6,-5.7) -- node[above]{\textit{insight}} (4.4,-5.7);
+  \draw[->] (0,-6.4) -- node[above]{confirma o cancel\mbox{\textperiodcentered}la} (4.4,-6.4);
+\end{tikzpicture}

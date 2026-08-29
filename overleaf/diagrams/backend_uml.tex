@@ -1,0 +1,54 @@
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  module/.style={draw, rectangle split, rectangle split parts=2, align=left,
+    text width=36mm, minimum height=14mm, fill=white},
+  dependency/.style={-{Latex[length=2mm]}, semithick},
+  deptext/.style={font=\sffamily\tiny, fill=white, inner sep=1pt}
+]
+  \node[module] (snap) at (-5.2,4.2) {
+    \centering\textbf{\guillemotleft module\guillemotright\\SnapController}
+    \nodepart{second}\texttt{onTransaction()}\\\texttt{analyzeTransaction()}\\\texttt{renderInsight()}};
+  \node[module] (server) at (0,4.2) {
+    \centering\textbf{\guillemotleft controller\guillemotright\\server.js}
+    \nodepart{second}\texttt{POST /analyze}\\\texttt{GET /health}\\\texttt{GET /analysis-history}};
+  \node[module] (analyzer) at (5.2,4.2) {
+    \centering\textbf{\guillemotleft service\guillemotright\\AnalyzerService}
+    \nodepart{second}\texttt{analyzeTransaction()}\\\texttt{collectLocalMemory-}\\\texttt{Signals()}\\\texttt{collectKnownAddress-}\\\texttt{Signals()}};
+
+  \node[module] (normalizer) at (-5.2,1.0) {
+    \centering\textbf{\guillemotleft service\guillemotright\\Normalizer}
+    \nodepart{second}\texttt{normalizeTx()}};
+  \node[module] (decoder) at (0,1.0) {
+    \centering\textbf{\guillemotleft service\guillemotright\\Decoder}
+    \nodepart{second}\texttt{decodeKnown-}\\\texttt{Transaction()}};
+  \node[module] (rules) at (5.2,1.0) {
+    \centering\textbf{\guillemotleft service\guillemotright\\RuleEngine}
+    \nodepart{second}\texttt{buildDeterministic-}\\\texttt{Verdict()}};
+
+  \node[module] (database) at (-5.2,-2.2) {
+    \centering\textbf{\guillemotleft repository\guillemotright\\DatabaseRepository}
+    \nodepart{second}\texttt{saveAnalysisHistory()}\\\texttt{lookupAddress()}\\\texttt{findRecentAnalysis-}\\\texttt{ByTarget()}};
+  \node[module] (retrieval) at (0,-2.2) {
+    \centering\textbf{\guillemotleft service\guillemotright\\ContextService}
+    \nodepart{second}\texttt{retrieveContext()}\\\texttt{getAddressCache()}};
+  \node[module] (ollama) at (5.2,-2.2) {
+    \centering\textbf{\guillemotleft gateway\guillemotright\\OllamaClient}
+    \nodepart{second}\texttt{askOllama()}\\\texttt{explainTransaction()}};
+
+  \draw[dependency] (snap) -- node[deptext,above]{HTTP / JSON} (server);
+  \draw[dependency] (server) -- node[deptext,above]{delega} (analyzer);
+  \draw[dependency] (analyzer.south) -- (rules.north);
+  \draw[dependency] (rules.west) -- (decoder.east);
+  \draw[dependency] (decoder.west) -- (normalizer.east);
+  \draw[dependency] (analyzer.east) -- ++(1.0,0) |- (ollama.east);
+  % El tram vertical creua la dependencia RuleEngine -> Decoder a (2.6, 1.0):
+  % el semicercle indica que hi passa per sobre, sense connectar-hi. El segment
+  % blanc interromp la linia horitzontal sota l'apex de l'arc, de manera que
+  % la superposicio quedi inequivoca.
+  \draw[white, line width=2.2pt] (2.70,1.0) -- (2.87,1.0);
+  \draw[dependency] (analyzer.south) -- ++(0,-0.65) -- ++(-2.6,0)
+    -- (2.6,1.18)
+    arc (90:-90:0.18)
+    -- (2.6,-2.2) -- (retrieval.east);
+  \draw[dependency] (retrieval) -- node[deptext,below]{consulta} (database);
+\end{tikzpicture}

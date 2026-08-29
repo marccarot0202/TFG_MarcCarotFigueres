@@ -5,37 +5,39 @@ function scoreContext(tx, context) {
   if (context.knownAddress) {
     if (context.knownAddress.type === 'scam') {
       score += 80;
-      issues.push(`Dirección etiquetada como scam por ${context.knownAddress.source}`);
+      issues.push(
+        `Adreça etiquetada com a scam per ${context.knownAddress.source}`,
+      );
     } else if (context.knownAddress.type === 'suspicious') {
       score += 50;
-      issues.push(`Dirección sospechosa según ${context.knownAddress.source}`);
+      issues.push(`Adreça sospitosa segons ${context.knownAddress.source}`);
     }
   }
 
   if (tx.is_infinite_approve) {
     score += 70;
-    issues.push('Approve infinito detectado');
+    issues.push('Approve il·limitat detectat');
   }
 
   if (tx.type === 'setApprovalForAll') {
     score += 70;
-    issues.push('setApprovalForAll detectado: permiso total sobre NFTs/tokens');
+    issues.push('setApprovalForAll detectat: permís total sobre NFT o tokens');
   }
 
   if (context.contractCache) {
     if (context.contractCache.risk_level === 'ALTO') {
       score += 40;
-      issues.push('Contrato previamente analizado como ALTO riesgo');
+      issues.push('Contracte analitzat prèviament com de risc ALT');
     } else if (context.contractCache.risk_level === 'MEDIO') {
       score += 20;
-      issues.push('Contrato previamente analizado como riesgo MEDIO');
+      issues.push('Contracte analitzat prèviament com de risc MITJÀ');
     }
   }
 
   if (context.etherscan && context.etherscan.fetched) {
     if (!context.etherscan.verified) {
       score += 25;
-      issues.push('Contrato no verificado en Etherscan');
+      issues.push('Contracte no verificat a Etherscan');
     }
 
     if (context.etherscan.sourceCode) {
@@ -43,17 +45,17 @@ function scoreContext(tx, context) {
 
       if (source.includes('delegatecall')) {
         score += 30;
-        issues.push('Uso de delegatecall detectado');
+        issues.push("S'ha detectat l'ús de delegatecall");
       }
 
       if (source.includes('selfdestruct')) {
         score += 35;
-        issues.push('Uso de selfdestruct detectado');
+        issues.push("S'ha detectat l'ús de selfdestruct");
       }
 
       if (source.includes('tx.origin')) {
         score += 20;
-        issues.push('Uso de tx.origin detectado');
+        issues.push("S'ha detectat l'ús de tx.origin");
       }
     }
   }
@@ -65,7 +67,7 @@ function scoreContext(tx, context) {
 
     if (highRiskCount > 0) {
       score += 15;
-      issues.push('Existen transacciones similares con riesgo ALTO en el historial');
+      issues.push("Hi ha transaccions similars amb risc ALT a l'historial");
     }
   }
 

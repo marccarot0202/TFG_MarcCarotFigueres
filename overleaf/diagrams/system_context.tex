@@ -1,0 +1,32 @@
+\begin{tikzpicture}[
+  font=\sffamily\small,
+  component/.style={draw, rounded corners=1.5pt, minimum width=31mm, minimum height=11mm, align=center, fill=white},
+  external/.style={draw, ellipse, minimum width=28mm, minimum height=10mm, align=center, fill=white},
+  store/.style={draw, cylinder, shape border rotate=90, aspect=0.25, minimum width=25mm, minimum height=12mm, align=center, fill=white},
+  link/.style={-{Latex[length=2.2mm]}, semithick},
+  both/.style={{Latex[length=2.2mm]}-{Latex[length=2.2mm]}, semithick},
+  label/.style={font=\sffamily\scriptsize, fill=white, inner sep=1pt}
+]
+  \draw[dashed, rounded corners=2pt] (-4.1,1.75) rectangle (5.75,-2.45);
+  \node[font=\sffamily\small, fill=white] at (-0.7,1.75) {Entorn local de l'usuari};
+
+  \node[external] (user) at (-4.6,-3.35) {Usuari};
+  \node[external] (dapp) at (-4.7,2.6) {DApp / Etherscan};
+  \node[external] (chain) at (6.0,2.6) {Blockchain\\Sepolia};
+  \node[external] (sources) at (6.4,-3.35) {Fonts externes\\de context};
+
+  \node[component] (metamask) at (-2.4,0.55) {MetaMask Flask};
+  \node[component] (snap) at (1.4,0.55) {Snap de seguretat};
+  \node[component] (backend) at (1.4,-1.45) {Backend Analyzer};
+  \node[component] (ollama) at (-2.4,-1.45) {Ollama\\IA local};
+  \node[store] (sqlite) at (4.45,-1.45) {SQLite};
+
+  \draw[link] (user) |- node[label,pos=0.25,left]{inicia i decideix} (metamask.west);
+  \draw[link] (dapp) -- node[label,sloped,above]{sol\mbox{\textperiodcentered}licitud de transacci\'o} (metamask);
+  \draw[link] (metamask) -- node[label,above]{\texttt{onTransaction}} (snap);
+  \draw[both] (snap) -- node[label,right]{HTTP / JSON} (backend);
+  \draw[both] (backend) -- node[label,above]{\texttt{/api/generate}} (ollama);
+  \draw[both] (backend) -- node[label,above]{consultes SQL} (sqlite);
+  \draw[both] (metamask.north) |- node[label,pos=0.55,above]{RPC / confirmaci\'o} (chain.west);
+  \draw[link] (sources) -| node[label,pos=0.25,above]{adreces conegudes} (backend.south);
+\end{tikzpicture}

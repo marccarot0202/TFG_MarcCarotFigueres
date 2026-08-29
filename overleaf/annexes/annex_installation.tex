@@ -1,0 +1,151 @@
+\section{Instruccions d’instal·lació i execució}
+\label{annex:installacio}
+
+Aquest annex descriu els passos necessaris per recuperar el codi font, instal·lar les dependències i executar els diferents components del prototip. L’objectiu és facilitar la reproducció de l’entorn utilitzat durant el desenvolupament i l’avaluació del sistema.
+
+\subsection{Requisits previs}
+
+Abans d’executar el projecte, és necessari disposar dels components següents:
+
+\begin{itemize}
+    \item Node.js i npm;
+    \item MetaMask Flask;
+    \item Ollama;
+    \item el model local \texttt{llama3.2:latest};
+    \item Git;
+    \item un navegador compatible amb MetaMask Flask;
+    \item accés a un endpoint RPC de Sepolia;
+    \item ETH de prova de la xarxa Sepolia.
+\end{itemize}
+
+Les versions exactes utilitzades durant l’avaluació es recullen a la Taula~\ref{tab:configuracio_avaluacio}.
+
+\subsection{Descàrrega del repositori}
+
+El codi font del projecte es pot obtenir des del repositori de GitHub mitjançant l’ordre següent:
+
+\begin{lstlisting}[language=bash,breaklines=true,breakatwhitespace=false]
+git clone https://github.com/marccarot0202/TFG_MarcCarotFigueres.git
+cd TFG_MarcCarotFigueres
+\end{lstlisting}
+
+La versió utilitzada en l'avaluació correspon a l'estat del repositori dels dies 17 i 18 de juliol de 2026. Abans de publicar la versió final es recomana crear una etiqueta Git associada a l'entrega.
+
+\subsection{Instal·lació de les dependències}
+
+Les dependències generals del projecte s’instal·len des de l’arrel del repositori:
+
+\begin{lstlisting}[language=bash]
+yarn install
+\end{lstlisting}
+
+El backend i els contractes disposen també dels seus propis fitxers de dependències:
+
+\begin{lstlisting}[language=bash]
+cd backend
+npm install
+
+cd ../smart-contracts
+npm install
+\end{lstlisting}
+
+\subsection{Instal·lació del model local}
+
+El model utilitzat pel prototip es descarrega mitjançant Ollama:
+
+\begin{lstlisting}[language=bash]
+ollama pull llama3.2
+\end{lstlisting}
+
+Es pot comprovar que el model està disponible amb:
+
+\begin{lstlisting}[language=bash]
+ollama list
+\end{lstlisting}
+
+El servei local d’Ollama ha d’estar accessible a:
+
+\begin{center}
+\texttt{http://localhost:11434}
+\end{center}
+
+\subsection{Configuració de les variables d’entorn}
+
+Les credencials i les dades sensibles no s’emmagatzemen directament al repositori. Per executar el desplegament o les consultes sobre Sepolia és necessari crear un fitxer local de variables d’entorn.
+
+Un exemple simplificat de configuració és el següent:
+
+\begin{lstlisting}
+SEPOLIA_RPC_URL=URL_DEL_PROVEIDOR_RPC
+PRIVATE_KEY=CLAU_PRIVADA_DEL_COMPTE_DE_PROVES
+ETHERSCAN_API_KEY=CLAU_DE_L_API
+\end{lstlisting}
+
+Aquest fitxer no s’ha d’incorporar al control de versions ni publicar al repositori.
+
+\subsection{Execució dels components}
+
+El prototip està format per diversos serveis que s’han d’executar simultàniament. En l'entorn Windows utilitzat per a l'avaluació, la forma recomanada és executar \texttt{Iniciador\_Portatil.bat} des de l'arrel. Aquest script selecciona Node.js 20.11.1 i obre Ollama, el backend i el \textit{workspace} de la DApp i el Snap en l'ordre correcte.
+
+\begin{lstlisting}[language=bash]
+Iniciador_Portatil.bat
+\end{lstlisting}
+
+Les ordres següents descriuen els components per separat amb finalitat de reproducció i diagnòstic; no s'han d'executar simultàniament amb l'iniciador, perquè es produirien conflictes de ports.
+
+\subsubsection{Backend local}
+
+El backend d’anàlisi s’executa al port \texttt{3000}:
+
+\begin{lstlisting}[language=bash]
+cd backend
+node server.js
+\end{lstlisting}
+
+Es pot comprovar el seu estat accedint als endpoints:
+
+\begin{center}
+\texttt{http://localhost:3000/health}
+\end{center}
+
+\begin{center}
+\texttt{http://localhost:3000/stats}
+\end{center}
+
+\subsubsection{Snap}
+
+El servidor de desenvolupament del Snap s’executa al port \texttt{8080}:
+
+\begin{lstlisting}[language=bash]
+yarn workspace snap start
+\end{lstlisting}
+
+\subsubsection{DApp local}
+
+La DApp de proves s’executa al port \texttt{8000}. L’ordre exacta depèn de l’estructura del repositori:
+
+\begin{lstlisting}[language=bash]
+yarn workspace site start
+\end{lstlisting}
+
+Un cop iniciada, la interfície queda disponible a:
+
+\begin{center}
+\texttt{http://localhost:8000}
+\end{center}
+
+\subsection{Ordre recomanat d’inicialització}
+
+Per preparar correctament l’entorn, es recomana seguir aquest ordre:
+
+\begin{enumerate}
+    \item iniciar Ollama;
+    \item iniciar el backend local;
+    \item iniciar el servidor del Snap;
+    \item iniciar la DApp;
+    \item obrir MetaMask Flask;
+    \item instal·lar o reconnectar el Snap;
+    \item seleccionar la xarxa Sepolia;
+    \item comprovar l’estat dels serveis des de la DApp;
+    \item iniciar una operació de prova.
+\end{enumerate}

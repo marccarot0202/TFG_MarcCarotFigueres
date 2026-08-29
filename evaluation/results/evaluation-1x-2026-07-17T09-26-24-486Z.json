@@ -1,0 +1,1137 @@
+{
+  "generated_at": "2026-07-17T09:26:24.480Z",
+  "protocol": {
+    "repetitions": 1,
+    "api_url": "http://localhost:3000",
+    "cases": [
+      {
+        "id": "A1",
+        "scenario": "A",
+        "operation": "Simple transaction without risk indicators",
+        "expectedClass": "negative"
+      },
+      {
+        "id": "B1",
+        "scenario": "B",
+        "operation": "Limited ERC20 approval",
+        "expectedClass": "negative"
+      },
+      {
+        "id": "B2",
+        "scenario": "B",
+        "operation": "ERC20 approval revocation",
+        "expectedClass": "negative"
+      },
+      {
+        "id": "C1",
+        "scenario": "C",
+        "operation": "Unlimited ERC20 approval",
+        "expectedClass": "positive"
+      },
+      {
+        "id": "D1",
+        "scenario": "D",
+        "operation": "Enable global ERC721 approval",
+        "expectedClass": "positive"
+      },
+      {
+        "id": "D2",
+        "scenario": "D",
+        "operation": "Revoke global ERC721 approval",
+        "expectedClass": "negative"
+      },
+      {
+        "id": "E1",
+        "scenario": "E",
+        "operation": "Interaction with a controlled scam-labelled address",
+        "expectedClass": "positive"
+      }
+    ]
+  },
+  "environment": {
+    "platform": "Windows_NT 10.0.19045 x64",
+    "cpu": "AMD Ryzen 7 3700U with Radeon Vega Mobile Gfx  ",
+    "cpu_cores": 8,
+    "ram_bytes": 14962167808,
+    "node": "v20.11.1"
+  },
+  "summary": {
+    "matrix": {
+      "true_positive": 3,
+      "false_positive": 4,
+      "true_negative": 0,
+      "false_negative": 0
+    },
+    "metrics": {
+      "accuracy": 0.42857142857142855,
+      "precision": 0.42857142857142855,
+      "recall": 1,
+      "specificity": 0,
+      "f1": 0.6
+    },
+    "timing_ms": {
+      "minimum": 98754,
+      "maximum": 120599,
+      "mean": 111793.85714285714
+    }
+  },
+  "observations": [
+    {
+      "scenario": "A",
+      "case_id": "A1",
+      "repetition": 1,
+      "expected_class": "negative",
+      "operation": "Simple transaction without risk indicators",
+      "decision": "not_submitted",
+      "predicted_class": "positive",
+      "analysis_id": 27,
+      "response": {
+        "success": true,
+        "risk": "MEDIO",
+        "risk_score": 10,
+        "issues": [
+          "Parece una transferencia simple",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (2 veces) en análisis locales",
+          "Existen 2 análisis recientes similares para este destino"
+        ],
+        "verdict": {
+          "risk": "MEDIO",
+          "risk_score": 10,
+          "recommended_action": "ALLOW",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "findings": [
+          "Parece una transferencia simple",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (2 veces) en análisis locales",
+          "Existen 2 análisis recientes similares para este destino"
+        ],
+        "explanation": "La transacción se debe aprobar porque el riesgo calculado es bajo, indicando que la transferencia parece simple y no hay hallazgos fuertes en su contra. La dirección destino ha aparecido antes en análisis locales y existen análisis recientes similares, lo cual sugiere una posible normalidad en esta transacción. Esto se basa en el contexto de memoria local y , que respaldan esta decisión.",
+        "context_summary": "Desde: 0x1111111111111111111111111111111111111111 | Hacia: 0x2222222222222222222222222222222222222222 | Origen: evaluation_runner",
+        "normalized_tx": {
+          "type": "transaction",
+          "chainId": "0xaa36a7",
+          "from": "0x1111111111111111111111111111111111111111",
+          "to": "0x2222222222222222222222222222222222222222",
+          "value": "0x0",
+          "data": "0x",
+          "origin": "evaluation_runner",
+          "method_selector": null,
+          "has_value": false,
+          "is_contract_interaction": false,
+          "decoded": null
+        },
+        "decoded": null,
+        "deterministic_verdict": {
+          "findings": [
+            "Parece una transferencia simple",
+            "Origen de la solicitud: evaluation_runner",
+            "La dirección destino ya ha aparecido antes (2 veces) en análisis locales",
+            "Existen 2 análisis recientes similares para este destino"
+          ],
+          "risk_level": "BAJO",
+          "risk_score": 10,
+          "recommended_action": "ALLOW"
+        },
+        "local_memory_signals": {
+          "cached_addresses": {
+            "target": {
+              "id": 74,
+              "address": "0x2222222222222222222222222222222222222222",
+              "chain_id": "0xaa36a7",
+              "label": "target",
+              "notes": "Dirección destino observada en análisis local",
+              "first_seen_at": 1784277721,
+              "last_seen_at": 1784278918,
+              "times_seen": 2,
+              "last_method_selector": "0x095ea7b3"
+            }
+          },
+          "recent_similar_analysis": [
+            {
+              "risk_level": "ALTO",
+              "risk_score": 90,
+              "recommended_action": "REVIEW",
+              "count": 1
+            },
+            {
+              "risk_level": "BAJO",
+              "risk_score": 10,
+              "recommended_action": "ALLOW",
+              "count": 1
+            }
+          ],
+          "findings": [
+            "La dirección destino ya ha aparecido antes (2 veces) en análisis locales",
+            "Existen 2 análisis recientes similares para este destino"
+          ]
+        },
+        "ai_review": {
+          "ai_risk_hint": "ALTO",
+          "confidence": "alta",
+          "ai_flags": [
+            "La dirección destino ya ha aparecido antes (2 veces) en análisis locales | Existen 2 análisis recientes similares para este destino",
+            "Parece una transferencia simple | Origen de la solicitud: evaluation_runner",
+            "uso repetido en memoria local"
+          ],
+          "reviewer_summary": "Revisión por riesgo elevado",
+          "raw_response": "{\"ai_risk_hint\":\"ALTO\",\"confidence\":\"alta\",\"ai_flags\":[\"La dirección destino ya ha aparecido antes (2 veces) en análisis locales | Existen 2 análisis recientes similares para este destino\",\"Parece una transferencia simple | Origen de la solicitud: evaluation_runner\",\"uso repetido en memoria local\"],\"reviewer_summary\":\"Revisión por riesgo elevado\"}"
+        },
+        "final_verdict": {
+          "risk_level": "MEDIO",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "analysis_id": 27,
+        "performance": {
+          "started_at": "2026-07-17T09:13:21.761Z",
+          "ai_review_ms": 62327,
+          "explanation_ms": 51079,
+          "pre_persistence_ms": 113423,
+          "persistence_ms": 36,
+          "total_backend_ms": 113459
+        },
+        "evaluation": {
+          "scenario": "A",
+          "case_id": "A1",
+          "repetition": 1,
+          "expected_class": "negative",
+          "operation": "Simple transaction without risk indicators",
+          "decision": "not_submitted"
+        },
+        "timestamp": "2026-07-17T09:15:15.230Z"
+      }
+    },
+    {
+      "scenario": "B",
+      "case_id": "B1",
+      "repetition": 1,
+      "expected_class": "negative",
+      "operation": "Limited ERC20 approval",
+      "decision": "not_submitted",
+      "predicted_class": "positive",
+      "analysis_id": 28,
+      "response": {
+        "success": true,
+        "risk": "MEDIO",
+        "risk_score": 20,
+        "issues": [
+          "Se ha detectado una aprobación de tokens",
+          "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+          "Cantidad aprobada: 100",
+          "La aprobación no es ilimitada",
+          "Se concede un permiso limitado",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (3 veces) en análisis locales",
+          "Existen 2 análisis recientes similares para este destino y selector"
+        ],
+        "verdict": {
+          "risk": "MEDIO",
+          "risk_score": 20,
+          "recommended_action": "ALLOW",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "findings": [
+          "Se ha detectado una aprobación de tokens",
+          "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+          "Cantidad aprobada: 100",
+          "La aprobación no es ilimitada",
+          "Se concede un permiso limitado",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (3 veces) en análisis locales",
+          "Existen 2 análisis recientes similares para este destino y selector"
+        ],
+        "explanation": "La transacción aprobada es un permiso limitado para mover tokens desde la dirección 0x3333333333333333333333333333333333333333 hasta el destino especificado. La cantidad permitida es de 100 tokens, y se concede este permiso debido a una solicitud legítima proveniente del evaluation_runner.",
+        "context_summary": "Desde: 0x1111111111111111111111111111111111111111 | Hacia: 0x2222222222222222222222222222222222222222 | Origen: evaluation_runner | Selector: 0x095ea7b3 | Método: approve | Spender: 0x3333333333333333333333333333333333333333 | Cantidad: 100 | Permiso ilimitado: no",
+        "normalized_tx": {
+          "type": "transaction",
+          "chainId": "0xaa36a7",
+          "from": "0x1111111111111111111111111111111111111111",
+          "to": "0x2222222222222222222222222222222222222222",
+          "value": "0x0",
+          "data": "0x095ea7b300000000000000000000000033333333333333333333333333333333333333330000000000000000000000000000000000000000000000000000000000000064",
+          "origin": "evaluation_runner",
+          "method_selector": "0x095ea7b3",
+          "has_value": false,
+          "is_contract_interaction": true,
+          "decoded": {
+            "method": "approve",
+            "signature": "approve(address,uint256)",
+            "selector": "0x095ea7b3",
+            "spender": "0x3333333333333333333333333333333333333333",
+            "amount": "100",
+            "amount_hex": "0x0000000000000000000000000000000000000000000000000000000000000064",
+            "is_infinite_approval": false
+          }
+        },
+        "decoded": {
+          "method": "approve",
+          "signature": "approve(address,uint256)",
+          "selector": "0x095ea7b3",
+          "spender": "0x3333333333333333333333333333333333333333",
+          "amount": "100",
+          "amount_hex": "0x0000000000000000000000000000000000000000000000000000000000000064",
+          "is_infinite_approval": false
+        },
+        "deterministic_verdict": {
+          "findings": [
+            "Se ha detectado una aprobación de tokens",
+            "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+            "Cantidad aprobada: 100",
+            "La aprobación no es ilimitada",
+            "Se concede un permiso limitado",
+            "Origen de la solicitud: evaluation_runner",
+            "La dirección destino ya ha aparecido antes (3 veces) en análisis locales",
+            "Existen 2 análisis recientes similares para este destino y selector"
+          ],
+          "risk_level": "BAJO",
+          "risk_score": 20,
+          "recommended_action": "ALLOW"
+        },
+        "local_memory_signals": {
+          "cached_addresses": {
+            "target": {
+              "id": 74,
+              "address": "0x2222222222222222222222222222222222222222",
+              "chain_id": "0xaa36a7",
+              "label": "target",
+              "notes": "Dirección destino observada en análisis local",
+              "first_seen_at": 1784277721,
+              "last_seen_at": 1784279715,
+              "times_seen": 3,
+              "last_method_selector": "0x095ea7b3"
+            },
+            "spender": {
+              "id": 78,
+              "address": "0x3333333333333333333333333333333333333333",
+              "chain_id": "0xaa36a7",
+              "label": "spender",
+              "notes": "Dirección observada como spender con aprobación ilimitada",
+              "first_seen_at": 1784278918,
+              "last_seen_at": 1784278918,
+              "times_seen": 1,
+              "last_method_selector": "0x095ea7b3"
+            }
+          },
+          "recent_similar_analysis": [
+            {
+              "risk_level": "ALTO",
+              "risk_score": 90,
+              "recommended_action": "REVIEW",
+              "count": 1
+            },
+            {
+              "risk_level": "BAJO",
+              "risk_score": 10,
+              "recommended_action": "ALLOW",
+              "count": 1
+            }
+          ],
+          "findings": [
+            "La dirección destino ya ha aparecido antes (3 veces) en análisis locales",
+            "Existen 2 análisis recientes similares para este destino y selector"
+          ]
+        },
+        "ai_review": {
+          "ai_risk_hint": "ALTO",
+          "confidence": "alta",
+          "ai_flags": [
+            "usos repetidos en memoria local",
+            "análisis similares recientes",
+            "directorio autorizado con riesgo bajo"
+          ],
+          "reviewer_summary": "Revisión requerida debido a riesgos asociados con la operación.",
+          "raw_response": "{\"ai_risk_hint\":\"ALTO\",\"confidence\":\"alta\",\"ai_flags\":[\"usos repetidos en memoria local\",\"análisis similares recientes\",\"directorio autorizado con riesgo bajo\"],\"reviewer_summary\":\"Revisión requerida debido a riesgos asociados con la operación.\"}"
+        },
+        "final_verdict": {
+          "risk_level": "MEDIO",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "analysis_id": 28,
+        "performance": {
+          "started_at": "2026-07-17T09:15:15.242Z",
+          "ai_review_ms": 61518,
+          "explanation_ms": 47536,
+          "pre_persistence_ms": 109070,
+          "persistence_ms": 52,
+          "total_backend_ms": 109122
+        },
+        "evaluation": {
+          "scenario": "B",
+          "case_id": "B1",
+          "repetition": 1,
+          "expected_class": "negative",
+          "operation": "Limited ERC20 approval",
+          "decision": "not_submitted"
+        },
+        "timestamp": "2026-07-17T09:17:04.380Z"
+      }
+    },
+    {
+      "scenario": "B",
+      "case_id": "B2",
+      "repetition": 1,
+      "expected_class": "negative",
+      "operation": "ERC20 approval revocation",
+      "decision": "not_submitted",
+      "predicted_class": "positive",
+      "analysis_id": 29,
+      "response": {
+        "success": true,
+        "risk": "MEDIO",
+        "risk_score": 5,
+        "issues": [
+          "Se ha detectado una aprobación de tokens",
+          "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+          "Cantidad aprobada: 0",
+          "La aprobación no es ilimitada",
+          "Esto parece una revocación de permiso",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (4 veces) en análisis locales",
+          "La dirección autorizada ya ha aparecido antes (2 veces) en análisis locales",
+          "Existen 3 análisis recientes similares para este destino y selector"
+        ],
+        "verdict": {
+          "risk": "MEDIO",
+          "risk_score": 5,
+          "recommended_action": "ALLOW",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "findings": [
+          "Se ha detectado una aprobación de tokens",
+          "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+          "Cantidad aprobada: 0",
+          "La aprobación no es ilimitada",
+          "Esto parece una revocación de permiso",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (4 veces) en análisis locales",
+          "La dirección autorizada ya ha aparecido antes (2 veces) en análisis locales",
+          "Existen 3 análisis recientes similares para este destino y selector"
+        ],
+        "explanation": "Se ha detectado una revocación de permiso de tokens. En este caso no se está concediendo un permiso nuevo amplio. Además, existen análisis locales similares previos, lo que aporta contexto adicional.",
+        "context_summary": "Desde: 0x1111111111111111111111111111111111111111 | Hacia: 0x2222222222222222222222222222222222222222 | Origen: evaluation_runner | Selector: 0x095ea7b3 | Método: approve | Spender: 0x3333333333333333333333333333333333333333 | Cantidad: 0 | Permiso ilimitado: no",
+        "normalized_tx": {
+          "type": "transaction",
+          "chainId": "0xaa36a7",
+          "from": "0x1111111111111111111111111111111111111111",
+          "to": "0x2222222222222222222222222222222222222222",
+          "value": "0x0",
+          "data": "0x095ea7b300000000000000000000000033333333333333333333333333333333333333330000000000000000000000000000000000000000000000000000000000000000",
+          "origin": "evaluation_runner",
+          "method_selector": "0x095ea7b3",
+          "has_value": false,
+          "is_contract_interaction": true,
+          "decoded": {
+            "method": "approve",
+            "signature": "approve(address,uint256)",
+            "selector": "0x095ea7b3",
+            "spender": "0x3333333333333333333333333333333333333333",
+            "amount": "0",
+            "amount_hex": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "is_infinite_approval": false
+          }
+        },
+        "decoded": {
+          "method": "approve",
+          "signature": "approve(address,uint256)",
+          "selector": "0x095ea7b3",
+          "spender": "0x3333333333333333333333333333333333333333",
+          "amount": "0",
+          "amount_hex": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "is_infinite_approval": false
+        },
+        "deterministic_verdict": {
+          "findings": [
+            "Se ha detectado una aprobación de tokens",
+            "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+            "Cantidad aprobada: 0",
+            "La aprobación no es ilimitada",
+            "Esto parece una revocación de permiso",
+            "Origen de la solicitud: evaluation_runner",
+            "La dirección destino ya ha aparecido antes (4 veces) en análisis locales",
+            "La dirección autorizada ya ha aparecido antes (2 veces) en análisis locales",
+            "Existen 3 análisis recientes similares para este destino y selector"
+          ],
+          "risk_level": "BAJO",
+          "risk_score": 5,
+          "recommended_action": "ALLOW"
+        },
+        "local_memory_signals": {
+          "cached_addresses": {
+            "target": {
+              "id": 74,
+              "address": "0x2222222222222222222222222222222222222222",
+              "chain_id": "0xaa36a7",
+              "label": "target",
+              "notes": "Dirección destino observada en análisis local",
+              "first_seen_at": 1784277721,
+              "last_seen_at": 1784279824,
+              "times_seen": 4,
+              "last_method_selector": "0x095ea7b3"
+            },
+            "spender": {
+              "id": 78,
+              "address": "0x3333333333333333333333333333333333333333",
+              "chain_id": "0xaa36a7",
+              "label": "spender",
+              "notes": "Dirección observada como spender con aprobación limitada",
+              "first_seen_at": 1784278918,
+              "last_seen_at": 1784279824,
+              "times_seen": 2,
+              "last_method_selector": "0x095ea7b3"
+            }
+          },
+          "recent_similar_analysis": [
+            {
+              "risk_level": "ALTO",
+              "risk_score": 90,
+              "recommended_action": "REVIEW",
+              "count": 1
+            },
+            {
+              "risk_level": "BAJO",
+              "risk_score": 10,
+              "recommended_action": "ALLOW",
+              "count": 1
+            },
+            {
+              "risk_level": "BAJO",
+              "risk_score": 20,
+              "recommended_action": "ALLOW",
+              "count": 1
+            }
+          ],
+          "findings": [
+            "La dirección destino ya ha aparecido antes (4 veces) en análisis locales",
+            "La dirección autorizada ya ha aparecido antes (2 veces) en análisis locales",
+            "Existen 3 análisis recientes similares para este destino y selector"
+          ]
+        },
+        "ai_review": {
+          "ai_risk_hint": "ALTO",
+          "confidence": "alta",
+          "ai_flags": [
+            "revocación de permiso",
+            "usabilidad del método approve"
+          ],
+          "reviewer_summary": "La revocación de permiso y uso repetido en memoria local aumentan el riesgo.",
+          "raw_response": "{\"ai_risk_hint\": \"ALTO\", \"confidence\": \"alta\", \"ai_flags\": [\"revocación de permiso\", \"usabilidad del método approve\"], \"reviewer_summary\": \"La revocación de permiso y uso repetido en memoria local aumentan el riesgo.\"}"
+        },
+        "final_verdict": {
+          "risk_level": "MEDIO",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "analysis_id": 29,
+        "performance": {
+          "started_at": "2026-07-17T09:17:04.389Z",
+          "ai_review_ms": 62366,
+          "explanation_ms": 58147,
+          "pre_persistence_ms": 120531,
+          "persistence_ms": 68,
+          "total_backend_ms": 120599
+        },
+        "evaluation": {
+          "scenario": "B",
+          "case_id": "B2",
+          "repetition": 1,
+          "expected_class": "negative",
+          "operation": "ERC20 approval revocation",
+          "decision": "not_submitted"
+        },
+        "timestamp": "2026-07-17T09:19:05.007Z"
+      }
+    },
+    {
+      "scenario": "C",
+      "case_id": "C1",
+      "repetition": 1,
+      "expected_class": "positive",
+      "operation": "Unlimited ERC20 approval",
+      "decision": "not_submitted",
+      "predicted_class": "positive",
+      "analysis_id": 30,
+      "response": {
+        "success": true,
+        "risk": "ALTO",
+        "risk_score": 90,
+        "issues": [
+          "Se ha detectado una aprobación de tokens",
+          "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+          "Cantidad aprobada: ilimitada",
+          "La aprobación es ilimitada",
+          "La dirección autorizada podría mover todos los tokens permitidos sin pedir permiso de nuevo",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (5 veces) en análisis locales",
+          "La dirección autorizada ya ha aparecido antes (3 veces) en análisis locales",
+          "Existen 4 análisis recientes similares para este destino y selector"
+        ],
+        "verdict": {
+          "risk": "ALTO",
+          "risk_score": 90,
+          "recommended_action": "REVIEW",
+          "source": "deterministic_priority",
+          "reason": "El motor determinista detectó un patrón crítico conocido"
+        },
+        "findings": [
+          "Se ha detectado una aprobación de tokens",
+          "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+          "Cantidad aprobada: ilimitada",
+          "La aprobación es ilimitada",
+          "La dirección autorizada podría mover todos los tokens permitidos sin pedir permiso de nuevo",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (5 veces) en análisis locales",
+          "La dirección autorizada ya ha aparecido antes (3 veces) en análisis locales",
+          "Existen 4 análisis recientes similares para este destino y selector"
+        ],
+        "explanation": "La transacción aprobada es un permiso para mover tokens ilimitados desde la dirección autorizada 0x3333333333333333333333333333333333333333. Esto significa que la dirección destinataria tiene acceso ilimitado a los tokens permitidos sin necesidad de pedir permiso nuevamente.",
+        "context_summary": "Desde: 0x1111111111111111111111111111111111111111 | Hacia: 0x2222222222222222222222222222222222222222 | Origen: evaluation_runner | Selector: 0x095ea7b3 | Método: approve | Spender: 0x3333333333333333333333333333333333333333 | Cantidad: 115792089237316195423570985008687907853269984665640564039457584007913129639935 | Permiso ilimitado: sí",
+        "normalized_tx": {
+          "type": "transaction",
+          "chainId": "0xaa36a7",
+          "from": "0x1111111111111111111111111111111111111111",
+          "to": "0x2222222222222222222222222222222222222222",
+          "value": "0x0",
+          "data": "0x095ea7b30000000000000000000000003333333333333333333333333333333333333333ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "origin": "evaluation_runner",
+          "method_selector": "0x095ea7b3",
+          "has_value": false,
+          "is_contract_interaction": true,
+          "decoded": {
+            "method": "approve",
+            "signature": "approve(address,uint256)",
+            "selector": "0x095ea7b3",
+            "spender": "0x3333333333333333333333333333333333333333",
+            "amount": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+            "amount_hex": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "is_infinite_approval": true
+          }
+        },
+        "decoded": {
+          "method": "approve",
+          "signature": "approve(address,uint256)",
+          "selector": "0x095ea7b3",
+          "spender": "0x3333333333333333333333333333333333333333",
+          "amount": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "amount_hex": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "is_infinite_approval": true
+        },
+        "deterministic_verdict": {
+          "findings": [
+            "Se ha detectado una aprobación de tokens",
+            "Dirección autorizada: 0x3333333333333333333333333333333333333333",
+            "Cantidad aprobada: ilimitada",
+            "La aprobación es ilimitada",
+            "La dirección autorizada podría mover todos los tokens permitidos sin pedir permiso de nuevo",
+            "Origen de la solicitud: evaluation_runner",
+            "La dirección destino ya ha aparecido antes (5 veces) en análisis locales",
+            "La dirección autorizada ya ha aparecido antes (3 veces) en análisis locales",
+            "Existen 4 análisis recientes similares para este destino y selector"
+          ],
+          "risk_level": "ALTO",
+          "risk_score": 90,
+          "recommended_action": "REVIEW"
+        },
+        "local_memory_signals": {
+          "cached_addresses": {
+            "target": {
+              "id": 74,
+              "address": "0x2222222222222222222222222222222222222222",
+              "chain_id": "0xaa36a7",
+              "label": "target",
+              "notes": "Dirección destino observada en análisis local",
+              "first_seen_at": 1784277721,
+              "last_seen_at": 1784279944,
+              "times_seen": 5,
+              "last_method_selector": "0x095ea7b3"
+            },
+            "spender": {
+              "id": 78,
+              "address": "0x3333333333333333333333333333333333333333",
+              "chain_id": "0xaa36a7",
+              "label": "spender",
+              "notes": "Dirección observada como spender con aprobación limitada",
+              "first_seen_at": 1784278918,
+              "last_seen_at": 1784279944,
+              "times_seen": 3,
+              "last_method_selector": "0x095ea7b3"
+            }
+          },
+          "recent_similar_analysis": [
+            {
+              "risk_level": "ALTO",
+              "risk_score": 90,
+              "recommended_action": "REVIEW",
+              "count": 1
+            },
+            {
+              "risk_level": "BAJO",
+              "risk_score": 5,
+              "recommended_action": "ALLOW",
+              "count": 1
+            },
+            {
+              "risk_level": "BAJO",
+              "risk_score": 10,
+              "recommended_action": "ALLOW",
+              "count": 1
+            },
+            {
+              "risk_level": "BAJO",
+              "risk_score": 20,
+              "recommended_action": "ALLOW",
+              "count": 1
+            }
+          ],
+          "findings": [
+            "La dirección destino ya ha aparecido antes (5 veces) en análisis locales",
+            "La dirección autorizada ya ha aparecido antes (3 veces) en análisis locales",
+            "Existen 4 análisis recientes similares para este destino y selector"
+          ]
+        },
+        "ai_review": {
+          "ai_risk_hint": "ALTO",
+          "confidence": "media",
+          "ai_flags": [
+            "permiso ilimitado detectado",
+            "uso repetido en memoria local",
+            "Análisis similares recientes con riesgo crítico"
+          ],
+          "reviewer_summary": "La operación requiere revisión por su riesgo elevado.",
+          "raw_response": "{\"ai_risk_hint\":\"ALTO\",\"confidence\":\"media\",\"ai_flags\":[\"permiso ilimitado detectado\",\"uso repetido en memoria local\",\"Análisis similares recientes con riesgo crítico\"],\"reviewer_summary\":\"La operación requiere revisión por su riesgo elevado.\"}"
+        },
+        "final_verdict": {
+          "risk_level": "ALTO",
+          "source": "deterministic_priority",
+          "reason": "El motor determinista detectó un patrón crítico conocido"
+        },
+        "analysis_id": 30,
+        "performance": {
+          "started_at": "2026-07-17T09:19:05.022Z",
+          "ai_review_ms": 69461,
+          "explanation_ms": 49232,
+          "pre_persistence_ms": 118711,
+          "persistence_ms": 77,
+          "total_backend_ms": 118788
+        },
+        "evaluation": {
+          "scenario": "C",
+          "case_id": "C1",
+          "repetition": 1,
+          "expected_class": "positive",
+          "operation": "Unlimited ERC20 approval",
+          "decision": "not_submitted"
+        },
+        "timestamp": "2026-07-17T09:21:03.828Z"
+      }
+    },
+    {
+      "scenario": "D",
+      "case_id": "D1",
+      "repetition": 1,
+      "expected_class": "positive",
+      "operation": "Enable global ERC721 approval",
+      "decision": "not_submitted",
+      "predicted_class": "positive",
+      "analysis_id": 31,
+      "response": {
+        "success": true,
+        "risk": "ALTO",
+        "risk_score": 95,
+        "issues": [
+          "Se ha detectado un permiso global sobre activos tipo NFT o similares",
+          "Operador afectado: 0x3333333333333333333333333333333333333333",
+          "Se activa un permiso global",
+          "El operador podrá gestionar todos los activos cubiertos por este permiso",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (6 veces) en análisis locales",
+          "El operador ya ha aparecido antes (4 veces) en análisis locales"
+        ],
+        "verdict": {
+          "risk": "ALTO",
+          "risk_score": 95,
+          "recommended_action": "REVIEW",
+          "source": "deterministic_priority",
+          "reason": "El motor determinista detectó un patrón crítico conocido"
+        },
+        "findings": [
+          "Se ha detectado un permiso global sobre activos tipo NFT o similares",
+          "Operador afectado: 0x3333333333333333333333333333333333333333",
+          "Se activa un permiso global",
+          "El operador podrá gestionar todos los activos cubiertos por este permiso",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (6 veces) en análisis locales",
+          "El operador ya ha aparecido antes (4 veces) en análisis locales"
+        ],
+        "explanation": "La transacción es una solicitud de permiso global para mover tokens desde la dirección 0x3333333333333333333333333333333333333333. Esto significa que el operador podrá gestionar todos los activos cubiertos por este permiso. La dirección destino ya ha aparecido antes en análisis locales y el operador también lo ha aparecido anteriormente, lo que podría indicar un patrón de actividad conocido.",
+        "context_summary": "Desde: 0x1111111111111111111111111111111111111111 | Hacia: 0x2222222222222222222222222222222222222222 | Origen: evaluation_runner | Selector: 0xa22cb465 | Método: setApprovalForAll | Operator: 0x3333333333333333333333333333333333333333 | Approved: true",
+        "normalized_tx": {
+          "type": "transaction",
+          "chainId": "0xaa36a7",
+          "from": "0x1111111111111111111111111111111111111111",
+          "to": "0x2222222222222222222222222222222222222222",
+          "value": "0x0",
+          "data": "0xa22cb46500000000000000000000000033333333333333333333333333333333333333330000000000000000000000000000000000000000000000000000000000000001",
+          "origin": "evaluation_runner",
+          "method_selector": "0xa22cb465",
+          "has_value": false,
+          "is_contract_interaction": true,
+          "decoded": {
+            "method": "setApprovalForAll",
+            "signature": "setApprovalForAll(address,bool)",
+            "selector": "0xa22cb465",
+            "operator": "0x3333333333333333333333333333333333333333",
+            "approved": true
+          }
+        },
+        "decoded": {
+          "method": "setApprovalForAll",
+          "signature": "setApprovalForAll(address,bool)",
+          "selector": "0xa22cb465",
+          "operator": "0x3333333333333333333333333333333333333333",
+          "approved": true
+        },
+        "deterministic_verdict": {
+          "findings": [
+            "Se ha detectado un permiso global sobre activos tipo NFT o similares",
+            "Operador afectado: 0x3333333333333333333333333333333333333333",
+            "Se activa un permiso global",
+            "El operador podrá gestionar todos los activos cubiertos por este permiso",
+            "Origen de la solicitud: evaluation_runner",
+            "La dirección destino ya ha aparecido antes (6 veces) en análisis locales",
+            "El operador ya ha aparecido antes (4 veces) en análisis locales"
+          ],
+          "risk_level": "ALTO",
+          "risk_score": 95,
+          "recommended_action": "REVIEW"
+        },
+        "local_memory_signals": {
+          "cached_addresses": {
+            "target": {
+              "id": 74,
+              "address": "0x2222222222222222222222222222222222222222",
+              "chain_id": "0xaa36a7",
+              "label": "target",
+              "notes": "Dirección destino observada en análisis local",
+              "first_seen_at": 1784277721,
+              "last_seen_at": 1784280063,
+              "times_seen": 6,
+              "last_method_selector": "0x095ea7b3"
+            },
+            "operator": {
+              "id": 78,
+              "address": "0x3333333333333333333333333333333333333333",
+              "chain_id": "0xaa36a7",
+              "label": "spender",
+              "notes": "Dirección observada como spender con aprobación ilimitada",
+              "first_seen_at": 1784278918,
+              "last_seen_at": 1784280063,
+              "times_seen": 4,
+              "last_method_selector": "0x095ea7b3"
+            }
+          },
+          "recent_similar_analysis": [],
+          "findings": [
+            "La dirección destino ya ha aparecido antes (6 veces) en análisis locales",
+            "El operador ya ha aparecido antes (4 veces) en análisis locales"
+          ]
+        },
+        "ai_review": {
+          "ai_risk_hint": "ALTO",
+          "confidence": "baja",
+          "ai_flags": [
+            "Operador afectado: 0x3333333333333333333333333333333333333333",
+            "Se activa un permiso global"
+          ],
+          "reviewer_summary": "No se detectaron riesgos significativos",
+          "raw_response": "{\"ai_risk_hint\":\"Baja\",\"confidence\":\"baja\",\"ai_flags\":[\"Operador afectado: 0x3333333333333333333333333333333333333333\",\"Se activa un permiso global\"],\"reviewer_summary\":\"No se detectaron riesgos significativos\"}"
+        },
+        "final_verdict": {
+          "risk_level": "ALTO",
+          "source": "deterministic_priority",
+          "reason": "El motor determinista detectó un patrón crítico conocido"
+        },
+        "analysis_id": 31,
+        "performance": {
+          "started_at": "2026-07-17T09:21:03.836Z",
+          "ai_review_ms": 61333,
+          "explanation_ms": 48009,
+          "pre_persistence_ms": 109355,
+          "persistence_ms": 80,
+          "total_backend_ms": 109435
+        },
+        "evaluation": {
+          "scenario": "D",
+          "case_id": "D1",
+          "repetition": 1,
+          "expected_class": "positive",
+          "operation": "Enable global ERC721 approval",
+          "decision": "not_submitted"
+        },
+        "timestamp": "2026-07-17T09:22:53.283Z"
+      }
+    },
+    {
+      "scenario": "D",
+      "case_id": "D2",
+      "repetition": 1,
+      "expected_class": "negative",
+      "operation": "Revoke global ERC721 approval",
+      "decision": "not_submitted",
+      "predicted_class": "positive",
+      "analysis_id": 32,
+      "response": {
+        "success": true,
+        "risk": "MEDIO",
+        "risk_score": 5,
+        "issues": [
+          "Se ha detectado un permiso global sobre activos tipo NFT o similares",
+          "Operador afectado: 0x3333333333333333333333333333333333333333",
+          "Se revoca el permiso global",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (7 veces) en análisis locales",
+          "El operador ya ha aparecido antes (5 veces) en análisis locales",
+          "Existen 1 análisis recientes similares para este destino y selector"
+        ],
+        "verdict": {
+          "risk": "MEDIO",
+          "risk_score": 5,
+          "recommended_action": "ALLOW",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "findings": [
+          "Se ha detectado un permiso global sobre activos tipo NFT o similares",
+          "Operador afectado: 0x3333333333333333333333333333333333333333",
+          "Se revoca el permiso global",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino ya ha aparecido antes (7 veces) en análisis locales",
+          "El operador ya ha aparecido antes (5 veces) en análisis locales",
+          "Existen 1 análisis recientes similares para este destino y selector"
+        ],
+        "explanation": "La transacción es un permiso para mover tokens. El operador, 0x3333333333333333333333333333333333333333, ya ha aparecido en análisis locales 5 veces y la dirección destino tiene un historial de 7 apariciones, lo que indica una actividad repetitiva. La memoria local , y confirman estos hallazgos.",
+        "context_summary": "Desde: 0x1111111111111111111111111111111111111111 | Hacia: 0x2222222222222222222222222222222222222222 | Origen: evaluation_runner | Selector: 0xa22cb465 | Método: setApprovalForAll | Operator: 0x3333333333333333333333333333333333333333 | Approved: false",
+        "normalized_tx": {
+          "type": "transaction",
+          "chainId": "0xaa36a7",
+          "from": "0x1111111111111111111111111111111111111111",
+          "to": "0x2222222222222222222222222222222222222222",
+          "value": "0x0",
+          "data": "0xa22cb46500000000000000000000000033333333333333333333333333333333333333330000000000000000000000000000000000000000000000000000000000000000",
+          "origin": "evaluation_runner",
+          "method_selector": "0xa22cb465",
+          "has_value": false,
+          "is_contract_interaction": true,
+          "decoded": {
+            "method": "setApprovalForAll",
+            "signature": "setApprovalForAll(address,bool)",
+            "selector": "0xa22cb465",
+            "operator": "0x3333333333333333333333333333333333333333",
+            "approved": false
+          }
+        },
+        "decoded": {
+          "method": "setApprovalForAll",
+          "signature": "setApprovalForAll(address,bool)",
+          "selector": "0xa22cb465",
+          "operator": "0x3333333333333333333333333333333333333333",
+          "approved": false
+        },
+        "deterministic_verdict": {
+          "findings": [
+            "Se ha detectado un permiso global sobre activos tipo NFT o similares",
+            "Operador afectado: 0x3333333333333333333333333333333333333333",
+            "Se revoca el permiso global",
+            "Origen de la solicitud: evaluation_runner",
+            "La dirección destino ya ha aparecido antes (7 veces) en análisis locales",
+            "El operador ya ha aparecido antes (5 veces) en análisis locales",
+            "Existen 1 análisis recientes similares para este destino y selector"
+          ],
+          "risk_level": "BAJO",
+          "risk_score": 5,
+          "recommended_action": "ALLOW"
+        },
+        "local_memory_signals": {
+          "cached_addresses": {
+            "target": {
+              "id": 74,
+              "address": "0x2222222222222222222222222222222222222222",
+              "chain_id": "0xaa36a7",
+              "label": "target",
+              "notes": "Dirección destino observada en análisis local",
+              "first_seen_at": 1784277721,
+              "last_seen_at": 1784280173,
+              "times_seen": 7,
+              "last_method_selector": "0xa22cb465"
+            },
+            "operator": {
+              "id": 78,
+              "address": "0x3333333333333333333333333333333333333333",
+              "chain_id": "0xaa36a7",
+              "label": "operator",
+              "notes": "Dirección observada como operador con permiso global activo",
+              "first_seen_at": 1784278918,
+              "last_seen_at": 1784280173,
+              "times_seen": 5,
+              "last_method_selector": "0xa22cb465"
+            }
+          },
+          "recent_similar_analysis": [
+            {
+              "risk_level": "ALTO",
+              "risk_score": 95,
+              "recommended_action": "REVIEW",
+              "count": 1
+            }
+          ],
+          "findings": [
+            "La dirección destino ya ha aparecido antes (7 veces) en análisis locales",
+            "El operador ya ha aparecido antes (5 veces) en análisis locales",
+            "Existen 1 análisis recientes similares para este destino y selector"
+          ]
+        },
+        "ai_review": {
+          "ai_risk_hint": "ALTO",
+          "confidence": "media",
+          "ai_flags": [
+            "uso repetido en memoria local",
+            "análisis recientes similares para la dirección destino"
+          ],
+          "reviewer_summary": "Revisión requerida por riesgo elevado",
+          "raw_response": "{\"ai_risk_hint\":\"ALTO\",\"confidence\":\"media\",\"ai_flags\":[\"permiso global activo no revocado\",\"uso repetido en memoria local\",\"análisis recientes similares para la dirección destino\"],\"reviewer_summary\":\"Revisión requerida por riesgo elevado\"}"
+        },
+        "final_verdict": {
+          "risk_level": "MEDIO",
+          "source": "ai_escalation",
+          "reason": "La IA detectó señales adicionales que justifican mayor cautela"
+        },
+        "analysis_id": 32,
+        "performance": {
+          "started_at": "2026-07-17T09:22:53.291Z",
+          "ai_review_ms": 62766,
+          "explanation_ms": 49558,
+          "pre_persistence_ms": 112337,
+          "persistence_ms": 63,
+          "total_backend_ms": 112400
+        },
+        "evaluation": {
+          "scenario": "D",
+          "case_id": "D2",
+          "repetition": 1,
+          "expected_class": "negative",
+          "operation": "Revoke global ERC721 approval",
+          "decision": "not_submitted"
+        },
+        "timestamp": "2026-07-17T09:24:45.706Z"
+      }
+    },
+    {
+      "scenario": "E",
+      "case_id": "E1",
+      "repetition": 1,
+      "expected_class": "positive",
+      "operation": "Interaction with a controlled scam-labelled address",
+      "decision": "not_submitted",
+      "predicted_class": "positive",
+      "analysis_id": 33,
+      "response": {
+        "success": true,
+        "risk": "ALTO",
+        "risk_score": 60,
+        "issues": [
+          "Parece una transferencia simple",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino está etiquetada como \"Controlled evaluation address E1\" (scam)",
+          "Fuente de la etiqueta: user_manual_report",
+          "La etiqueta indica un riesgo crítico conocido"
+        ],
+        "verdict": {
+          "risk": "ALTO",
+          "risk_score": 60,
+          "recommended_action": "REVIEW",
+          "source": "deterministic_priority",
+          "reason": "El motor determinista detectó un patrón crítico conocido"
+        },
+        "findings": [
+          "Parece una transferencia simple",
+          "Origen de la solicitud: evaluation_runner",
+          "La dirección destino está etiquetada como \"Controlled evaluation address E1\" (scam)",
+          "Fuente de la etiqueta: user_manual_report",
+          "La etiqueta indica un riesgo crítico conocido"
+        ],
+        "explanation": "Se ha detectado una operación que conviene revisar. Además, la dirección implicada está etiquetada en la base local como de alto riesgo.",
+        "context_summary": "Desde: 0x1111111111111111111111111111111111111111 | Hacia: 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee | Origen: evaluation_runner",
+        "normalized_tx": {
+          "type": "transaction",
+          "chainId": "0xaa36a7",
+          "from": "0x1111111111111111111111111111111111111111",
+          "to": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "value": "0x0",
+          "data": "0x",
+          "origin": "evaluation_runner",
+          "method_selector": null,
+          "has_value": false,
+          "is_contract_interaction": false,
+          "decoded": null
+        },
+        "decoded": null,
+        "deterministic_verdict": {
+          "findings": [
+            "Parece una transferencia simple",
+            "Origen de la solicitud: evaluation_runner",
+            "La dirección destino está etiquetada como \"Controlled evaluation address E1\" (scam)",
+            "Fuente de la etiqueta: user_manual_report",
+            "La etiqueta indica un riesgo crítico conocido"
+          ],
+          "risk_level": "ALTO",
+          "risk_score": 60,
+          "recommended_action": "REVIEW"
+        },
+        "local_memory_signals": {
+          "cached_addresses": {},
+          "recent_similar_analysis": [],
+          "findings": []
+        },
+        "ai_review": {
+          "ai_risk_hint": "ALTO",
+          "confidence": "alta",
+          "ai_flags": [
+            "dirección con etiqueta de riesgo detected",
+            "Riesgo crítico conocido",
+            "uso repetido en memoria local"
+          ],
+          "reviewer_summary": "La operación requiere revisión por su riesgo elevado.",
+          "raw_response": "{\"ai_risk_hint\":\"ALTO\",\"confidence\":\"alta\",\"ai_flags\":[\"dirección con etiqueta de riesgo detected\",\"Riesgo crítico conocido\",\"uso repetido en memoria local\"],\"reviewer_summary\":\"La operación requiere revisión por su riesgo elevado.\"}"
+        },
+        "final_verdict": {
+          "risk_level": "ALTO",
+          "source": "deterministic_priority",
+          "reason": "El motor determinista detectó un patrón crítico conocido"
+        },
+        "analysis_id": 33,
+        "performance": {
+          "started_at": "2026-07-17T09:24:45.714Z",
+          "ai_review_ms": 57543,
+          "explanation_ms": 41144,
+          "pre_persistence_ms": 98697,
+          "persistence_ms": 57,
+          "total_backend_ms": 98754
+        },
+        "evaluation": {
+          "scenario": "E",
+          "case_id": "E1",
+          "repetition": 1,
+          "expected_class": "positive",
+          "operation": "Interaction with a controlled scam-labelled address",
+          "decision": "not_submitted"
+        },
+        "timestamp": "2026-07-17T09:26:24.478Z"
+      }
+    }
+  ]
+}

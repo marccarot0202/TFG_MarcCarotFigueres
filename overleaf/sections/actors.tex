@@ -1,0 +1,27 @@
+\subsection{Actors principals}
+
+En aquest sistema hi intervenen diversos actors amb rols diferenciats. Alguns formen part directa del flux d’execució (usuari, DApp, cartera), mentre que d’altres aporten serveis auxiliars (anàlisi local i infraestructura externa).
+
+
+\paragraph{Usuari}
+Persona que interactua amb una DApp i ha de decidir si confirma o rebutja una transacció. L’objectiu del sistema és reduir el risc associat a decisions preses sense comprendre les implicacions de permisos i operacions habituals en Web3.
+
+\paragraph{DApp (Aplicació descentralitzada)}
+Aplicació web que sol·licita a la cartera la signatura i enviament d’una transacció mitjançant l’estàndard EIP-1193 (\texttt{window.ethereum}). En el projecte s’utilitza una DApp de proves per generar escenaris controlats.
+
+\paragraph{MetaMask Flask (Cartera)}
+Extensió del navegador que actua com a cartera i punt de signatura. Rep les sol·licituds de la DApp i, quan detecta un Snap instal·lat amb els permisos adequats, pot invocar-lo per obtenir \emph{transaction insights} abans de la confirmació.
+
+\paragraph{Snap (Mòdul de seguretat)}
+Component executat dins MetaMask que intercepta la petició de transacció mitjançant el \textit{handler} \texttt{onTransaction}. El Snap prepara la informació rellevant i consulta el \textit{backend} local per obtenir un veredicte i una explicació, que es mostren a l’usuari dins la UI de MetaMask.
+
+
+\paragraph{Backend Analyzer (Servei local)} Servei local encarregat de centralitzar l’anàlisi. Normalitza la transacció, intenta descodificar la \textit{calldata}, aplica regles deterministes per detectar patrons de risc i consulta informació de suport a través d’una base de dades SQLite local. També integra el component d’IA local per generar explicacions en llenguatge natural i, quan escau, aportar una revisió complementària del resultat.
+
+\paragraph{LLM (IA local)}
+Servei d’inferència local que executa un model de llenguatge. En el projecte s’utilitza com a \emph{explicador}: genera una explicació humana a partir dels resultats de l’anàlisi determinista, sense substituir la lògica de decisió basada en regles.
+
+\paragraph{Base de dades local} Component de persistència utilitzat pel \textit{backend} per emmagatzemar l’historial d’anàlisis, adreces observades i informació procedent de fonts externes. Aquesta capa permet introduir memòria local al sistema i enriquir futures anàlisis sense dependre exclusivament de la transacció rebuda en aquell moment.
+
+
+\paragraph{Infraestructura externa i fonts de context} Conjunt de serveis i fonts externes utilitzats per complementar l’anàlisi. Inclou l’accés RPC a xarxes de prova com Sepolia per fer consultes \textit{on-chain}, així com datasets o llistes d’adreces conegudes que poden aportar informació addicional sobre contractes o adreces sospitoses.

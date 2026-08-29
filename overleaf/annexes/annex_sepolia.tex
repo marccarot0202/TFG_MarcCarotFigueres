@@ -1,0 +1,101 @@
+\section{Configuració de Sepolia i contractes desplegats}
+\label{annex:sepolia}
+
+Aquest annex recull la configuració blockchain utilitzada durant el desenvolupament i l’avaluació, així com les adreces dels contractes intel·ligents desplegats a la xarxa de proves Sepolia.
+
+\subsection{Configuració de la xarxa}
+
+La configuració general utilitzada és la següent:
+
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{p{0.32\textwidth} X}
+\hline
+\textbf{Paràmetre} & \textbf{Valor} \\
+\hline
+Xarxa & Sepolia \\
+Identificador de cadena & \texttt{11155111} \\
+Identificador hexadecimal & \texttt{0xaa36a7} \\
+Moneda nativa & Sepolia ETH \\
+Proveïdor RPC & Google Cloud Web3 Portal \\
+Explorador de blocs & Etherscan Sepolia \\
+Entorn de desplegament & Hardhat \\
+\hline
+\end{tabularx}
+\caption{Configuració de la xarxa utilitzada durant les proves}
+\label{tab:configuracio_sepolia_annex}
+\end{table}
+
+L’URL concreta del node RPC no es publica a la memòria quan incorpora credencials o identificadors privats. Aquesta informació es proporciona mitjançant variables d’entorn durant l’execució.
+
+\subsection{Contractes desplegats}
+
+La Taula~\ref{tab:contractes_desplegats} recull els contractes utilitzats durant les proves.
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{
+    p{0.28\textwidth}
+    p{0.38\textwidth}
+    X
+}
+\hline
+\textbf{Contracte} &
+\textbf{Adreça a Sepolia} &
+\textbf{Finalitat} \\
+\hline
+
+\texttt{SecurityTestContract} &
+\url{0xA32D1b3BE52922ffA5e65403d9378165c672a363} &
+Generació d’aprovacions ERC20 limitades, revocacions i aprovacions elevades. \\
+
+\texttt{SecurityTestNFT} &
+\url{0x216033047ffbec7eb223bf206e4d440f644500d3} &
+Generació de permisos globals ERC721 mitjançant \texttt{setApprovalForAll}. \\
+
+\hline
+\end{tabularx}
+\caption{Contractes intel·ligents desplegats a Sepolia}
+\label{tab:contractes_desplegats}
+\end{table}
+
+\subsection{Verificació dels contractes}
+
+Els contractes es van verificar mitjançant Etherscan, fet que permet consultar públicament el codi font, l’ABI i les funcions exposades. Aquesta verificació també facilita la generació manual d’operacions mitjançant la interfície \textit{Write Contract}.
+
+Per a cada contracte es pot registrar:
+
+\begin{itemize}
+    \item l’adreça de desplegament;
+    \item el bloc de desplegament;
+    \item el \textit{hash} de la transacció de desplegament;
+    \item la versió del compilador Solidity;
+    \item els paràmetres del constructor;
+    \item l’estat de verificació a Etherscan.
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{p{0.27\textwidth} X X}
+\hline
+\textbf{Element} &
+\textbf{SecurityTestContract} &
+\textbf{SecurityTestNFT} \\
+\hline
+Adreça & \texttt{0xA32D...a363} & \texttt{0x2160...00d3} \\
+Bloc de desplegament & No conservat & \texttt{10588546} \\
+Hash del desplegament & No conservat & \texttt{0xbdd099cf...27417ccb} \\
+Pragma de Solidity & \texttt{\string^0.8.20} & \texttt{\string^0.8.20} \\
+Verificació & Verificat a Etherscan & Verificat a Etherscan \\
+\hline
+\end{tabularx}
+\caption{Informació tècnica dels contractes desplegats}
+\label{tab:informacio_contractes_annex}
+\end{table}
+
+La identitat del contracte \texttt{SecurityTestNFT} es va recuperar a partir de l'historial ERC721 del compte de proves i es va contrastar amb Etherscan. El contracte va ser creat per \texttt{0x8527...81aa}, el mateix compte emprat durant l'avaluació, i el rebut del desplegament presenta estat satisfactori. Aquestes dades permeten reproduir els casos D1 i D2 directament des de la interfície \textit{Write Contract} del contracte verificat.

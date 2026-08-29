@@ -4,8 +4,8 @@ const OLLAMA_URL = 'http://localhost:11434/api/generate';
 
 async function askOllama(prompt, model = 'llama3.2') {
   try {
-    console.log('📤 Enviando prompt a Ollama...');
-    console.log('📏 Longitud prompt:', prompt.length);
+    console.log('📤 Enviant el prompt a Ollama...');
+    console.log('📏 Longitud del prompt:', prompt.length);
 
     const response = await axios.post(
       OLLAMA_URL,
@@ -19,15 +19,15 @@ async function askOllama(prompt, model = 'llama3.2') {
       },
     );
 
-    console.log('📥 Respuesta cruda de Ollama recibida');
+    console.log("📥 S'ha rebut la resposta en brut d'Ollama");
 
     return response.data.response;
   } catch (error) {
-    console.error('Error llamando a Ollama:', error.message);
+    console.error('Error cridant Ollama:', error.message);
 
     if (error.response) {
-      console.error('Status Ollama:', error.response.status);
-      console.error('Data Ollama:', error.response.data);
+      console.error("Estat d'Ollama:", error.response.status);
+      console.error("Dades d'Ollama:", error.response.data);
     }
 
     throw error;

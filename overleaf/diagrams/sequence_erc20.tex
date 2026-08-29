@@ -1,0 +1,13 @@
+\begin{tikzpicture}[font=\sffamily\scriptsize, >=Latex]
+  \foreach \x/\name in {0/Usuari,2.4/Etherscan,4.8/MetaMask i Snap,7.5/Decoder,10/Regles,12.4/Base de dades} {
+    \node[draw, fill=white, minimum width=21mm, minimum height=7mm, align=center] at (\x,0) {\name};
+    \draw[densely dashed] (\x,-0.4) -- (\x,-5.5);
+  }
+  \draw[->] (0,-0.8) -- node[above]{\texttt{approve(spender,amount)}} (2.4,-0.8);
+  \draw[->] (2.4,-1.5) -- node[above]{transacci\'o} (4.8,-1.5);
+  \draw[->] (4.8,-2.2) -- node[above]{\textit{calldata}} (7.5,-2.2);
+  \draw[->] (7.5,-2.9) -- node[above]{\texttt{spender}, quantitat i l\'imit} (10,-2.9);
+  \draw[->] (10,-3.6) -- node[above]{consulta d'adreces} (12.4,-3.6);
+  \draw[->] (12.4,-4.3) -- node[above]{etiquetes i mem\`oria} (10,-4.3);
+  \draw[->] (10,-5.0) -- node[above]{BAIX / ALT i acci\'o} (4.8,-5.0);
+\end{tikzpicture}

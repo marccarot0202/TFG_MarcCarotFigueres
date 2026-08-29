@@ -1,0 +1,85 @@
+\section{Background}
+\label{cap:general_description}
+
+Aquesta secció introdueix, de manera breu, els conceptes, eines i tecnologies que serveixen de base per al desenvolupament de la proposta. L’objectiu no és aprofundir-hi com en un manual tècnic, sinó oferir al lector el context mínim necessari per entendre els elements que intervenen en el sistema i el paper que cadascun d’ells té dins del projecte.
+
+\subsection{Tecnologia}
+
+La proposta s’emmarca dins l’ecosistema \textit{Web3}, un conjunt d’aplicacions i serveis que utilitzen tecnologies descentralitzades per transferir valor o executar lògica programable sense dependre d’un intermediari únic. La base d’aquest ecosistema és la \textit{blockchain}, un registre distribuït on les operacions es validen i s’emmagatzemen de manera compartida entre els participants de la xarxa. Cada operació confirmada queda registrada de forma persistent i pot ser consultada posteriorment.
+
+Dins d’aquest context, una transacció és una petició signada digitalment que pot transferir actius, executar una funció d’un contracte intel·ligent o modificar l’estat de la xarxa. Aquestes transaccions són especialment rellevants en el projecte, ja que poden incloure instruccions que no resulten evidents per a l’usuari, com ara autoritzacions perquè un contracte extern gestioni tokens o actius NFT.
+
+Ethereum és una plataforma \textit{blockchain} que permet executar \textit{smart contracts}, és a dir, programes desplegats a la xarxa que poden gestionar actius o implementar lògica de negoci de manera descentralitzada \cite{ethereum_whitepaper,solidity_docs}. Moltes de les aplicacions construïdes sobre Ethereum es coneixen com a aplicacions descentralitzades o \textit{DApps}, i acostumen a comunicar-se amb la cartera de l’usuari mitjançant l’estàndard EIP-1193, que defineix una interfície comuna per als proveïdors Ethereum al navegador \cite{eip1193}.
+
+
+Per interactuar amb aquestes aplicacions, els usuaris utilitzen carteres digitals, que són les eines encarregades de custodiar les claus criptogràfiques i autoritzar operacions a la xarxa. En aquest projecte s’utilitza MetaMask, una de les carteres més esteses en l’ecosistema Ethereum i, més concretament, la seva extensibilitat mitjançant MetaMask Snaps, una funcionalitat llançada públicament per Consensys el 2023 \cite{consensys_snaps_launch}. Els Snaps permeten ampliar el comportament de la cartera mitjançant mòduls que operen en un entorn aïllat i sotmès a permisos específics, incloent la generació de \textit{transaction insights}, és a dir, missatges o indicacions que aporten context i informació rellevant sobre una transacció abans que l’usuari la signi \cite{metamask_tx_insights,metamask_entrypoints,metamask_permissions}.
+
+Una part important de les transaccions dirigides a contractes intel·ligents consisteix a concedir permisos. En els tokens fungibles, habitualment basats en l’estàndard ERC20 \cite{eip20}, una operació d’aprovació pot autoritzar una altra adreça a utilitzar una quantitat determinada de tokens en nom de l’usuari. En els actius no fungibles o NFTs, estàndards com ERC721 \cite{eip721} permeten concedir permisos globals mitjançant operacions com \texttt{setApprovalForAll}, que autoritzen un operador a gestionar tots els actius d’una col·lecció concreta. Aquest tipus d’autoritzacions constitueix un dels principals patrons de risc analitzats en aquest treball.
+
+
+Des del punt de vista del desenvolupament, en aquest projecte els contractes intel·ligents de prova s’han escrit en Solidity, el llenguatge més habitual dins l’ecosistema Ethereum, i s’han gestionat amb Hardhat, l’eina utilitzada per compilar, provar i desplegar els contractes durant el desenvolupament \cite{solidity_docs,hardhat_docs}. Aquesta combinació permet construir escenaris controlats sobre una xarxa de prova i validar el comportament del sistema en condicions pròximes a un cas real.
+
+Ateses les limitacions de l’entorn d’execució dels Snaps, el sistema es planteja amb una arquitectura modular en què la cartera i el Snap assumeixen la intercepció i la presentació de la informació, mentre que l’anàlisi i la generació d’explicacions es deleguen a components auxiliars. En aquest marc, la capa explicativa es recolza en models de llenguatge extensos (\textit{Large Language Models}, LLM), és a dir, models d’\textbf{intel·ligència artificial generativa} capaços de produir text en llenguatge natural a partir del context disponible. Al llarg de la memòria, els termes \textit{LLM}, \textit{model de llenguatge} i \textit{IA generativa} s’utilitzen de manera equivalent per referir-se a aquest component. Per a l’execució local d’aquests models, el projecte utilitza Ollama \cite{ollama_api_intro,ollama_auth_local}.
+
+En conjunt, el sistema combina dos mecanismes complementaris: d’una banda, un conjunt de regles deterministes per detectar patrons de risc; de l’altra, un model de llenguatge local per transformar els resultats tècnics en explicacions comprensibles per a l’usuari.
+
+\subsection{Solucions existents}
+
+En els darrers anys han aparegut diverses eines orientades a reforçar la seguretat en carteres i interaccions Web3. Entre les aproximacions més habituals es troben les extensions de navegador orientades a detectar estafes o \textit{wallet drainers}, com Wallet Guard i Pocket Universe \cite{walletguard_official,pocketuniverse_official}; les plataformes de simulació i validació de transaccions, com Blockaid \cite{blockaid_tx_security}; i els serveis que agreguen intel·ligència de risc a partir de fonts externes o integren mecanismes propis de protecció dins la cartera, com Blockfence o Rabby \cite{blockfence_official,rabby_official}. Aquestes solucions evidencien que el problema és real i que existeix una demanda clara de mecanismes d’assistència abans de la signatura.
+
+Tot i això, moltes d’aquestes eines comparteixen algunes limitacions recurrents. En primer lloc, sovint depenen de serveis externs per classificar o simular transaccions, fet que introdueix qüestions de privadesa i dificulta entendre amb claredat els criteris utilitzats en l’anàlisi. En segon lloc, en nombrosos casos la interacció amb l’usuari se centra en l’alerta o el bloqueig, però no en l’explicació detallada del perquè una acció és arriscada. Finalment, l’extensibilitat del sistema acostuma a quedar condicionada pel model del proveïdor i per la poca visibilitat sobre el funcionament intern de les seves eines.
+
+\subsection{Diferenciació de la proposta}
+
+A partir de les limitacions observades en les eines existents, la proposta d’aquest projecte se centra a cobrir tres mancances principals: la dependència de serveis externs, la manca d’explicacions comprensibles per a l’usuari i la dificultat d’entendre, revisar o justificar els criteris de detecció aplicats.
+
+En aquest sentit, la solució plantejada adopta un enfocament basat en processament local sempre que és possible, ús de regles deterministes per a la detecció de patrons de risc i generació d’explicacions en llenguatge natural amb l’objectiu d’ajudar l’usuari a entendre què està autoritzant abans de confirmar una transacció. Aquest plantejament no pretén substituir completament altres eines del sector, sinó oferir una resposta específica a algunes de les seves mancances més habituals, especialment en els àmbits de la privadesa, la transparència i l’explicabilitat.
+
+La Taula~\ref{tab:comparativa} resumeix aquesta diferenciació des d’un punt de vista sintètic, posant el focus en les diferències d’enfocament entre les solucions habituals del sector i la proposta desenvolupada en aquest projecte.
+
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{l X X}
+\hline
+\textbf{Aspecte} & \textbf{Solucions existents (tendència general)} & \textbf{Proposta del projecte} \\
+\hline
+Moment d’intervenció
+& Habitualment durant la revisió de la transacció o immediatament abans de la signatura, sovint en forma d’avisos o alertes
+& Intervenció prèvia a la confirmació: l’usuari rep context abans de signar \\
+
+Criteris de detecció
+& Sovint opacs o poc explicats (heurístiques internes o reputació)
+& Regles deterministes auditables (p. ex. permisos il·limitats i permisos globals) \\
+
+Explicació a l’usuari
+& Alertes breus o tècniques, poc orientades a comprensió
+& Explicació en llenguatge natural per facilitar decisió informada \\
+
+Privadesa i dades
+& Dependència freqüent de serveis externs per enriquir o classificar
+& Processament local sempre que és possible (inclosa IA local), reduint exposició de dades \\
+
+Integració amb la cartera
+& Extensió externa o servei web independent
+& Integració dins l’experiència de la cartera mitjançant Snap (\textit{insight} abans de confirmar) \\
+
+Extensibilitat
+& Limitada pel proveïdor i el seu model d’actualitzacions
+& Arquitectura modular: motor de regles i capa d’explicació ampliables amb nous casos \\
+
+\hline
+\end{tabularx}
+\caption{Comparativa resumida entre l’enfocament predominant en eines de seguretat Web3 i l’enfocament adoptat en la proposta}
+\label{tab:comparativa}
+\end{table}
+
+
+La comparació s’ha plantejat en termes d’enfocament general, ja que l’objectiu no és elaborar una revisió exhaustiva del mercat, sinó identificar les mancances més rellevants que la proposta intenta abordar.
+
+
+
+
+
+

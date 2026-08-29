@@ -1,0 +1,41 @@
+\subsection{Escenaris de prova}
+
+Per avaluar el comportament del prototip s’han definit diversos escenaris de prova representatius. Aquests casos no pretenen cobrir tota la complexitat de l’ecosistema Web3, però sí permeten comprovar el funcionament del sistema en situacions prou significatives des del punt de vista funcional i de seguretat.
+
+\textbf{Escenari 1. Interceptació bàsica de transacció}
+
+\textbf{Objectiu:} Comprovar que MetaMask Flask invoca correctament el Snap i que el flux basat en \texttt{onTransaction} s’activa abans de la confirmació final de la transacció.
+
+\textbf{Component principal a validar:} Snap i integració amb MetaMask.
+
+\vspace{0.5em}
+
+\textbf{Escenari 2. Operació de risc amb aprovació elevada}
+
+\textbf{Objectiu:} Verificar si el sistema detecta una operació potencialment perillosa i li assigna un nivell de risc coherent amb la naturalesa de l’autorització enviada.
+
+\textbf{Component principal a validar:} Backend d’anàlisi i capa de regles.
+
+\vspace{0.5em}
+
+\textbf{Escenari 3. Operació menys crítica}
+
+\textbf{Objectiu:} Comprovar si el sistema és capaç de diferenciar entre casos més sensibles i accions relativament neutres, evitant classificar totes les transaccions de la mateixa manera.
+
+\textbf{Component principal a validar:} Motor de risc i coherència del veredicte.
+
+\vspace{0.5em}
+
+\textbf{Escenari 4. Explicació en llenguatge natural}
+
+\textbf{Objectiu:} Avaluar si la resposta generada pel mòdul d’intel·ligència artificial resulta comprensible, útil i adequada per acompanyar l’usuari durant la presa de decisions.
+
+\textbf{Component principal a validar:} Integració amb Ollama.
+
+\vspace{0.5em}
+
+\textbf{Escenari 5. Integració completa en entorn realista}
+
+\textbf{Objectiu:} Validar el recorregut complet del sistema sobre un contracte desplegat a Sepolia, passant per DApp o Etherscan, MetaMask, Snap, backend i IA.
+
+\textbf{Component principal a validar:} Sistema complet end-to-end.

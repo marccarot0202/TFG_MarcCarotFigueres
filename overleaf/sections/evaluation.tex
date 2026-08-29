@@ -1,0 +1,41 @@
+\section{Avaluació}
+\label{cap:evaluation}
+
+Aquest capítol presenta l’avaluació del prototip a partir d’una bateria d’escenaris controlats i reproduïbles. L’objectiu és comprovar si el sistema compleix els requisits definits al Capítol~\ref{cap:design} i si és capaç d’oferir assistència útil abans de la confirmació d’una transacció dins de MetaMask.
+
+L’avaluació se centra en quatre aspectes principals: la intercepció de transaccions, la detecció de patrons de risc, la generació d’explicacions comprensibles i la integració completa entre la DApp, el Snap, el backend, la base de dades local, Ollama i els contractes desplegats a Sepolia.
+
+Cada escenari s’exposa conjuntament amb el resultat esperat, el resultat observat i els requisits que permet validar. Aquesta organització permet relacionar de manera directa cada prova amb el comportament del sistema i amb el grau de compliment dels requisits.
+
+\subsection{Infraestructura i preparació de l’avaluació}
+
+Abans de presentar els escenaris de prova i els resultats obtinguts, cal descriure la infraestructura utilitzada per executar l’avaluació i el procediment seguit per preparar les operacions analitzades. Aquesta preparació permet garantir que les proves es duen a terme en un entorn controlat, reproduïble i prou proper a una interacció real amb la xarxa Ethereum. 
+
+L’entorn d’avaluació combina els components locals del prototip —la DApp de proves, MetaMask Flask, el Snap, el backend d’anàlisi, la base de dades SQLite i el servei local d’Ollama— amb una infraestructura blockchain externa basada en la xarxa de proves Sepolia. 
+
+Sobre aquesta xarxa es despleguen contractes intel·ligents específicament dissenyats per generar operacions representatives, com aprovacions ERC20 limitades o il·limitades i permisos globals sobre actius ERC721. 
+
+Aquesta secció descriu el disseny dels contractes de prova, la connexió amb Sepolia, el procés de compilació i desplegament, la verificació mitjançant Etherscan i el protocol utilitzat per generar les transaccions i recollir-ne les evidències. L’objectiu és establir les condicions experimentals necessàries abans d’analitzar, en els apartats posteriors, el comportament del sistema en cada escenari.
+
+\subfile{impl_contracts}
+
+\subfile{protocol_execucio}
+
+\subfile{monitoritzacio_avaluacio}
+
+\subfile{tracabilitat_requisits}
+
+\subfile{escala_risc}
+
+\subfile{escenaris_resultats}
+
+\subsection{Anàlisi dels resultats}
+\label{sec:analisi_resultats}
+
+Un cop presentats els escenaris i les evidències recollides, aquest apartat analitza els resultats des de tres perspectives complementàries. En primer lloc, es quantifica la capacitat de classificació del sistema mitjançant una matriu de confusió i les mètriques derivades. A continuació, es contrasta cada requisit definit al Capítol~\ref{cap:design} amb les evidències obtingudes. Finalment, es delimita l’abast dels resultats i s’interpreten els casos límit detectats.
+
+\subfile{matriu_confussio}
+
+\subfile{compliment_requisits}
+
+\subfile{limitacions_avaluacio}

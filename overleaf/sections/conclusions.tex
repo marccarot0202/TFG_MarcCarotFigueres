@@ -1,0 +1,72 @@
+\section{Conclusions}
+\label{cap:conclusions}
+
+El projecte ha assolit l'objectiu de desenvolupar un prototip funcional d'assistent de seguretat Web3 integrat a MetaMask mitjançant un Snap. El sistema intercepta les sol·licituds abans de la confirmació, normalitza i descodifica la informació disponible, aplica regles deterministes, incorpora context local i utilitza un model de llenguatge com a capa complementària. El resultat es presenta a l'usuari mitjançant un \textit{insight} que resumeix el nivell de risc, els motius principals, l'acció recomanada i una explicació entenedora.
+
+L'arquitectura proposada s'ha materialitzat en components diferenciats per a la DApp, el Snap, el backend, el motor de regles, la descodificació, la persistència SQLite \cite{sqlite_docs}, les fonts de context i Ollama. Aquesta separació facilita la traçabilitat de les decisions, permet conservar una resposta determinista quan la IA no està disponible i possibilita evolucionar cada component sense redissenyar el flux complet.
+
+El conjunt controlat de 80 observacions va obtenir una exactitud del 91,25\,\% i una mètrica F1 del 89,55\,\%. Els set errors observats corresponen a aprovacions de quantitat molt elevada, però diferents de \texttt{MaxUint256}. Per tant, identifiquen una limitació concreta de cobertura i no un comportament aleatori del sistema. També es va validar el recorregut complet d'una operació real sobre la xarxa de proves Sepolia \cite{ethereum_sepolia}, des d'Etherscan fins a MetaMask, el Snap i el backend, així com el funcionament del \textit{fallback} quan Ollama no està disponible.
+
+El desenvolupament ha seguit un procés iteratiu. Cada versió es va construir a partir dels resultats i les limitacions de l'anterior. Primer es va establir la intercepció, després s'hi van incorporar la descodificació i les regles, i posteriorment la persistència, el context local, la IA i els controls de coherència. Les proves van permetre detectar i corregir elevacions de risc sense evidència, explicacions incompatibles amb l'operació analitzada i un error de connexió durant la segona consulta a Ollama. D'aquesta manera, cada iteració no només va ampliar funcionalitats, sinó que va reforçar la robustesa i la capacitat d'auditoria del prototip.
+
+En conjunt, el treball demostra que és viable combinar regles verificables, memòria local i intel·ligència artificial generativa per aportar context abans de signar una operació Web3. La contribució principal no és substituir la decisió de l'usuari, sinó reduir l'opacitat de la signatura i oferir una advertència justificable en el mateix punt en què encara es pot cancel·lar l'acció.
+
+\subsection{Treball futur}
+
+Les limitacions identificades defineixen línies d'evolució concretes. La prioritat és millorar el temps de resposta de la capa d'IA. Les mesures es van obtenir en un ordinador portàtil d'ús general, executant el model localment i sense infraestructura dedicada d'inferència. En aquest context, Ollama concentra gairebé tota la latència, mentre que el motor determinista i la persistència responen amb rapidesa. Per això, el rendiment observat no invalida l'arquitectura, però sí que indica que una versió orientada a ús quotidià hauria de combinar les dues consultes al model, reduir els \textit{prompts}, emprar models més lleugers, reutilitzar resultats equivalents i aplicar un temps màxim després del qual es mostri immediatament el veredicte determinista.
+
+També convé ampliar la cobertura del motor de regles, que actualment només descodifica \texttt{approve} i \texttt{setApprovalForAll} sobre els estàndards ERC20 \cite{eip20} i ERC721 \cite{eip721}. Les extensions més rellevants són les següents:
+
+\begin{itemize}
+    \item \textbf{Llindars configurables per a aprovacions elevades.} Actualment només es considera il·limitada una quantitat exactament igual a \texttt{MaxUint256}. Un llindar parametritzable permetria cobrir els casos de frontera detectats a l'escenari C2.
+
+    \item \textbf{Signatures EIP-712} \cite{eip712}\textbf{.} L'estàndard EIP-712 defineix com signar dades estructurades i tipades en lloc de cadenes de bytes opaques. Aquestes signatures no són transaccions i, per tant, no arriben al punt d'entrada \texttt{onTransaction}, però poden autoritzar operacions amb conseqüències econòmiques reals.
+
+    \item \textbf{Aprovacions per signatura o} \textit{permit} \cite{eip2612}\textbf{.} L'extensió EIP-2612 permet concedir una aprovació ERC20 mitjançant una signatura fora de cadena, sense enviar cap transacció d'\texttt{approve}. És un vector especialment rellevant, perquè l'usuari pot atorgar un permís de despesa sense que la cartera li mostri una operació d'aprovació convencional.
+
+    \item \textbf{Multicrides (}\textit{multicall}\textbf{).} Es tracta d'agrupar diverses crides a contracte dins d'una única transacció \cite{openzeppelin_contracts}. El descodificador actual només interpreta el selector exterior, de manera que una operació de risc pot quedar amagada dins del lot.
+
+    \item \textbf{Protocols DeFi i més selectors estàndard,} com ara operacions d'intercanvi, préstec o dipòsit en agrupacions de liquiditat.
+\end{itemize}
+
+Aquesta ampliació s'hauria d'acompanyar d'un conjunt de proves més extens i divers, amb repeticions automatitzades, contractes reals i comparació entre models i configuracions de maquinari.
+
+Finalment, un estudi amb usuaris permetria mesurar la comprensió real dels \textit{insights}, ajustar-ne el llenguatge i validar-ne l'accessibilitat. Una altra millora funcional seria afegir un canal posterior a la confirmació que associés automàticament el \textit{hash} de la transacció amb el registre previ de l'anàlisi. Aquestes línies permetrien transformar el prototip validat en una eina més completa, ràpida i preparada per a un entorn d'ús real.
+
+\subsection{Competència CT7: principis ètics i de responsabilitat social}
+
+Aquest apartat analitza el projecte des de la competència transversal CT7, «Aplicar els principis ètics i de responsabilitat social com a ciutadà o ciutadana i com a professional». Per a cadascun dels quatre indicadors que la componen es valora si el treball hi té implicacions i, quan és així, de quina manera s'han tingut en compte.
+
+\subsubsection{Igualtat}
+
+El nucli de decisió del sistema és determinista i opera exclusivament sobre dades tècniques de la transacció, com ara el selector de la funció, l'adreça de destinació, la quantitat aprovada o el valor booleà d'un permís global. Aquestes dades no contenen cap atribut demogràfic, de manera que el motor de regles no pot introduir un biaix de gènere: davant de la mateixa entrada produeix sempre la mateixa sortida, amb independència de qui signi l'operació.
+
+La capa d'intel·ligència artificial generativa sí que constitueix un punt de risc, perquè els models de llenguatge hereten els biaixos presents en les dades amb què s'han entrenat. En aquest projecte l'exposició es redueix per disseny: el model no decideix el nivell de risc, no rep cap dada personal de l'usuari i la seva sortida se sotmet a una capa de control semàntic que la descarta quan contradiu els fets verificats. Tot i això, el llenguatge de les explicacions generades no s'ha auditat específicament des d'una perspectiva de gènere, i aquesta seria una comprovació necessària abans d'un desplegament real.
+
+Pel que fa a l'accés, l'assistent utilitza llenguatge planer i presenta primer la decisió i els motius principals, la qual cosa pot reduir la barrera d'entrada de les persones amb menys formació tècnica. Aquest punt és rellevant perquè l'ecosistema de les criptomonedes presenta una bretxa de participació per gènere àmpliament documentada, i les eines que exigeixen coneixements especialitzats tendeixen a reforçar-la. No obstant això, no s'ha dut a terme cap estudi d'accessibilitat ni cap prova amb participants diversos, de manera que no es pot afirmar que la interfície sigui igualment comprensible per a tots els perfils. Una evolució responsable hauria d'incloure proves d'accessibilitat, compatibilitat amb tecnologies assistives i disponibilitat en més idiomes.
+
+\subsubsection{Medi ambient}
+
+El projecte té dues implicacions ambientals clares. La primera deriva de la decisió d'executar la intel·ligència artificial en local. Aquesta opció evita enviar dades a centres de processament remots, però trasllada el consum energètic al dispositiu de l'usuari. Les mesures obtingudes mostren que aquest consum no és menyspreable: cada anàlisi requereix dues inferències consecutives i un temps mitjà de 158,1 segons, un ús clarament ineficient dels recursos disponibles.
+
+Aplicar la perspectiva mediambiental a la solució proposada implica, per tant, tractar l'eficiència com un requisit i no com una simple millora de rendiment. Les línies de treball futur ja identificades —unificar les dues consultes al model, escurçar els \textit{prompts}, emprar models més compactes, reutilitzar resultats equivalents i activar la IA només quan aporti informació que les regles no cobreixen— redueixen simultàniament la latència i l'energia consumida per operació.
+
+La segona implicació és indirecta i afecta l'objecte mateix del treball. Les xarxes blockchain tenen una petjada energètica associada a la validació de transaccions. Un assistent que ajuda l'usuari a detectar i cancel·lar operacions abusives abans de signar-les evita transaccions innecessàries i, amb elles, el consum corresponent. Tota l'avaluació s'ha fet, a més, sobre una xarxa de proves, sense consumir recursos de la xarxa principal.
+
+\subsubsection{Responsabilitat social}
+
+La necessitat social que motiva el treball és concreta i documentada: cada any es perden milers de milions de dòlars en estafes i explotacions dins l'ecosistema Web3 \cite{chainalysis_stolen_2024,certik_hack3d_2024}, i una part significativa d'aquestes pèrdues no es deriva d'un error del protocol, sinó del fet que una persona autoritza una operació que no comprèn. El col·lectiu més exposat és precisament el que té menys coneixements tècnics.
+
+La resposta del projecte a aquesta problemàtica consisteix a intervenir en el moment previ a la signatura, que és l'últim punt en què la decisió encara es pot revertir, i a explicar el motiu del risc en lloc de limitar-se a emetre una alerta. Aquest enfocament comporta, però, una responsabilitat afegida. El sistema es planteja com una ajuda a la decisió i mai com una garantia de seguretat, i el capítol de disseny delimita explícitament les amenaces que queden fora del seu abast. Els \textit{insights} han de comunicar aquestes limitacions i evitar l'alarmisme, ja que un excés de falses alertes acabaria provocant que l'usuari les ignorés sistemàticament.
+
+Finalment, el fet que el prototip s'hagi construït amb eines de codi obert i s'hagi publicat en un repositori accessible permet que altres persones el revisin, el critiquin o el reutilitzin, cosa que reverteix el resultat del treball en la comunitat.
+
+\subsubsection{Ètica}
+
+Dins de l'àmbit de la seguretat informàtica, el principi deontològic més directament implicat en aquest treball és el de no atribuir conductes malicioses sense evidència suficient. Assenyalar una adreça com a fraudulenta té conseqüències reals per a qui n'és titular. Per aquest motiu, les etiquetes procedents de fonts externes \cite{mew_ethereum_lists} es tracten com a context complementari i no com una prova absoluta, i la memòria fa explícit que aquestes llistes poden contenir errors o informació desactualitzada.
+
+El segon compromís ètic afecta l'ús de la intel·ligència artificial. El model de llenguatge s'ha emprat com a component del prototip i també com a suport durant el desenvolupament i la redacció de la memòria. En cap dels dos casos se n'han acceptat els resultats de manera automàtica. Dins del sistema, les respostes es contrasten amb els fets semàntics detectats, se'n filtren les contradiccions i es conserva la resposta original per garantir la traçabilitat de la decisió. Aquesta subordinació de la IA al motor determinista no és només una decisió tècnica, sinó també una manera d'assumir que una eina de seguretat ha de poder justificar els seus veredictes davant de qui els rep.
+
+El tercer element és la privadesa. Processar les transaccions en local evita exposar a tercers informació sobre l'activitat econòmica de l'usuari, coherentment amb el principi de minimització de dades. Les úniques connexions externes són les estrictament necessàries per consultar l'estat de la xarxa.
+
+Assumir aquestes decisions implica també reconèixer-ne les conseqüències. La més rellevant és que el sistema pot generar falsos negatius, com els set documentats a l'escenari C2. Presentar aquest límit de manera explícita, en lloc de reportar únicament les mètriques favorables, forma part de l'ús responsable dels resultats obtinguts.

@@ -11,7 +11,7 @@ async function fetchContractInfo(address, chainId = '11155111') {
       name: null,
       abi: null,
       sourceCode: null,
-      reason: 'No API key or address',
+      reason: "No s'ha configurat la clau de l'API o falta l'adreça",
     };
   }
 

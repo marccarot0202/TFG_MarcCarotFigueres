@@ -1,5 +1,66 @@
+# --- Dependencies i entorn ---
 .env
 node_modules
 artifacts
 cache
-node_modules
+
+# --- Configuracio local d'eines de desenvolupament ---
+.claude/
+.agents/
+.vscode/
+.idea/
+
+# --- Registres i fitxers de treball temporals ---
+*.log
+!packages/**/*.log
+codex-*.log
+AUDITORIA_MEMORIA_TFG.md
+context_*.txt
+context_*.docx
+canvis*.txt
+reunio*.txt
+Especificaciones.txt
+Iniciador_v1.txt
+
+# --- Documentacio administrativa amb dades personals (NO publicar) ---
+docu_Entrega/
+
+# --- Artefactes de compilacio LaTeX ---
+overleaf/*.aux
+overleaf/*.log
+overleaf/*.out
+overleaf/*.toc
+overleaf/*.lof
+overleaf/*.lot
+overleaf/*.lol
+overleaf/*.blg
+overleaf/*.bbl
+overleaf/*.fdb_latexmk
+overleaf/*.fls
+overleaf/*.synctex.gz
+overleaf/_minted/
+overleaf/diagrams/*.aux
+overleaf/diagrams/*.log
+overleaf/_review_page_*.png
+
+# --- Versions antigues i proves del document (nomes es publica main.pdf) ---
+overleaf/$job.*
+overleaf/main_*.pdf
+overleaf/main_*.aux
+overleaf/main_*.log
+overleaf/main_*.out
+overleaf/main_*.toc
+overleaf/main_*.lof
+overleaf/main_*.lot
+overleaf/main_*.lol
+overleaf/main_*.bbl
+overleaf/main_*.blg
+overleaf/MarcCarot_TFG_final.*
+
+# --- Sortides de compilacio del lloc web ---
+packages/site/public/
+packages/site/.cache/
+
+# --- Carpetes de treball d'imatges (les definitives son a overleaf/imgs/) ---
+Imatges/
+Fotos_Escenaris/

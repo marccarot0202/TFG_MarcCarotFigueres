@@ -13,16 +13,16 @@ const theme = {
     code: 'ui-monospace,Menlo,Monaco,"Cascadia Mono","Segoe UI Mono","Roboto Mono","Oxygen Mono","Ubuntu Monospace","Source Code Pro","Fira Mono","Droid Sans Mono","Courier New", monospace',
   },
   fontSizes: {
-    heading: '5.2rem',
-    mobileHeading: '3.6rem',
-    title: '2.4rem',
-    large: '2rem',
+    heading: '3.2rem',
+    mobileHeading: '2.6rem',
+    title: '2rem',
+    large: '1.8rem',
     text: '1.6rem',
     small: '1.4rem',
   },
   radii: {
-    default: '24px',
-    button: '8px',
+    default: '8px',
+    button: '6px',
   },
   breakpoints,
   mediaQueries: {
@@ -31,8 +31,8 @@ const theme = {
     large: `@media screen and (min-width: ${breakpoints[2] as string})`,
   },
   shadows: {
-    default: '0px 7px 42px rgba(0, 0, 0, 0.1)',
-    button: '0px 0px 16.1786px rgba(0, 0, 0, 0.15);',
+    default: '0 1px 2px rgba(31, 35, 40, 0.08)',
+    button: '0 1px 2px rgba(31, 35, 40, 0.12)',
   },
 };
 
@@ -43,24 +43,24 @@ export const light: DefaultTheme = {
   colors: {
     background: {
       default: '#FFFFFF',
-      alternative: '#F2F4F6',
-      inverse: '#141618',
+      alternative: '#F6F8FA',
+      inverse: '#1F2328',
     },
     icon: {
       default: '#141618',
       alternative: '#BBC0C5',
     },
     text: {
-      default: '#24272A',
-      muted: '#6A737D',
-      alternative: '#535A61',
+      default: '#1F2328',
+      muted: '#656D76',
+      alternative: '#57606A',
       inverse: '#FFFFFF',
     },
     border: {
-      default: '#BBC0C5',
+      default: '#D0D7DE',
     },
     primary: {
-      default: '#6F4CFF',
+      default: '#0969DA',
       inverse: '#FFFFFF',
     },
     card: {
@@ -81,8 +81,8 @@ export const light: DefaultTheme = {
 export const dark: DefaultTheme = {
   colors: {
     background: {
-      default: '#24272A',
-      alternative: '#141618',
+      default: '#0D1117',
+      alternative: '#161B22',
       inverse: '#FFFFFF',
     },
     icon: {
@@ -90,16 +90,16 @@ export const dark: DefaultTheme = {
       alternative: '#BBC0C5',
     },
     text: {
-      default: '#FFFFFF',
-      muted: '#FFFFFF',
-      alternative: '#D6D9DC',
-      inverse: '#24272A',
+      default: '#F0F6FC',
+      muted: '#8C959F',
+      alternative: '#B1BAC4',
+      inverse: '#0D1117',
     },
     border: {
-      default: '#848C96',
+      default: '#30363D',
     },
     primary: {
-      default: '#6F4CFF',
+      default: '#58A6FF',
       inverse: '#FFFFFF',
     },
     card: {
@@ -132,17 +132,17 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${(props) => props.theme.fonts.default};
     font-size: ${(props) => props.theme.fontSizes.text};
     margin: 0;
+    line-height: 1.5;
   }
 
   * {
-    transition: background-color .1s linear;
+    box-sizing: border-box;
+    transition: background-color .1s linear, border-color .1s linear;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-size: ${(props) => props.theme.fontSizes.heading};
-    ${(props) => props.theme.mediaQueries.small} {
-      font-size: ${(props) => props.theme.fontSizes.mobileHeading};
-    }
+    line-height: 1.25;
+    letter-spacing: 0;
   }
 
   code {

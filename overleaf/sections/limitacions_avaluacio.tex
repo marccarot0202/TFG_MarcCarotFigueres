@@ -1,0 +1,10 @@
+\subsubsection{Abast i interpretació dels resultats}
+\label{sec:limitacions_avaluacio}
+
+L'avaluació confirma el funcionament coordinat de la DApp, MetaMask, el Snap, el \textit{backend}, SQLite, Ollama i els contractes desplegats a Sepolia. Les 80 observacions automatitzades, les proves manuals i la confirmació d'una transacció real permeten validar els requisits del prototip i mesurar de manera reproduïble el comportament dels patrons implementats.
+
+La prova de frontera C2 aporta una delimitació especialment útil: el motor detecta l'aprovació exactament igual a \texttt{MaxUint256}, però no eleva el risc d'altres quantitats extraordinàriament elevades. Aquest resultat no afecta la resta de regles verificades i defineix una ampliació concreta del criteri d'aprovacions ERC20 per a una iteració posterior. De manera similar, la cobertura es pot estendre en el futur a les signatures de dades tipades EIP-712 \cite{eip712}, a les aprovacions per signatura o \textit{permit} \cite{eip2612}, a les multicrides que agrupen diverses operacions dins d'una mateixa transacció \cite{openzeppelin_contracts} i a operacions pròpies de protocols DeFi. Aquestes extensions es detallen al Capítol~\ref{cap:conclusions}.
+
+Els resultats de rendiment corresponen a l'equip local i al model \texttt{llama3.2:latest} utilitzats durant les proves. La separació entre el motor determinista i la capa d'IA permet conservar el veredicte i una explicació local quan Ollama no està disponible, mentre que equips més potents, models més compactes o una única consulta estructurada podrien reduir el temps de generació.
+
+Per tant, les mètriques descriuen el conjunt controlat avaluat i no pretenen certificar totes les amenaces possibles de l'ecosistema Web3. Dins d'aquest abast, el prototip demostra una arquitectura funcional, reproduïble i extensible, i els casos límit observats proporcionen objectius tècnics precisos per continuar-ne l'evolució.

@@ -28,10 +28,12 @@ async function retrieveContext(tx) {
         abi: etherscan.abi,
         risk_level: etherscan.verified ? 'BAJO' : 'MEDIO',
         risk_score: etherscan.verified ? 10 : 35,
-        issues: etherscan.verified ? [] : ['Contrato no verificado en Etherscan'],
+        issues: etherscan.verified
+          ? []
+          : ['Contracte no verificat a Etherscan'],
         ai_summary: etherscan.verified
-          ? 'Contrato verificado obtenido desde Etherscan'
-          : 'Contrato no verificado o sin source code público',
+          ? 'Contracte verificat obtingut des d’Etherscan'
+          : 'Contracte no verificat o sense codi font públic',
       });
     }
   }

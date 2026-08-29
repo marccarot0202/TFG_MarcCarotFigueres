@@ -2,12 +2,12 @@ import type { OnRpcRequestHandler } from '@metamask/snaps-sdk';
 import { Box, Text, Bold, Heading } from '@metamask/snaps-sdk/jsx';
 
 /**
- * Llama al backend para analizar una transacción
+ * Crida el backend per analitzar una transacció.
  */
 
 function formatBulletList(items: string[], maxItems = 5): string {
   if (!Array.isArray(items) || items.length === 0) {
-    return 'Sin elementos';
+    return 'Sense elements';
   }
 
   return items
@@ -18,7 +18,7 @@ function formatBulletList(items: string[], maxItems = 5): string {
 
 function renderBulletTexts(items: string[], maxItems = 5, prefix = 'item') {
   if (!Array.isArray(items) || items.length === 0) {
-    return <Text>• Sin elementos</Text>;
+    return <Text>• Sense elements</Text>;
   }
 
   return (
@@ -41,20 +41,20 @@ async function analyzeTransaction(txData: any) {
     });
 
     if (!response.ok) {
-      throw new Error(`Backend error: ${response.statusText}`);
+      throw new Error(`Error del backend: ${response.statusText}`);
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error llamando al backend:', error);
+    console.error('Error cridant el backend:', error);
     return {
       success: false,
-      error: 'No se pudo conectar con el backend',
+      error: "No s'ha pogut connectar amb el backend",
       risk: 'DESCONOCIDO',
       risk_score: 0,
-      issues: ['No se pudo obtener análisis del backend'],
-      findings: ['No se pudo obtener análisis del backend'],
-      explanation: 'Error de conexión',
+      issues: ["No s'ha pogut obtenir l'anàlisi del backend"],
+      findings: ["No s'ha pogut obtenir l'anàlisi del backend"],
+      explanation: 'Error de connexió',
       verdict: {
         risk: 'DESCONOCIDO',
         risk_score: 0,
@@ -63,13 +63,13 @@ async function analyzeTransaction(txData: any) {
       final_verdict: {
         risk_level: 'DESCONOCIDO',
         source: 'fallback',
-        reason: 'No se pudo obtener veredicto final',
+        reason: "No s'ha pogut obtenir el veredicte final",
       },
       ai_review: {
         ai_risk_hint: 'DESCONOCIDO',
         confidence: 'baja',
         ai_flags: [],
-        reviewer_summary: 'No se pudo obtener revisión IA',
+        reviewer_summary: "No s'ha pogut obtenir la revisió de la IA",
       },
       local_memory_signals: {
         findings: [],
@@ -79,7 +79,7 @@ async function analyzeTransaction(txData: any) {
 }
 
 /**
- * Emoji según riesgo
+ * Emoji segons el risc.
  */
 function getRiskEmoji(risk: string): string {
   switch ((risk || '').toUpperCase()) {
@@ -95,7 +95,7 @@ function getRiskEmoji(risk: string): string {
 }
 
 /**
- * Riesgo principal mostrado en UI: usar el veredicto final si existe
+ * Risc principal que es mostra a la interfície: prioritza el veredicte final.
  */
 function getDisplayedRisk(analysis: any): string {
   return (
@@ -124,21 +124,36 @@ function getRecommendedAction(analysis: any): string {
   return 'REVIEW';
 }
 
+function getRiskLabel(risk: string): string {
+  switch ((risk || '').toUpperCase()) {
+    case 'BAJO':
+      return 'BAIX';
+    case 'MEDIO':
+      return 'MITJÀ';
+    case 'ALTO':
+      return 'ALT';
+    case 'DESCONOCIDO':
+      return 'DESCONEGUT';
+    default:
+      return risk || 'DESCONEGUT';
+  }
+}
+
 function getActionLabel(action: string): string {
   switch ((action || '').toUpperCase()) {
     case 'ALLOW':
-      return 'Permitir';
+      return 'Permetre';
     case 'REVIEW':
-      return 'Revisar con cuidado';
+      return 'Revisar amb atenció';
     case 'BLOCK':
-      return 'Bloquear';
+      return 'Bloquejar';
     default:
       return 'Revisar';
   }
 }
 
 function getExplanation(analysis: any): string {
-  return analysis?.explanation || 'No hay explicación disponible';
+  return analysis?.explanation || 'No hi ha cap explicació disponible';
 }
 
 function getFindings(analysis: any): string[] {
@@ -150,7 +165,7 @@ function getFindings(analysis: any): string[] {
     return analysis.issues;
   }
 
-  return ['No se detectaron hallazgos específicos'];
+  return ["No s'han detectat indicis específics"];
 }
 
 function getLocalContextFindings(analysis: any): string[] {
@@ -165,7 +180,10 @@ function getLocalContextFindings(analysis: any): string[] {
 }
 
 function getAiFlags(analysis: any): string[] {
-  if (Array.isArray(analysis?.ai_review?.ai_flags) && analysis.ai_review.ai_flags.length > 0) {
+  if (
+    Array.isArray(analysis?.ai_review?.ai_flags) &&
+    analysis.ai_review.ai_flags.length > 0
+  ) {
     return analysis.ai_review.ai_flags;
   }
 
@@ -173,15 +191,34 @@ function getAiFlags(analysis: any): string[] {
 }
 
 function getAiSummary(analysis: any): string {
-  return analysis?.ai_review?.reviewer_summary || 'Sin observaciones adicionales de IA';
+  return (
+    analysis?.ai_review?.reviewer_summary ||
+    'Sense observacions addicionals de la IA'
+  );
 }
 
 function getAiConfidence(analysis: any): string {
   return analysis?.ai_review?.confidence || 'baja';
 }
 
+function getConfidenceLabel(confidence: string): string {
+  switch ((confidence || '').toLowerCase()) {
+    case 'baja':
+    case 'baixa':
+      return 'baixa';
+    case 'media':
+    case 'medio':
+    case 'mitjana':
+      return 'mitjana';
+    case 'alta':
+      return 'alta';
+    default:
+      return confidence || 'baixa';
+  }
+}
+
 function getFinalReason(analysis: any): string {
-  return analysis?.final_verdict?.reason || 'Sin motivo adicional';
+  return analysis?.final_verdict?.reason || 'Sense cap motiu addicional';
 }
 
 function getFinalSource(analysis: any): string {
@@ -197,7 +234,9 @@ function splitPrimaryAndLocalFindings(analysis: any): {
 
   const localSet = new Set(localContextFindings);
 
-  const primaryFindings = allFindings.filter((finding: string) => !localSet.has(finding));
+  const primaryFindings = allFindings.filter(
+    (finding: string) => !localSet.has(finding),
+  );
 
   return {
     primaryFindings,
@@ -211,10 +250,16 @@ function prioritizeFindings(findings: string[]): string[] {
 
     return (
       text.includes('está etiquetada como') ||
+      text.includes('està etiquetada com') ||
       text.includes('fuente de la etiqueta') ||
+      text.includes("font de l'etiqueta") ||
       text.includes('riesgo crítico conocido') ||
+      text.includes('risc crític conegut') ||
       text.includes('merece especial precaución') ||
+      text.includes('requereix una precaució especial') ||
       text.includes('base de datos') ||
+      text.includes('base de dades') ||
+      text.includes('llista fosca') ||
       text.includes('darklist')
     );
   });
@@ -227,26 +272,29 @@ function prioritizeFindings(findings: string[]): string[] {
 function getSourceLabel(source: string): string {
   switch (source) {
     case 'deterministic_priority':
-      return 'Reglas deterministas prioritarias';
+      return 'Regles deterministes prioritàries';
     case 'hybrid_escalation':
-      return 'Escalado híbrido';
+      return 'Escalat híbrid';
     case 'ai_escalation':
-      return 'Escalado por revisión IA';
+      return 'Escalat per revisió de la IA';
     case 'deterministic_base':
       return 'Base determinista';
+    case 'fallback':
+      return 'Mode alternatiu';
     default:
-      return source || 'Desconocido';
+      return source || 'Desconegut';
   }
 }
 
 /**
- * UI principal de análisis
+ * Interfície principal d'anàlisi.
  */
 function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
   const displayedRisk = getDisplayedRisk(analysis);
   const recommendedAction = getRecommendedAction(analysis);
   const explanation = getExplanation(analysis);
-  const { primaryFindings, localContextFindings } = splitPrimaryAndLocalFindings(analysis);
+  const { primaryFindings, localContextFindings } =
+    splitPrimaryAndLocalFindings(analysis);
   const orderedPrimaryFindings = prioritizeFindings(primaryFindings);
   const aiFlags = getAiFlags(analysis);
   const aiSummary = getAiSummary(analysis);
@@ -256,71 +304,69 @@ function renderAnalysisCard(analysis: any, chainId: string, origin?: string) {
 
   return (
     <Box>
-      <Heading>
-        {getRiskEmoji(displayedRisk)} Análisis de Seguridad
-      </Heading>
+      <Heading>{getRiskEmoji(displayedRisk)} Anàlisi de seguretat</Heading>
 
       <Text>
-        <Bold>Veredicto final:</Bold> {displayedRisk}
+        <Bold>Veredicte final:</Bold> {getRiskLabel(displayedRisk)}
       </Text>
 
       <Text>
-        <Bold>Acción recomendada:</Bold> {getActionLabel(recommendedAction)}
+        <Bold>Acció recomanada:</Bold> {getActionLabel(recommendedAction)}
       </Text>
 
       <Text>
-        <Bold>Fuente del veredicto:</Bold> {getSourceLabel(finalSource)}
+        <Bold>Font del veredicte:</Bold> {getSourceLabel(finalSource)}
       </Text>
 
       <Text>
-        <Bold>Motivo principal:</Bold> {finalReason}
+        <Bold>Motiu principal:</Bold> {finalReason}
       </Text>
 
       <Text>
-        <Bold>Hallazgos principales:</Bold>
+        <Bold>Indicis principals:</Bold>
       </Text>
-      {renderBulletTexts(primaryFindings, 8, 'primary')}
+      {renderBulletTexts(orderedPrimaryFindings, 8, 'primary')}
 
       {localContextFindings.length > 0 ? (
         <Box>
           <Text>
-            <Bold>Contexto local:</Bold>
+            <Bold>Context local:</Bold>
           </Text>
           {renderBulletTexts(localContextFindings, 3, 'local')}
         </Box>
       ) : null}
 
       <Text>
-        <Bold>Revisión IA:</Bold>
+        <Bold>Revisió de la IA:</Bold>
       </Text>
 
       <Text>{aiSummary}</Text>
 
       <Text>
-        <Bold>Confianza IA:</Bold> {aiConfidence}
+        <Bold>Confiança de la IA:</Bold> {getConfidenceLabel(aiConfidence)}
       </Text>
 
       {aiFlags.length > 0 ? renderBulletTexts(aiFlags, 3, 'ai-flag') : null}
 
       <Text>
-        <Bold>Explicación final:</Bold>
+        <Bold>Explicació final:</Bold>
       </Text>
 
       <Text>{explanation}</Text>
 
       <Text>
-        <Bold>Red:</Bold> {chainId}
+        <Bold>Xarxa:</Bold> {chainId}
       </Text>
 
       <Text>
-        <Bold>Origen:</Bold> {origin || 'Desconocido'}
+        <Bold>Origen:</Bold> {origin || 'Desconegut'}
       </Text>
     </Box>
   );
 }
 
 /**
- * Hook automático de transacciones salientes
+ * Hook automàtic de transaccions sortints.
  */
 export const onTransaction = async ({
   transaction,
@@ -331,7 +377,7 @@ export const onTransaction = async ({
   chainId: string;
   transactionOrigin?: string;
 }) => {
-  console.log('🔍 Interceptando transacción real:', transaction);
+  console.log('🔍 Interceptant una transacció real:', transaction);
 
   const txData = {
     type: 'transaction',
@@ -351,9 +397,12 @@ export const onTransaction = async ({
 };
 
 /**
- * Métodos RPC manuales
+ * Mètodes RPC manuals.
  */
-export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => {
+export const onRpcRequest: OnRpcRequestHandler = async ({
+  origin,
+  request,
+}) => {
   switch (request.method) {
     case 'hello':
       return snap.request({
@@ -363,15 +412,12 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
           content: (
             <Box>
               <Text>
-                Hello, <Bold>{origin}</Bold>!
+                Hola, <Bold>{origin}</Bold>!
               </Text>
               <Text>
-                This custom confirmation is just for display purposes.
+                Aquesta confirmació comprova la comunicació amb el Snap.
               </Text>
-              <Text>
-                But you can edit the snap source code to make it do something,
-                if you want to!
-              </Text>
+              <Text>La connexió funciona correctament.</Text>
             </Box>
           ),
         },
@@ -392,7 +438,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
           type: 'alert',
           content: renderAnalysisCard(
             analysis,
-            txData.chainId || 'Desconocida',
+            txData.chainId || 'Desconeguda',
             origin,
           ),
         },
@@ -400,6 +446,6 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
     }
 
     default:
-      throw new Error('Method not found.');
+      throw new Error('Mètode no trobat.');
   }
 };

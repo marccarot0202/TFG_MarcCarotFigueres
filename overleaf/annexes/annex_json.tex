@@ -1,0 +1,76 @@
+\section{Estructura de les peticions i respostes JSON}
+\label{annex:json}
+
+Aquest annex mostra una versió abreujada, però fidel, del contracte real de l'endpoint \texttt{/analyze}. Els nivells de risc interns utilitzats pel \textit{backend} són \texttt{BAJO}, \texttt{MEDIO} i \texttt{ALTO}, i les accions són \texttt{ALLOW}, \texttt{REVIEW} i \texttt{BLOCK}. La DApp i el Snap en mostren els equivalents en català, però el contracte conserva aquests valors per compatibilitat.
+
+\subsection{Petició enviada pel Snap}
+
+\begin{lstlisting}[language=json]
+{
+  "chainId": "eip155:11155111",
+  "from": "0x852712de...45AE881aa",
+  "to": "0xA32D1b3B...c672a363",
+  "value": "0x0",
+  "data": "0x095ea7b3...0001",
+  "origin": "https://sepolia.etherscan.io"
+}
+\end{lstlisting}
+
+El camp \texttt{data} conté la \textit{calldata}; els primers quatre bytes formen el selector. En aquest exemple, \texttt{0x095ea7b3} correspon a \texttt{approve(address,uint256)}.
+
+\subsection{Resposta representativa del backend}
+
+\begin{lstlisting}[language=json]
+{
+  "success": true,
+  "risk": "BAJO",
+  "risk_score": 20,
+  "issues": [
+    "S'ha detectat una aprovaci\u00f3 de tokens",
+    "Quantitat aprovada: 1",
+    "L'aprovaci\u00f3 no \u00e9s il\u00b7limitada"
+  ],
+  "verdict": {
+    "risk": "BAJO",
+    "risk_score": 20,
+    "recommended_action": "ALLOW",
+    "source": "deterministic_base",
+    "reason": "No hi ha hagut motius suficients per alterar el veredicte base"
+  },
+  "decoded": {
+    "method": "approve",
+    "signature": "approve(address,uint256)",
+    "selector": "0x095ea7b3",
+    "spender": "0x3333333333333333333333333333333333333333",
+    "amount": "1",
+    "is_infinite_approval": false
+  },
+  "ai_review": {
+    "ai_risk_hint": "BAJO",
+    "confidence": "baja",
+    "ai_flags": [],
+    "reviewer_summary": "Sense observacions addicionals de la IA.",
+    "raw_response": null
+  },
+  "final_verdict": {
+    "risk_level": "BAJO",
+    "source": "deterministic_base",
+    "reason": "No hi ha hagut motius suficients per alterar el veredicte base"
+  },
+  "analysis_id": 48,
+  "performance": {
+    "ai_review_ms": 29,
+    "explanation_ms": 10,
+    "persistence_ms": 38,
+    "total_backend_ms": 93
+  },
+  "evaluation": null,
+  "timestamp": "2026-07-18T16:35:41.289Z"
+}
+\end{lstlisting}
+
+La resposta diferencia el veredicte determinista, la revisió complementària, el veredicte final i les mesures de rendiment. \texttt{raw\_response} conserva la sortida original d'Ollama quan existeix; si el servei no està disponible, queda a \texttt{null} i el sistema utilitza una explicació local segura. Els indicis del camp \texttt{findings} són cadenes de text, no objectes amb camps \texttt{code} o \texttt{severity}.
+
+\subsection{Persistència i detall}
+
+\texttt{analysis\_id} identifica el registre d'\texttt{analysis\_history}. El detall recuperat des de \texttt{/analysis-history/:id} afegeix els camps complets de transacció normalitzada, senyals de memòria local, coincidències amb adreces conegudes i fets semàntics. El \textit{hash} d'una transacció confirmada no forma part de la resposta prèvia a la confirmació, perquè encara no existeix en el moment de l'anàlisi.

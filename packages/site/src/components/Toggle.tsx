@@ -115,7 +115,7 @@ export const Toggle = ({
         </UncheckedContainer>
       </ToggleContainer>
       <ToggleCircle checked={checked} />
-      <ToggleInput type="checkbox" aria-label="Toggle Button" />
+      <ToggleInput type="checkbox" aria-label="Canviar el tema" />
     </ToggleWrapper>
   );
 };

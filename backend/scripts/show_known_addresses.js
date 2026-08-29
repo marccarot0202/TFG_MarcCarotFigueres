@@ -24,20 +24,20 @@ params.push(limit);
 
 db.all(sql, params, (err, rows) => {
   if (err) {
-    console.error('❌ Error consultando known_addresses:', err.message);
+    console.error('❌ Error consultant known_addresses:', err.message);
     db.close();
     process.exit(1);
     return;
   }
 
-  console.log(`📋 Mostrando ${rows.length} direcciones conocidas`);
+  console.log(`📋 Es mostren ${rows.length} adreces conegudes`);
   console.log('='.repeat(80));
 
   for (const row of rows) {
-    console.log(`Address: ${row.address}`);
-    console.log(`Label: ${row.label}`);
-    console.log(`Type: ${row.type}`);
-    console.log(`Source: ${row.source}`);
+    console.log(`Adreça: ${row.address}`);
+    console.log(`Etiqueta: ${row.label}`);
+    console.log(`Tipus: ${row.type}`);
+    console.log(`Font: ${row.source}`);
     console.log('-'.repeat(80));
   }
 

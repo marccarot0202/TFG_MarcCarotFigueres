@@ -4,6 +4,7 @@ const { decodeKnownTransaction } = require('./decoder');
 const { buildDeterministicVerdict } = require('./rules');
 const {
   saveAnalysisHistory,
+  updateAnalysisPerformance,
   upsertAddressCache,
   getAddressCache,
   findRecentAnalysisByTarget,
@@ -13,22 +14,24 @@ const {
 function buildContextSummary(tx) {
   const parts = [];
 
-  if (tx.from) parts.push(`Desde: ${tx.from}`);
-  if (tx.to) parts.push(`Hacia: ${tx.to}`);
+  if (tx.from) parts.push(`Des de: ${tx.from}`);
+  if (tx.to) parts.push(`Cap a: ${tx.to}`);
   if (tx.origin) parts.push(`Origen: ${tx.origin}`);
   if (tx.method_selector) parts.push(`Selector: ${tx.method_selector}`);
 
   if (tx.decoded?.method === 'approve') {
-    parts.push('Método: approve');
+    parts.push('Mètode: approve');
     parts.push(`Spender: ${tx.decoded.spender}`);
-    parts.push(`Cantidad: ${tx.decoded.amount}`);
-    parts.push(`Permiso ilimitado: ${tx.decoded.is_infinite_approval ? 'sí' : 'no'}`);
+    parts.push(`Quantitat: ${tx.decoded.amount}`);
+    parts.push(
+      `Permís il·limitat: ${tx.decoded.is_infinite_approval ? 'sí' : 'no'}`,
+    );
   }
 
   if (tx.decoded?.method === 'setApprovalForAll') {
-    parts.push('Método: setApprovalForAll');
-    parts.push(`Operator: ${tx.decoded.operator}`);
-    parts.push(`Approved: ${tx.decoded.approved ? 'true' : 'false'}`);
+    parts.push('Mètode: setApprovalForAll');
+    parts.push(`Operador: ${tx.decoded.operator}`);
+    parts.push(`Aprovat: ${tx.decoded.approved ? 'sí' : 'no'}`);
   }
 
   if (tx.has_value) {
@@ -38,44 +41,56 @@ function buildContextSummary(tx) {
   return parts.join(' | ');
 }
 
-async function explainTransaction(tx, verdict, localMemorySignals = null, semanticFacts = null) {
-  const findingsText = verdict.findings.map((f, i) => `${i + 1}. ${f}`).join('\n');
+async function explainTransaction(
+  tx,
+  verdict,
+  localMemorySignals = null,
+  semanticFacts = null,
+) {
+  const findingsText = verdict.findings
+    .map((f, i) => `${i + 1}. ${f}`)
+    .join('\n');
 
   const memoryText =
     localMemorySignals && localMemorySignals.findings.length > 0
       ? localMemorySignals.findings.map((f, i) => `M${i + 1}. ${f}`).join('\n')
-      : 'No hay señales adicionales de memoria local';
+      : 'No hi ha senyals addicionals de memòria local';
 
   const prompt = `
-Eres un asistente de seguridad Web3.
-Explica EN ESPAÑOL y de forma MUY SIMPLE una transacción basándote SOLO en los hallazgos confirmados.
+Ets un assistent de seguretat Web3.
+Explica EN CATALÀ i de manera MOLT SENZILLA una transacció basant-te NOMÉS en els indicis confirmats.
 
-DATOS CONFIRMADOS:
-- Riesgo calculado por reglas: ${verdict.risk_level}
-- Acción recomendada: ${verdict.recommended_action}
+DADES CONFIRMADES:
+- Risc calculat per les regles: ${verdict.risk_level}
+- Acció recomanada: ${verdict.recommended_action}
 
-HALLAZGOS PRINCIPALES:
+INDICIS PRINCIPALS:
 ${findingsText}
 
-MEMORIA LOCAL:
+MEMÒRIA LOCAL:
 ${memoryText}
 
-INSTRUCCIONES:
-1. Responde en 2 o 3 frases cortas, no más
-2. No uses markdown
-3. No inventes funciones ni propósitos no confirmados
-4. Si es approve, di que es un permiso para mover tokens, NO una transferencia
-5. Si la aprobación es ilimitada, dilo claramente
-6. Si hay memoria local, menciónala solo como contexto adicional
-7. No uses palabras como "sospechoso", "patrón inusual", "actividad sospechosa" o similares salvo que esté explícitamente confirmado
-8. No uses lenguaje alarmista
-9. Habla para una persona no técnica
+INSTRUCCIONS:
+1. Respon en 2 o 3 frases curtes, no més
+2. No facis servir markdown
+3. No inventis funcions ni finalitats no confirmades
+4. Si és approve, digues que és un permís per moure tokens, NO una transferència
+5. Si l'aprovació és il·limitada, digues-ho clarament
+6. Si hi ha memòria local, esmenta-la només com a context addicional
+7. No facis servir paraules com "sospitós", "patró inusual", "activitat sospitosa" o similars, tret que estigui confirmat explícitament
+8. No facis servir llenguatge alarmista
+9. Parla per a una persona no tècnica
 
-Explicación:
+Explicació:
   `.trim();
 
-const rawExplanation = await askOllama(prompt);
-return sanitizeExplanation(rawExplanation, verdict, semanticFacts || {});
+  try {
+    const rawExplanation = await askOllama(prompt);
+    return sanitizeExplanation(rawExplanation, verdict, semanticFacts || {});
+  } catch (error) {
+    console.error("⚠️ Error generant l'explicació amb IA:", error.message);
+    return buildSafeExplanation(verdict, semanticFacts || {});
+  }
 }
 
 async function persistLocalAddressMemory(tx) {
@@ -90,7 +105,7 @@ async function persistLocalAddressMemory(tx) {
         address: tx.from,
         chainId,
         label: 'sender',
-        notes: 'Dirección origen observada en análisis local',
+        notes: "Adreça d'origen observada en una anàlisi local",
         lastMethodSelector: methodSelector,
       }),
     );
@@ -102,7 +117,7 @@ async function persistLocalAddressMemory(tx) {
         address: tx.to,
         chainId,
         label: 'target',
-        notes: 'Dirección destino observada en análisis local',
+        notes: 'Adreça de destinació observada en una anàlisi local',
         lastMethodSelector: methodSelector,
       }),
     );
@@ -115,8 +130,8 @@ async function persistLocalAddressMemory(tx) {
         chainId,
         label: 'spender',
         notes: tx.decoded.is_infinite_approval
-          ? 'Dirección observada como spender con aprobación ilimitada'
-          : 'Dirección observada como spender con aprobación limitada',
+          ? 'Adreça observada com a spender amb una aprovació il·limitada'
+          : 'Adreça observada com a spender amb una aprovació limitada',
         lastMethodSelector: methodSelector,
       }),
     );
@@ -129,8 +144,8 @@ async function persistLocalAddressMemory(tx) {
         chainId,
         label: 'operator',
         notes: tx.decoded.approved
-          ? 'Dirección observada como operador con permiso global activo'
-          : 'Dirección observada como operador con revocación de permiso global',
+          ? 'Adreça observada com a operador amb un permís global actiu'
+          : 'Adreça observada com a operador amb una revocació del permís global',
         lastMethodSelector: methodSelector,
       }),
     );
@@ -169,15 +184,15 @@ async function collectLocalMemorySignals(tx) {
       if ((cached.times_seen || 0) > 1) {
         if (item.key === 'target') {
           signals.findings.push(
-            `La dirección destino ya ha aparecido antes (${cached.times_seen} veces) en análisis locales`,
+            `L'adreça de destinació ja ha aparegut abans (${cached.times_seen} vegades) en anàlisis locals`,
           );
         } else if (item.key === 'spender') {
           signals.findings.push(
-            `La dirección autorizada ya ha aparecido antes (${cached.times_seen} veces) en análisis locales`,
+            `L'adreça autoritzada ja ha aparegut abans (${cached.times_seen} vegades) en anàlisis locals`,
           );
         } else if (item.key === 'operator') {
           signals.findings.push(
-            `El operador ya ha aparecido antes (${cached.times_seen} veces) en análisis locales`,
+            `L'operador ja ha aparegut abans (${cached.times_seen} vegades) en anàlisis locals`,
           );
         }
       }
@@ -185,14 +200,18 @@ async function collectLocalMemorySignals(tx) {
   }
 
   if (tx.to) {
-    const recent = await findRecentAnalysisByTarget(tx.to, tx.method_selector, 10);
+    const recent = await findRecentAnalysisByTarget(
+      tx.to,
+      tx.method_selector,
+      10,
+    );
     signals.recent_similar_analysis = recent;
 
     const totalSimilar = recent.reduce((acc, row) => acc + (row.count || 0), 0);
 
     if (totalSimilar > 0) {
       signals.findings.push(
-        `Existen ${totalSimilar} análisis recientes similares para este destino${tx.method_selector ? ' y selector' : ''}`,
+        `Hi ha ${totalSimilar} anàlisis recents similars per a aquesta destinació${tx.method_selector ? ' i aquest selector' : ''}`,
       );
     }
   }
@@ -231,30 +250,30 @@ async function collectKnownAddressSignals(tx) {
 
     signals.matches[item.key] = match;
 
-    const label = match.label || 'sin etiqueta';
+    const label = match.label || 'sense etiqueta';
     const type = String(match.type || '').toLowerCase();
-    const source = match.source || 'fuente desconocida';
+    const source = match.source || 'font desconeguda';
 
     if (item.key === 'target') {
       signals.findings.push(
-        `La dirección destino está etiquetada como "${label}" (${type || 'sin tipo'})`,
+        `L'adreça de destinació està etiquetada com a "${label}" (${type || 'sense tipus'})`,
       );
     } else if (item.key === 'spender') {
       signals.findings.push(
-        `La dirección autorizada está etiquetada como "${label}" (${type || 'sin tipo'})`,
+        `L'adreça autoritzada està etiquetada com a "${label}" (${type || 'sense tipus'})`,
       );
     } else if (item.key === 'operator') {
       signals.findings.push(
-        `El operador está etiquetado como "${label}" (${type || 'sin tipo'})`,
+        `L'operador està etiquetat com a "${label}" (${type || 'sense tipus'})`,
       );
     }
 
-    signals.findings.push(`Fuente de la etiqueta: ${source}`);
+    signals.findings.push(`Font de l'etiqueta: ${source}`);
 
     if (type === 'scam' || type === 'blacklist' || type === 'blacklisted') {
       signals.score_adjustment += 50;
       signals.forced_risk_level = 'ALTO';
-      signals.findings.push('La etiqueta indica un riesgo crítico conocido');
+      signals.findings.push("L'etiqueta indica un risc crític conegut");
       continue;
     }
 
@@ -267,14 +286,14 @@ async function collectKnownAddressSignals(tx) {
 
       if (source.includes('darklist')) {
         signals.findings.push(
-          'La dirección aparece en una darklist externa y debe considerarse de alto riesgo potencial',
+          "L'adreça apareix en una llista fosca externa i s'ha de considerar de risc potencial alt",
         );
       } else {
         signals.findings.push(
-          'La etiqueta indica una dirección que merece especial precaución',
+          "L'etiqueta indica una adreça que requereix una precaució especial",
         );
       }
-      
+
       continue;
     }
 
@@ -285,7 +304,9 @@ async function collectKnownAddressSignals(tx) {
       type === 'own_contract'
     ) {
       signals.score_adjustment -= 10;
-      signals.findings.push('La etiqueta aporta contexto de confianza o de prueba');
+      signals.findings.push(
+        "L'etiqueta aporta context de confiança o de prova",
+      );
     }
   }
 
@@ -294,15 +315,14 @@ async function collectKnownAddressSignals(tx) {
 
 function safeJsonParseFromText(text) {
   if (!text || typeof text !== 'string') {
-    throw new Error('Respuesta vacía o no textual');
+    throw new Error('Resposta buida o no textual');
   }
 
   const trimmed = text.trim();
 
   try {
     return JSON.parse(trimmed);
-  } catch (_) {
-  }
+  } catch (_) {}
 
   const firstBrace = trimmed.indexOf('{');
   const lastBrace = trimmed.lastIndexOf('}');
@@ -315,28 +335,39 @@ function safeJsonParseFromText(text) {
   if (trimmed.startsWith('{') && !trimmed.endsWith('}')) {
     try {
       return JSON.parse(`${trimmed}}`);
-    } catch (_) {
-    }
+    } catch (_) {}
   }
 
-  throw new Error('No se pudo extraer un JSON válido');
+  throw new Error("No s'ha pogut extreure un JSON vàlid");
 }
 
 function normalizeAiRiskHint(value, fallback) {
-  const text = String(value || '').trim().toUpperCase();
+  const text = String(value || '')
+    .trim()
+    .toUpperCase();
 
-  if (text === 'BAJO') return 'BAJO';
-  if (text === 'MEDIO') return 'MEDIO';
-  if (text === 'ALTO') return 'ALTO';
+  if (text === 'BAJO' || text === 'BAIX') return 'BAJO';
+  if (text === 'MEDIO' || text === 'MITJÀ' || text === 'MITJA') return 'MEDIO';
+  if (text === 'ALTO' || text === 'ALT') return 'ALTO';
 
   return fallback;
 }
 
 function normalizeConfidence(value) {
-  const text = String(value || '').trim().toLowerCase();
+  const text = String(value || '')
+    .trim()
+    .toLowerCase();
 
-  if (text === 'baja') return 'baja';
-  if (text === 'media' || text === 'medio') return 'media';
+  if (text === 'baja' || text === 'baixa') return 'baja';
+  if (
+    text === 'media' ||
+    text === 'medio' ||
+    text === 'mitjana' ||
+    text === 'mitjà' ||
+    text === 'mitja'
+  ) {
+    return 'media';
+  }
   if (text === 'alta') return 'alta';
 
   return 'media';
@@ -347,13 +378,73 @@ function containsAny(text, terms) {
   return terms.some((term) => normalized.includes(term));
 }
 
-function buildSemanticFacts(tx, deterministicVerdict, knownAddressSignals, localMemorySignals) {
+const unlimitedPermissionTerms = [
+  'ilimitad',
+  'sin límite',
+  'sin limite',
+  'il·limit',
+  'sense límit',
+  'sense limit',
+];
+
+const globalPermissionTerms = [
+  'permiso global',
+  'global',
+  'todos los activos',
+  'todos tus nft',
+  'todos los nfts',
+  'permís global',
+  'tots els actius',
+  'tots els teus nft',
+  'tots els nfts',
+];
+
+const ethTransferTerms = ['envía eth', 'envia eth'];
+
+const maliciousActivityTerms = [
+  'phishing',
+  'estafa',
+  'malicios',
+  'maliciós',
+  'maliciosa',
+  'darklist',
+  'llista fosca',
+  'scam',
+];
+
+const tokenPermissionTerms = [
+  'permiso para mover token',
+  'se permite mover token',
+  'permite mover token',
+  'autorizado a mover token',
+  'autorizada a mover token',
+  'aprobación de token',
+  'aprobacion de token',
+  'autorización de token',
+  'autorizacion de token',
+  'permís per moure token',
+  'es permet moure token',
+  'permet moure token',
+  'autoritzat a moure token',
+  'autoritzada a moure token',
+  'aprovació de token',
+  'autorització de token',
+];
+
+function buildSemanticFacts(
+  tx,
+  deterministicVerdict,
+  knownAddressSignals,
+  localMemorySignals,
+) {
   const knownMatches = Object.values(knownAddressSignals?.matches || {});
   const knownTypes = knownMatches.map((match) =>
     String(match?.type || '').toLowerCase(),
   );
 
-  const recentSimilarCount = Array.isArray(localMemorySignals?.recent_similar_analysis)
+  const recentSimilarCount = Array.isArray(
+    localMemorySignals?.recent_similar_analysis,
+  )
     ? localMemorySignals.recent_similar_analysis.reduce(
         (acc, row) => acc + (row.count || 0),
         0,
@@ -367,90 +458,106 @@ function buildSemanticFacts(tx, deterministicVerdict, knownAddressSignals, local
       tx.decoded?.method === 'setApprovalForAll' && !!tx.decoded?.approved,
     isRevocation:
       (tx.decoded?.method === 'approve' && tx.decoded?.amount === '0') ||
-      (tx.decoded?.method === 'setApprovalForAll' && tx.decoded?.approved === false),
+      (tx.decoded?.method === 'setApprovalForAll' &&
+        tx.decoded?.approved === false),
     sendsValue: !!tx.has_value,
     deterministicRisk: deterministicVerdict.risk_level,
     hasKnownAddressMatch: knownMatches.length > 0,
     hasKnownAddressRiskLabel: knownTypes.some((type) =>
-      ['warning', 'suspicious', 'scam', 'blacklist', 'blacklisted'].includes(type),
+      ['warning', 'suspicious', 'scam', 'blacklist', 'blacklisted'].includes(
+        type,
+      ),
     ),
     hasKnownAddressCriticalLabel: knownTypes.some((type) =>
       ['scam', 'blacklist', 'blacklisted'].includes(type),
     ),
     hasKnownAddressTrustedLabel: knownTypes.some((type) =>
-      ['trusted', 'known_protocol', 'test_contract', 'own_contract'].includes(type),
+      ['trusted', 'known_protocol', 'test_contract', 'own_contract'].includes(
+        type,
+      ),
     ),
     recentSimilarCount,
     repeatedTarget:
       Number(localMemorySignals?.cached_addresses?.target?.times_seen || 0) > 1,
     repeatedSensitiveAddress:
-      Number(localMemorySignals?.cached_addresses?.spender?.times_seen || 0) > 1 ||
-      Number(localMemorySignals?.cached_addresses?.operator?.times_seen || 0) > 1,
+      Number(localMemorySignals?.cached_addresses?.spender?.times_seen || 0) >
+        1 ||
+      Number(localMemorySignals?.cached_addresses?.operator?.times_seen || 0) >
+        1,
   };
 }
 
 function buildSafeReviewerSummary(facts) {
   if (facts.isInfiniteApproval) {
-    return 'La operación requiere revisión porque concede un permiso ilimitado.';
+    return "L'operació requereix revisió perquè concedeix un permís il·limitat.";
   }
 
   if (facts.isGlobalApproval) {
-    return 'La operación requiere revisión porque activa un permiso global.';
+    return "L'operació requereix revisió perquè activa un permís global.";
   }
 
   if (facts.hasKnownAddressCriticalLabel) {
-    return 'La operación requiere revisión porque la dirección implicada está etiquetada como de alto riesgo.';
+    return "L'operació requereix revisió perquè l'adreça implicada està etiquetada com de risc alt.";
   }
 
   if (facts.hasKnownAddressRiskLabel) {
-    return 'La operación requiere revisión porque la dirección implicada tiene una etiqueta de precaución.';
+    return "L'operació requereix revisió perquè l'adreça implicada té una etiqueta de precaució.";
   }
 
   if (facts.deterministicRisk === 'MEDIO') {
-    return 'La operación requiere revisión por el contexto detectado.';
+    return "L'operació requereix revisió pel context detectat.";
   }
 
-  return 'Sin observaciones adicionales de IA.';
+  return 'Sense observacions addicionals de la IA.';
 }
 
 function buildSafeExplanation(verdict, facts) {
-  let sentence1 = 'Se ha detectado una operación que conviene revisar.';
+  let sentence1 = "S'ha detectat una operació que convé revisar.";
   let sentence2 = '';
   let sentence3 = '';
 
   if (facts.method === 'approve') {
     if (facts.isInfiniteApproval) {
-      sentence1 = 'Se ha detectado una aprobación de tokens con permiso ilimitado.';
+      sentence1 =
+        "S'ha detectat una aprovació de tokens amb un permís il·limitat.";
       sentence2 =
-        'Eso permitiría a la dirección autorizada mover tokens sin volver a pedir permiso.';
+        "Això permetria a l'adreça autoritzada moure tokens sense tornar a demanar permís.";
     } else if (facts.isRevocation) {
-      sentence1 = 'Se ha detectado una revocación de permiso de tokens.';
-      sentence2 = 'En este caso no se está concediendo un permiso nuevo amplio.';
+      sentence1 = "S'ha detectat una revocació del permís de tokens.";
+      sentence2 = "En aquest cas no s'està concedint cap permís ampli nou.";
     } else {
-      sentence1 = 'Se ha detectado una aprobación de tokens con permiso limitado.';
-      sentence2 = 'Eso permite mover solo la cantidad autorizada, no un permiso ilimitado.';
+      sentence1 =
+        "S'ha detectat una aprovació de tokens amb un permís limitat.";
+      sentence2 =
+        'Això permet moure només la quantitat autoritzada, no concedeix un permís il·limitat.';
     }
   } else if (facts.isGlobalApproval) {
-    sentence1 = 'Se ha detectado un permiso global sobre activos.';
+    sentence1 = "S'ha detectat un permís global sobre actius.";
     sentence2 =
-      'Eso permitiría al operador gestionar todos los activos cubiertos por ese permiso.';
+      "Això permetria a l'operador gestionar tots els actius coberts per aquest permís.";
   } else if (facts.method === 'setApprovalForAll' && facts.isRevocation) {
-    sentence1 = 'Se ha detectado una revocación de permiso global.';
-    sentence2 = 'En este caso se está retirando la autorización previa.';
+    sentence1 = "S'ha detectat una revocació del permís global.";
+    sentence2 = "En aquest cas s'està retirant l'autorització prèvia.";
   } else if (facts.deterministicRisk === 'MEDIO') {
-    sentence1 = 'Se ha detectado una interacción con contrato que requiere revisión.';
-    sentence2 = 'La función concreta no es lo bastante clara como para asumir que sea segura.';
+    sentence1 =
+      "S'ha detectat una interacció amb un contracte que requereix revisió.";
+    sentence2 =
+      'La funció concreta no és prou clara per considerar que sigui segura.';
+  } else if (facts.deterministicRisk === 'BAJO') {
+    sentence1 =
+      'Sembla una transferència simple sense indicadors addicionals de risc.';
+    sentence2 = "No s'ha detectat cap permís de tokens en aquesta operació.";
   }
 
   if (facts.hasKnownAddressCriticalLabel) {
     sentence3 =
-      'Además, la dirección implicada está etiquetada en la base local como de alto riesgo.';
+      "A més, l'adreça implicada està etiquetada a la base local com de risc alt.";
   } else if (facts.hasKnownAddressRiskLabel) {
     sentence3 =
-      'Además, la dirección implicada tiene una etiqueta de precaución en la base local.';
+      "A més, l'adreça implicada té una etiqueta de precaució a la base local.";
   } else if (facts.recentSimilarCount > 0) {
     sentence3 =
-      'Además, existen análisis locales similares previos, lo que aporta contexto adicional.';
+      'A més, hi ha anàlisis locals similars prèvies, fet que aporta context addicional.';
   }
 
   return [sentence1, sentence2, sentence3].filter(Boolean).join(' ');
@@ -468,7 +575,8 @@ function sanitizeAiReview(aiReview, facts) {
         .slice(0, 3)
     : [];
   let reviewerSummary =
-    typeof aiReview?.reviewer_summary === 'string' && aiReview.reviewer_summary.trim()
+    typeof aiReview?.reviewer_summary === 'string' &&
+    aiReview.reviewer_summary.trim()
       ? aiReview.reviewer_summary.trim()
       : buildSafeReviewerSummary(facts);
 
@@ -476,32 +584,46 @@ function sanitizeAiReview(aiReview, facts) {
     aiRiskHint = 'ALTO';
   }
 
+  const hasObjectiveEscalationSignal =
+    facts.isInfiniteApproval ||
+    facts.isGlobalApproval ||
+    facts.hasKnownAddressRiskLabel;
+
+  if (facts.deterministicRisk === 'BAJO' && !hasObjectiveEscalationSignal) {
+    aiRiskHint = 'BAJO';
+    reviewerSummary = buildSafeReviewerSummary(facts);
+  }
+
   if (!facts.isInfiniteApproval) {
-    aiFlags = aiFlags.filter((flag) => !containsAny(flag, ['ilimitad', 'sin límite', 'sin limite']));
-    if (containsAny(reviewerSummary, ['ilimitad', 'sin límite', 'sin limite'])) {
+    aiFlags = aiFlags.filter(
+      (flag) => !containsAny(flag, unlimitedPermissionTerms),
+    );
+    if (containsAny(reviewerSummary, unlimitedPermissionTerms)) {
       reviewerSummary = buildSafeReviewerSummary(facts);
     }
   }
 
   if (!facts.isGlobalApproval) {
-    aiFlags = aiFlags.filter((flag) => !containsAny(flag, ['permiso global', 'global', 'todos los activos']));
-    if (containsAny(reviewerSummary, ['permiso global', 'todos los activos'])) {
+    aiFlags = aiFlags.filter(
+      (flag) => !containsAny(flag, globalPermissionTerms),
+    );
+    if (containsAny(reviewerSummary, globalPermissionTerms)) {
       reviewerSummary = buildSafeReviewerSummary(facts);
     }
   }
 
   if (!facts.sendsValue) {
-    aiFlags = aiFlags.filter((flag) => !containsAny(flag, ['envía eth', 'envia eth']));
-    if (containsAny(reviewerSummary, ['envía eth', 'envia eth'])) {
+    aiFlags = aiFlags.filter((flag) => !containsAny(flag, ethTransferTerms));
+    if (containsAny(reviewerSummary, ethTransferTerms)) {
       reviewerSummary = buildSafeReviewerSummary(facts);
     }
   }
 
   if (!facts.hasKnownAddressRiskLabel) {
     aiFlags = aiFlags.filter(
-      (flag) => !containsAny(flag, ['phishing', 'estafa', 'malicios', 'darklist', 'scam']),
+      (flag) => !containsAny(flag, maliciousActivityTerms),
     );
-    if (containsAny(reviewerSummary, ['phishing', 'estafa', 'malicios', 'darklist', 'scam'])) {
+    if (containsAny(reviewerSummary, maliciousActivityTerms)) {
       reviewerSummary = buildSafeReviewerSummary(facts);
     }
   }
@@ -530,12 +652,14 @@ function sanitizeExplanation(explanation, verdict, facts) {
 
   const hasContradiction =
     (!facts.isInfiniteApproval &&
-      containsAny(text, ['ilimitad', 'sin límite', 'sin limite'])) ||
-    (!facts.isGlobalApproval &&
-      containsAny(text, ['permiso global', 'todos los activos', 'todos tus nft', 'todos los nfts'])) ||
-    (!facts.sendsValue && containsAny(text, ['envía eth', 'envia eth'])) ||
+      containsAny(text, unlimitedPermissionTerms)) ||
+    (!facts.isGlobalApproval && containsAny(text, globalPermissionTerms)) ||
+    (!facts.sendsValue && containsAny(text, ethTransferTerms)) ||
     (!facts.hasKnownAddressRiskLabel &&
-      containsAny(text, ['phishing', 'estafa', 'malicios', 'darklist', 'scam']));
+      containsAny(text, maliciousActivityTerms)) ||
+    (facts.method !== 'approve' &&
+      facts.method !== 'setApprovalForAll' &&
+      containsAny(text, tokenPermissionTerms));
 
   if (!text || text.length > 420 || hasContradiction) {
     return buildSafeExplanation(verdict, facts);
@@ -544,49 +668,52 @@ function sanitizeExplanation(explanation, verdict, facts) {
   return text;
 }
 
-
-
-async function reviewWithAI(tx, deterministicVerdict, localMemorySignals, semanticFacts) {
+async function reviewWithAI(
+  tx,
+  deterministicVerdict,
+  localMemorySignals,
+  semanticFacts,
+) {
   let raw = null;
 
   const findingsText = deterministicVerdict.findings.slice(0, 6).join(' | ');
   const memoryText =
     localMemorySignals && localMemorySignals.findings.length > 0
       ? localMemorySignals.findings.slice(0, 3).join(' | ')
-      : 'Sin señales adicionales';
+      : 'Sense senyals addicionals';
 
   const prompt = `
-Devuelve SOLO JSON válido.
-No añadas texto antes ni después.
-No uses markdown.
+Retorna NOMÉS JSON vàlid.
+No afegeixis text ni abans ni després.
+No facis servir markdown.
 
-Eres un revisor complementario de seguridad Web3.
-No reemplazas el riesgo base.
+Ets un revisor complementari de seguretat Web3.
+No substitueixis el risc base.
 
-DATOS:
-- Riesgo base: ${deterministicVerdict.risk_level}
-- Método: ${semanticFacts.method}
-- Permiso ilimitado: ${semanticFacts.isInfiniteApproval ? 'sí' : 'no'}
-- Permiso global activo: ${semanticFacts.isGlobalApproval ? 'sí' : 'no'}
-- Revocación: ${semanticFacts.isRevocation ? 'sí' : 'no'}
-- Dirección con etiqueta de riesgo: ${semanticFacts.hasKnownAddressRiskLabel ? 'sí' : 'no'}
-- Riesgo crítico etiquetado: ${semanticFacts.hasKnownAddressCriticalLabel ? 'sí' : 'no'}
-- Análisis similares recientes: ${semanticFacts.recentSimilarCount}
-- Hallazgos: ${findingsText}
-- Memoria local: ${memoryText}
+DADES:
+- Risc base: ${deterministicVerdict.risk_level}
+- Mètode: ${semanticFacts.method}
+- Permís il·limitat: ${semanticFacts.isInfiniteApproval ? 'sí' : 'no'}
+- Permís global actiu: ${semanticFacts.isGlobalApproval ? 'sí' : 'no'}
+- Revocació: ${semanticFacts.isRevocation ? 'sí' : 'no'}
+- Adreça amb etiqueta de risc: ${semanticFacts.hasKnownAddressRiskLabel ? 'sí' : 'no'}
+- Risc crític etiquetat: ${semanticFacts.hasKnownAddressCriticalLabel ? 'sí' : 'no'}
+- Anàlisis similars recents: ${semanticFacts.recentSimilarCount}
+- Indicis: ${findingsText}
+- Memòria local: ${memoryText}
 
-REGLAS OBLIGATORIAS:
-- Si "Permiso ilimitado" es "sí", ai_risk_hint debe ser "ALTO"
-- Si "Permiso global activo" es "sí", ai_risk_hint debe ser "ALTO"
-- Si no hay permiso ilimitado, no hables de permiso ilimitado
-- Si no hay permiso global, no hables de permiso global
-- No inventes phishing, scam o malicia si no existe etiqueta de riesgo
-- confidence solo puede ser: "baja", "media" o "alta"
-- ai_flags debe ser un array de 0 a 3 frases cortas
-- reviewer_summary debe ser una frase breve y objetiva
+REGLES OBLIGATÒRIES:
+- Si "Permís il·limitat" és "sí", ai_risk_hint ha de ser "ALTO"
+- Si "Permís global actiu" és "sí", ai_risk_hint ha de ser "ALTO"
+- Si no hi ha cap permís il·limitat, no parlis de permisos il·limitats
+- Si no hi ha cap permís global, no parlis de permisos globals
+- No inventis phishing, scam ni intencions malicioses si no hi ha cap etiqueta de risc
+- confidence només pot ser: "baja", "media" o "alta"
+- ai_flags ha de ser un array de 0 a 3 frases curtes escrites en català
+- reviewer_summary ha de ser una frase breu i objectiva escrita en català
 
-Formato exacto:
-{"ai_risk_hint":"ALTO","confidence":"media","ai_flags":["permiso ilimitado detectado","uso repetido en memoria local"],"reviewer_summary":"La operación requiere revisión por su riesgo elevado."}
+Format exacte:
+{"ai_risk_hint":"ALTO","confidence":"media","ai_flags":["permís il·limitat detectat","ús repetit en la memòria local"],"reviewer_summary":"L'operació requereix revisió pel seu risc elevat."}
   `.trim();
 
   try {
@@ -604,22 +731,22 @@ Formato exacto:
       semanticFacts,
     );
   } catch (error) {
-    console.error('⚠️ Error en AI reviewer:', error.message);
-    console.error('⚠️ Raw AI reviewer response:', raw);
+    console.error('⚠️ Error en el revisor de la IA:', error.message);
+    console.error('⚠️ Resposta en brut del revisor de la IA:', raw);
 
     return sanitizeAiReview(
       {
         ai_risk_hint: deterministicVerdict.risk_level,
         confidence: 'baja',
         ai_flags: [],
-        reviewer_summary: 'No se pudieron generar observaciones adicionales de IA',
+        reviewer_summary:
+          "No s'han pogut generar observacions addicionals de la IA",
         raw_response: raw,
       },
       semanticFacts,
     );
   }
 }
-
 
 function fuseVerdicts(deterministicVerdict, aiReview) {
   const baseRisk = deterministicVerdict.risk_level;
@@ -629,7 +756,7 @@ function fuseVerdicts(deterministicVerdict, aiReview) {
     return {
       risk_level: 'ALTO',
       source: 'deterministic_priority',
-      reason: 'El motor determinista detectó un patrón crítico conocido',
+      reason: 'El motor determinista ha detectat un patró crític conegut',
     };
   }
 
@@ -637,7 +764,7 @@ function fuseVerdicts(deterministicVerdict, aiReview) {
     return {
       risk_level: 'ALTO',
       source: 'hybrid_escalation',
-      reason: 'La IA refuerza la cautela sobre un caso ya incierto',
+      reason: 'La IA reforça la cautela sobre un cas que ja era incert',
     };
   }
 
@@ -645,29 +772,31 @@ function fuseVerdicts(deterministicVerdict, aiReview) {
     return {
       risk_level: 'MEDIO',
       source: 'ai_escalation',
-      reason: 'La IA detectó señales adicionales que justifican mayor cautela',
+      reason:
+        'La IA ha detectat senyals addicionals que justifiquen més cautela',
     };
   }
 
   return {
     risk_level: baseRisk,
     source: 'deterministic_base',
-    reason: 'No hubo motivos suficientes para alterar el veredicto base',
+    reason: 'No hi ha hagut motius suficients per alterar el veredicte base',
   };
 }
 
 async function analyzeTransaction(rawTxData) {
+  const analysisStartedAt = Date.now();
   const tx = normalizeTx(rawTxData);
   tx.decoded = decodeKnownTransaction(tx);
 
-  console.log('🧩 Transacción normalizada:', tx);
-  console.log('🔎 Transacción decodificada:', tx.decoded);
+  console.log('🧩 Transacció normalitzada:', tx);
+  console.log('🔎 Transacció descodificada:', tx.decoded);
 
   const localMemorySignals = await collectLocalMemorySignals(tx);
-  console.log('🧠 Memoria local:', localMemorySignals);
+  console.log('🧠 Memòria local:', localMemorySignals);
 
   const knownAddressSignals = await collectKnownAddressSignals(tx);
-  console.log('🏷️ Direcciones conocidas:', knownAddressSignals);
+  console.log('🏷️ Adreces conegudes:', knownAddressSignals);
 
   const deterministicVerdict = buildDeterministicVerdict(tx);
 
@@ -712,27 +841,40 @@ async function analyzeTransaction(rawTxData) {
     knownAddressSignals,
     localMemorySignals,
   );
-  console.log('🧱 Hechos semánticos:', semanticFacts);
+  console.log('🧱 Fets semàntics:', semanticFacts);
 
+  const aiReviewStartedAt = Date.now();
   const aiReview = await reviewWithAI(
     tx,
     deterministicVerdict,
     localMemorySignals,
     semanticFacts,
   );
-  console.log('🤖 Revisión IA:', aiReview);
+  const aiReviewMs = Date.now() - aiReviewStartedAt;
+  console.log('🤖 Revisió de la IA:', aiReview);
 
   const finalVerdict = fuseVerdicts(deterministicVerdict, aiReview);
-  console.log('⚖️ Veredicto final:', finalVerdict);
+  console.log('⚖️ Veredicte final:', finalVerdict);
 
-  console.log('🛡️ Veredicto determinista:', deterministicVerdict);
+  console.log('🛡️ Veredicte determinista:', deterministicVerdict);
 
+  const explanationStartedAt = Date.now();
   const explanation = await explainTransaction(
     tx,
     deterministicVerdict,
     localMemorySignals,
     semanticFacts,
   );
+  const explanationMs = Date.now() - explanationStartedAt;
+
+  const performance = {
+    started_at: new Date(analysisStartedAt).toISOString(),
+    ai_review_ms: aiReviewMs,
+    explanation_ms: explanationMs,
+    pre_persistence_ms: Date.now() - analysisStartedAt,
+    persistence_ms: null,
+    total_backend_ms: null,
+  };
 
   const analysisResult = {
     risk_level: deterministicVerdict.risk_level,
@@ -750,14 +892,26 @@ async function analyzeTransaction(rawTxData) {
     ai_review: aiReview,
     final_verdict: finalVerdict,
     semantic_facts: semanticFacts,
+    analysis_id: null,
+    performance,
+    evaluation: rawTxData.evaluation || null,
   };
 
   try {
-    await saveAnalysisHistory(rawTxData, analysisResult);
+    const persistenceStartedAt = Date.now();
+    const analysisId = await saveAnalysisHistory(rawTxData, analysisResult);
+    analysisResult.analysis_id = analysisId;
     await persistLocalAddressMemory(tx);
-    console.log('💾 Análisis guardado en BD');
+    performance.persistence_ms = Date.now() - persistenceStartedAt;
+    performance.total_backend_ms = Date.now() - analysisStartedAt;
+    await updateAnalysisPerformance(analysisId, performance);
+    console.log('💾 Anàlisi desada a la base de dades');
   } catch (dbError) {
-    console.error('⚠️ Error guardando en BD:', dbError.message);
+    performance.total_backend_ms = Date.now() - analysisStartedAt;
+    console.error(
+      "⚠️ Error desant l'anàlisi a la base de dades:",
+      dbError.message,
+    );
   }
 
   return analysisResult;
@@ -765,4 +919,6 @@ async function analyzeTransaction(rawTxData) {
 
 module.exports = {
   analyzeTransaction,
+  sanitizeAiReview,
+  sanitizeExplanation,
 };

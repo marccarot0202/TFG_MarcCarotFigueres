@@ -1,0 +1,95 @@
+\subsection{Resultats obtinguts}
+
+A continuació es presenten els resultats observats en els escenaris de prova definits anteriorment. L’anàlisi se centra tant en el funcionament tècnic del flux complet com en la utilitat de la informació presentada a l’usuari dins MetaMask.
+
+\paragraph{Resultat 1. Interceptació correcta de transaccions}
+MetaMask va activar el Snap i va mostrar l'\textit{insight} abans de la confirmació tant des de la DApp com des d'Etherscan.
+
+\paragraph{Resultat 2. Detecció de casos de risc}
+Les aprovacions il·limitades i els permisos globals actius van obtenir risc alt, mentre que les operacions limitades i les revocacions van mantenir risc baix.
+
+\paragraph{Resultat 3. Diferenciació entre escenaris}
+Les 80 observacions dels vuit casos controlats van produir 30 vertaders positius, 43 vertaders negatius i set falsos negatius amb les regles deterministes finals.
+
+\paragraph{Resultat 4. Qualitat de les explicacions}
+Les explicacions van resultar comprensibles en general, tot i que es va detectar i corregir una afirmació inventada sobre un permís de tokens.
+
+\paragraph{Resultat 5. Validació del flux complet}
+Una aprovació limitada es va iniciar des d'Etherscan, es va analitzar abans de confirmar i va quedar registrada correctament a Sepolia.
+
+
+La Taula~\ref{tab:ia_comportament} resumeix, de manera sintètica, el tipus de resposta observada en el mòdul d'intel·ligència artificial segons la naturalesa de la transacció analitzada.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{X X}
+\hline
+\textbf{Tipus d'entrada al model} & \textbf{Comportament observat en la resposta} \\
+\hline
+Transacció amb una aprovació de despesa molt elevada o pràcticament il·limitada &
+El model tendeix a identificar que es tracta d'una operació sensible i genera una explicació orientada al risc, advertint que l'usuari està concedint un permís ampli a un contracte extern. \\
+
+Transacció de dipòsit d'ETH al contracte de prova &
+La resposta acostuma a descriure l'operació com un enviament de valor al contracte i presenta un to menys alarmista que en els casos d'aprovació, tot i que la precisió depèn del context aportat. \\
+
+Transacció amb informació limitada o poc contextualitzada &
+Quan la informació enviada al model és més escassa o menys semàntica, la resposta continua sent funcional però tendeix a ser més general i menys específica en la interpretació de la transacció. \\
+\hline
+\end{tabularx}
+\caption{Comportament observat del mòdul d'IA segons el tipus d'entrada}
+\label{tab:ia_comportament}
+\end{table}
+
+
+
+\subsubsection{Resultat de la integració}
+
+Des d’un punt de vista funcional, la integració amb Ollama es pot considerar satisfactòria, ja que permet generar una explicació automàtica i mostrar-la dins de MetaMask com a part de l’anàlisi prèvia a la confirmació. Això demostra que el sistema és capaç de combinar una capa d’intercepció, una capa d’anàlisi i una capa d’explicació dins d’un mateix flux operatiu.
+
+Tanmateix, els resultats actuals també evidencien que la qualitat de l’explicació encara depèn en gran mesura del context i del refinament del \textit{prompt}. Per aquest motiu, la integració actual s’ha d’entendre com una base funcional sobre la qual es poden introduir millores futures, tant en la qualitat del context enviat al model com en la personalització de les respostes.
+
+
+\subsection{Limitacions de la implementació actual i Treball Futur}
+
+Per facilitar la lectura d’aquest apartat, la Taula~\ref{tab:limitacions_impl} resumeix les principals limitacions detectades en la implementació actual i les possibles línies d’ampliació associades.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{l X X}
+\hline
+\textbf{Àmbit} & \textbf{Limitació actual} & \textbf{Possible ampliació} \\
+\hline
+
+Cobertura funcional &
+El sistema se centra principalment en la intercepció de transaccions mitjançant \texttt{onTransaction} i no cobreix encara totes les formes de signatura presents a l’ecosistema Web3. &
+Afegir suport per a signatures fora de cadena, missatges estructurats i altres esquemes avançats d’autorització. \\
+
+Motor d’anàlisi &
+Les regles actuals cobreixen només un conjunt limitat de patrons de risc, suficient per validar el prototip però encara lluny d’una cobertura exhaustiva. &
+Ampliar el nombre d’heurístiques i incorporar nous patrons relacionats amb permisos, interaccions sospitoses i comportaments maliciosos. \\
+
+Capa d’IA &
+Les explicacions generades són funcionals, però poden resultar massa generals quan el context disponible és insuficient. &
+Enriquir el context enviat al model i refinar els \textit{prompts} per obtenir respostes més específiques i útils. \\
+
+Entorn de proves &
+La validació s’ha realitzat sobre un contracte de prova controlat i no sobre un conjunt extens i divers de contractes reals. &
+Provar el sistema sobre més contractes desplegats en testnet i, posteriorment, sobre mostres representatives d’entorns reals. \\
+
+Persistència i memòria &
+SQLite conserva l'historial complet, però el \textit{hash} posterior a la confirmació encara s'ha d'associar manualment. &
+Afegir un canal posterior a la confirmació que actualitzi el registre previ amb el \textit{hash} de la transacció. \\
+
+Context extern &
+El sistema encara no aprofita de manera completa fonts externes com el codi del contracte o datasets públics de risc. &
+Integrar consultes a APIs com Etherscan per recuperar codi font verificat i combinar-ho amb datasets externs de contractes o adreces malicioses. \\
+
+\hline
+\end{tabularx}
+\caption{Principals limitacions de la implementació actual i possibles línies d’ampliació}
+\label{tab:limitacions_impl}
+\end{table}
+
+Tal com es desprèn de la Taula~\ref{tab:limitacions_impl}, les limitacions actuals no afecten la viabilitat del prototip, però sí que delimiten clarament el seu abast i apunten de manera natural cap a futures línies de desenvolupament.

@@ -1,0 +1,85 @@
+\subsection{Integració del mòdul d’intel·ligència artificial}
+
+El mòdul d’intel·ligència artificial s’ha integrat amb l’objectiu de millorar la comprensió de les transaccions analitzades. En les primeres versions del prototip, la IA s’utilitzava únicament per transformar el resultat tècnic del \textit{backend} en una explicació en llenguatge natural. Posteriorment, aquesta capa es va ampliar amb una funció de revisió complementària, orientada a aportar una interpretació addicional del cas analitzat sense substituir el motor determinista de regles.
+
+Aquesta evolució permet combinar dues aproximacions diferents: d’una banda, una anàlisi estructurada i auditable basada en regles; de l’altra, una capa de llenguatge natural capaç d’explicar el resultat i ajudar l’usuari a entendre millor què està autoritzant.
+
+
+\subsubsection{Paper de la IA dins del sistema}
+
+La IA no constitueix el mecanisme principal de decisió sobre el risc. Aquesta responsabilitat recau en el \textit{backend}, que normalitza la transacció, aplica regles deterministes i construeix un veredicte inicial a partir de criteris explícits. El model de llenguatge s’utilitza com a capa complementària, tant per generar una explicació comprensible com per aportar una revisió addicional en casos on el context disponible pot ajudar a matisar el resultat.
+
+Aquesta separació és important perquè evita delegar completament la decisió de seguretat a un model probabilístic. Les regles continuen tenint prioritat en els patrons de risc clarament identificats, com ara aprovacions il·limitades o permisos globals. La IA, en canvi, actua com a suport interpretatiu i comunicatiu, especialment útil per convertir el resultat tècnic en una explicació més accessible per a l’usuari final.
+
+\subsubsection{Integració tècnica i selecció del model}
+
+La comunicació amb el model de llenguatge es realitza mitjançant el servei local d’Ollama. El backend utilitza el mòdul \texttt{ollama.js} per enviar peticions HTTP a l’endpoint \texttt{http://localhost:11434/api/generate}.
+
+Cada petició inclou l’identificador del model, el \textit{prompt} construït pel backend i l’opció \texttt{stream: false}. Aquesta configuració fa que Ollama retorni la resposta completa en format JSON abans que el backend continuï amb la construcció del resultat final.
+
+El model configurat en el prototip és \texttt{llama3.2}, que en l’entorn utilitzat es resol com a \texttt{llama3.2:latest}. No s’han establert explícitament paràmetres de mostreig com \texttt{temperature}, \texttt{top\_p} o \texttt{num\_predict}, de manera que s’utilitzen els valors predeterminats proporcionats per Ollama.
+
+En l’entorn de desenvolupament utilitzat, aquest model ocupa aproximadament 2,0 GB segons la informació proporcionada per Ollama. La selecció no deriva d’una comparació experimental formal amb altres models locals, ja que no es van executar proves sistemàtiques de latència, consum de memòria i qualitat entre alternatives. Es va adoptar com una opció compatible amb els recursos disponibles i suficient per a la funció acotada del prototip: generar explicacions breus i aportar una revisió complementària d’un veredicte construït principalment mitjançant regles deterministes.
+
+La configuració es concentra al fitxer \texttt{backend/services/ollama.js}, que estableix \texttt{llama3.2} com a valor predeterminat. L’encapsulació de la comunicació dins d’aquest servei permet substituir el model o modificar-ne la configuració en iteracions futures sense alterar la implementació del Snap ni el motor determinista d’anàlisi.
+
+
+\subsubsection{Generació d’explicacions}
+
+La primera funció del mòdul d’IA és generar una explicació en llenguatge natural a partir del resultat de l’anàlisi. Per fer-ho, el \textit{backend} construeix un \textit{prompt} amb la informació principal de la transacció, el tipus d’operació detectada, el nivell de risc i els elements rellevants identificats durant el procés d’anàlisi.
+
+El model utilitzat en el prototip és \texttt{llama3.2}, executat mitjançant Ollama. La resposta generada s’incorpora posteriorment al resultat final que el \textit{backend} retorna al Snap, de manera que pugui mostrar-se dins de MetaMask com a part de l’\textit{insight} de seguretat.
+
+Aquest enfocament permet que l’usuari no rebi únicament una etiqueta de risc, sinó també una explicació breu sobre el significat de l’operació. Per exemple, davant d’una aprovació elevada, el sistema pot explicar que l’usuari està concedint permís a una altra adreça perquè pugui moure tokens en el seu nom.
+
+\subsubsection{Revisió complementària de la IA}
+
+Com a ampliació posterior, el sistema incorpora una revisió complementària generada pel model. Aquesta revisió no substitueix el veredicte determinista, sinó que s’utilitza com una senyal addicional dins del procés d’anàlisi. El \textit{backend} pot demanar al model que revisi el cas a partir del context disponible i retorni una valoració estructurada, amb camps com el nivell de risc suggerit, el grau de confiança, possibles indicadors detectats i un resum justificatiu.
+
+En la implementació actual, aquesta informació es representa mitjançant una estructura de tipus \texttt{ai\_review}, que pot incloure camps com \texttt{ai\_risk\_hint}, \texttt{confidence}, \texttt{ai\_flags} i \texttt{reviewer\_summary}. Posteriorment, el \textit{backend} combina aquesta revisió amb el veredicte determinista i amb els fets semàntics detectats per construir el \texttt{final\_verdict}.
+
+Aquest plantejament permet aprofitar la capacitat interpretativa del model sense convertir-lo en l’única font de decisió. En els casos crítics detectats per regles, el resultat determinista manté prioritat; en canvi, en casos més ambigus, la revisió de la IA pot ajudar a enriquir el context presentat a l’usuari.
+
+\subsubsection{Control semàntic de la resposta}
+
+La incorporació d’un model de llenguatge també introdueix el risc que la resposta generada sigui massa genèrica o que inclogui afirmacions no justificades pel contingut real de la transacció. Per reduir aquest problema, el \textit{backend} construeix una capa de fets semàntics a partir de la informació detectada prèviament pel sistema.
+
+Aquests fets indiquen, per exemple, si la transacció correspon a un \texttt{approve}, si l’aprovació és il·limitada, si es tracta d’un \texttt{setApprovalForAll}, si l’operació envia ETH o si alguna adreça coincideix amb una etiqueta de risc coneguda. Aquesta informació serveix per limitar la interpretació del model i evitar contradiccions. Així, si el \textit{backend} no ha detectat una aprovació il·limitada, la resposta final no hauria d’afirmar que l’usuari està concedint un permís il·limitat.
+
+Aquest control permet mantenir la IA dins d’un marc més acotat i coherent amb l’anàlisi determinista. D’aquesta manera, el model pot aportar explicacions i revisions complementàries, però sempre condicionades pels fets estructurats que el \textit{backend} ha pogut verificar.
+
+\subsubsection{Construcció dels prompts}
+
+Els \textit{prompts} utilitzats pel sistema han evolucionat al llarg del desenvolupament. En una primera fase, eren força genèrics i només descrivien de manera bàsica el tipus d’operació, el contracte i alguns paràmetres simples. Aquesta aproximació va ser suficient per validar la comunicació amb Ollama, però generava respostes massa generals.
+
+Posteriorment, els \textit{prompts} es van anar ajustant per incloure més context i instruccions més precises. L’objectiu era obtenir respostes breus, comprensibles i adaptades al cas concret, evitant tecnicismes innecessaris i fent explícit qualsevol element de risc detectat.
+
+\newpage
+El Codi~\ref{lst:prompt_ia} mostra una versió representativa del \textit{prompt} utilitzat per generar explicacions amb Ollama.
+
+\begin{lstlisting}[
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    caption={Fragment representatiu del \textit{prompt} utilitzat per generar explicacions amb Ollama},
+    label={lst:prompt_ia}
+]
+const prompt = `
+Eres un asistente de seguridad para criptomonedas.
+Explica EN ESPANOL y de forma MUY SIMPLE que hace esta transaccion.
+
+CONTEXTO:
+- Tipo: ${txType}
+- ${context}
+- Desde: ${txData.from || 'usuario'}
+- Hacia: ${txData.to || 'contrato desconocido'}
+- ${valueInEth}
+- Origen: ${txData.origin || 'DApp desconocida'}
+
+INSTRUCCIONES:
+1. Explica en 2-3 frases cortas y simples
+2. Habla como si le explicaras a alguien que NO sabe de cripto
+3. NO uses palabras tecnicas como "0x", "wei", "gas", "ABI"
+4. Si hay algo sospechoso, mencionalo claramente
+`.trim();
+\end{lstlisting}

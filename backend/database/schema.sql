@@ -66,7 +66,16 @@ CREATE TABLE IF NOT EXISTS analysis_history (
   normalized_tx_json TEXT,
   decoded_json TEXT,
   findings_json TEXT,
-  explanation TEXT
+  explanation TEXT,
+  context_summary TEXT,
+  deterministic_verdict_json TEXT,
+  local_memory_signals_json TEXT,
+  known_address_signals_json TEXT,
+  ai_review_json TEXT,
+  final_verdict_json TEXT,
+  semantic_facts_json TEXT,
+  performance_json TEXT,
+  evaluation_json TEXT
 );
 
 CREATE TABLE IF NOT EXISTS address_cache (

@@ -1,0 +1,84 @@
+\subsection{Model d’amenaces i supòsits de confiança}
+\label{sec:model_amenaces}
+
+Atès que el projecte se centra en la seguretat de transaccions Web3, és necessari delimitar les amenaces que el sistema pretén detectar, els actius que es volen protegir i els elements que es consideren fiables durant el funcionament del prototip. Aquest model d’amenaces no pretén cobrir tots els riscos existents dins de l’ecosistema blockchain, sinó establir un marc concret i coherent amb l’abast funcional del treball.
+
+L’assistent actua durant el moment previ a la confirmació d’una transacció. Per tant, el seu objectiu principal no és impedir tècnicament qualsevol operació maliciosa, sinó aportar informació que permeti a l’usuari identificar determinats patrons de risc i prendre una decisió més informada abans de confirmar o cancel·lar l’acció.
+
+\subsubsection{Actius que es volen protegir}
+
+El sistema considera com a actius protegits tant els recursos digitals de l’usuari com la seva capacitat per prendre decisions informades. Els principals actius contemplats són els següents:
+
+\begin{itemize}
+    \item \textbf{Tokens fungibles.} Actius habitualment implementats mitjançant l’estàndard ERC20, que poden quedar exposats quan l’usuari concedeix permisos de despesa a una adreça externa.
+
+    \item \textbf{Actius no fungibles.} NFTs associats principalment a contractes ERC721, que poden ser gestionats per tercers quan l’usuari activa permisos globals mitjançant operacions com \texttt{setApprovalForAll}.
+
+    \item \textbf{Permisos concedits a tercers.} Autoritzacions que permeten que una adreça actuï en nom de l’usuari, ja sigui sobre una quantitat concreta de tokens o sobre tots els actius d’una col·lecció NFT.
+
+    \item \textbf{Capacitat de decisió de l’usuari.} Informació necessària per entendre les implicacions de l’operació abans de confirmar-la. Aquest element es considera especialment rellevant, ja que una transacció pot ser tècnicament vàlida però comportar conseqüències que no siguin evidents a partir de la interfície habitual de la cartera.
+\end{itemize}
+
+En aquest sentit, el sistema no protegeix únicament el valor econòmic dels actius, sinó també la comprensió del procés d’autorització. L’objectiu és reduir situacions de \textit{blind signing}, en què l’usuari accepta una operació sense disposar de prou informació sobre el seu efecte real.
+
+\subsubsection{Amenaces contemplades}
+
+El model d’amenaces assumeix que una DApp o una adreça externa pot intentar obtenir permisos excessius o induir l’usuari a confirmar una operació que no comprèn completament. Les principals amenaces considerades són les següents:
+
+\begin{itemize}
+    \item \textbf{DApp maliciosa o compromesa.} Una aplicació pot construir una transacció aparentment legítima que, en realitat, concedeixi permisos amplis a una adreça controlada per un atacant.
+
+    \item \textbf{Aprovació ERC20 excessiva.} Una operació \texttt{approve(address,uint256)} pot concedir una quantitat molt elevada o pràcticament il·limitada de tokens a un \textit{spender}. Si aquesta adreça és maliciosa o queda compromesa, podria utilitzar el permís concedit per transferir els actius autoritzats.
+
+    \item \textbf{Permís global sobre NFTs.} Una operació \nolinkurl{setApprovalForAll(operator,true)} autoritza un operador a gestionar tots els NFTs de l’usuari dins d’una col·lecció concreta. Aquesta autorització pot representar un risc elevat si l’operador no és legítim o si l’usuari no comprèn l’abast del permís.
+
+    \item \textbf{Interacció amb adreces sospitoses.} La transacció pot involucrar una adreça de destinació, un \textit{spender} o un \textit{operator} que coincideixi amb una etiqueta de risc procedent de les fonts de context disponibles.
+
+    \item \textbf{Operació desconeguda o amb informació insuficient.} La \textit{calldata} pot correspondre a una funció que el sistema no és capaç de descodificar. En aquests casos, la manca de context constitueix un factor de cautela, encara que no sigui una prova que la transacció sigui maliciosa.
+
+    \item \textbf{Explicació incorrecta generada per la IA.} El model de llenguatge pot produir una resposta ambigua, excessivament alarmista o incompatible amb les dades reals de la transacció. Per reduir aquest risc, la IA es manté subordinada al motor determinista i a la capa de control semàntic.
+\end{itemize}
+
+El sistema diferencia entre la presència d’un indicador de risc i la confirmació d’una activitat maliciosa. Per exemple, una aprovació il·limitada es considera una operació sensible per l’amplitud del permís concedit, però no implica necessàriament que el contracte destinatari sigui fraudulent.
+
+\subsubsection{Supòsits de confiança}
+
+Per delimitar correctament el problema, el prototip parteix d’un conjunt de supòsits sobre els components que intervenen en el sistema:
+
+\begin{itemize}
+    \item \textbf{MetaMask i l’entorn del Snap es consideren fiables.} Es pressuposa que MetaMask Flask invoca correctament el Snap, presenta la transacció real que s’ha de confirmar i manté la integritat dels components executats dins del seu entorn.
+
+    \item \textbf{El backend local no ha estat manipulat.} Es considera que el servei d’anàlisi, el motor de regles i la base de dades SQLite executen el codi corresponent a la versió documentada del projecte.
+
+    \item \textbf{El dispositiu de l’usuari no està compromès.} El sistema assumeix que no existeix programari maliciós amb capacitat per modificar el codi local, interceptar les comunicacions internes o controlar la cartera de l’usuari.
+
+    \item \textbf{Les dades blockchain consultades són representatives de l’estat de la xarxa.} Les consultes RPC s’utilitzen com a font de context sobre la xarxa, tot i que la disponibilitat del proveïdor extern no depèn directament del prototip.
+
+    \item \textbf{Les etiquetes externes no són una autoritat absoluta.} Les llistes d’adreces conegudes poden ser incompletes, contenir informació desactualitzada o no incloure amenaces recents. Per aquest motiu, s’utilitzen com a context complementari i no com a únic criteri de decisió.
+
+    \item \textbf{La IA pot generar errors.} El model de llenguatge és probabilístic i pot produir respostes imprecises. En conseqüència, no es considera una font de confiança suficient per determinar de manera autònoma el risc final. Les regles deterministes mantenen la prioritat en els patrons explícitament implementats.
+\end{itemize}
+
+Aquests supòsits permeten centrar l’anàlisi en els riscos derivats del contingut de la transacció i dels permisos concedits, sense estendre el projecte a la protecció integral del dispositiu, la cartera o la infraestructura blockchain.
+
+\subsubsection{Elements fora de l’abast}
+
+El prototip no pretén proporcionar una protecció completa davant de totes les amenaces possibles de l’ecosistema Web3. Queden fora de l’abast del treball els casos següents:
+
+\begin{itemize}
+    \item \textbf{Robatori o filtració de la clau privada.} El sistema no pot protegir l’usuari si un atacant obté directament les claus criptogràfiques o la frase de recuperació de la cartera.
+
+    \item \textbf{Malware al dispositiu.} No es contemplen atacs en què el sistema operatiu, el navegador, MetaMask o el backend local hagin estat modificats per programari maliciós.
+
+    \item \textbf{Auditoria completa de contractes intel·ligents.} El prototip no analitza exhaustivament el codi font ni detecta vulnerabilitats internes complexes dels contractes, com errors de lògica, reentrades o manipulacions econòmiques avançades.
+
+    \item \textbf{Atacs a la infraestructura blockchain.} No es cobreixen atacs sobre el consens d’Ethereum, manipulacions de la xarxa, reorganitzacions de blocs o vulnerabilitats pròpies del protocol blockchain.
+
+    \item \textbf{Descodificació universal de transaccions.} El sistema se centra en selectors i patrons concrets. Una interacció desconeguda pot generar una advertència de manca de context, però no pot ser interpretada amb el mateix nivell de precisió que les funcions implementades.
+
+    \item \textbf{Detecció perfecta de qualsevol estafa Web3.} Una adreça maliciosa nova pot no aparèixer als datasets utilitzats, i una transacció aparentment segura pot formar part d’un atac més ampli que no sigui visible a partir de la petició analitzada de manera individual.
+
+    \item \textbf{Substitució de la decisió de l’usuari.} El sistema no confirma ni bloqueja automàticament la transacció. La seva funció és proporcionar un veredicte, una recomanació i una explicació, però la decisió final continua corresponent a l’usuari.
+\end{itemize}
+
+Aquesta delimitació permet interpretar correctament els resultats del projecte. L’assistent s’ha de considerar una capa addicional de suport abans de la confirmació, i no una garantia absoluta de seguretat. La seva aportació principal consisteix a detectar patrons concrets, enriquir-los amb context i presentar-ne les implicacions d’una manera més comprensible per a l’usuari.
